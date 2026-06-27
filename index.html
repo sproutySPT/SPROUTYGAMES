@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정새싹게임즈 🌱</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@400;700;900&display=swap');
+
+:root{
+  --bg:#0c0c10;
+  --bg2:#15151c;
+  --panel:#1b1b24;
+  --line:#33334a;
+  --line-bright:#5a5a82;
+  --green:#5cff8f;
+  --pink:#ff5ca8;
+  --yellow:#ffe066;
+  --blue:#6ea8ff;
+  --text:#e8e8f0;
+  --muted:#8888a8;
+  --pixel:'Press Start 2P', monospace;
+  --mono:'IBM Plex Mono', monospace;
+  --sans:'Noto Sans KR', sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{image-rendering:pixelated;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(92,255,143,0.06), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(255,92,168,0.07), transparent 40%);
+}
+
+/* 스크롤바도 픽셀스럽게 */
+::-webkit-scrollbar{width:10px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--line-bright);}
+
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px 80px;}
+
+/* ── 픽셀 박스 (공통) ── */
+.pixel-box{
+  position:relative;
+  background:var(--panel);
+  border:3px solid var(--line);
+  border-radius:16px;
+  box-shadow:
+    0 0 0 3px var(--bg),
+    4px 4px 0 0 #000;
+}
+
+/* ── 헤더 ── */
+header{
+  padding:20px 28px 14px;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  flex-wrap:wrap;
+  border-bottom:3px solid var(--line);
+  margin-bottom:22px;
+  max-width:1280px; margin-left:auto; margin-right:auto;
+}
+.logo{
+  display:flex; align-items:center; gap:10px;
+}
+.logo-mark{
+  font-size:22px;
+  filter: drop-shadow(2px 2px 0 #000);
+}
+.logo-text{
+  font-family:var(--pixel);
+  font-size:14px;
+  letter-spacing:1px;
+  color:var(--green);
+  text-shadow:2px 2px 0 #000;
+}
+.logo-sub{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--muted);
+  margin-top:3px;
+}
+nav{
+  display:flex; gap:6px; font-family:var(--mono); font-size:11px;
+}
+nav a{
+  color:var(--text); text-decoration:none;
+  padding:8px 14px;
+  border:2px solid var(--line);
+  border-radius:10px;
+  background:var(--bg2);
+  transition:transform .1s, border-color .1s, color .1s;
+}
+nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY(-2px); }
+
+/* ── 히어로 / 메인 배너 ── */
+.hero{
+  position:relative;
+  margin-bottom:28px;
+}
+.hero-banner{
+  width:100%;
+  display:block;
+  border:3px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 0 0 3px var(--bg), 5px 5px 0 0 #000;
+  image-rendering:pixelated;
+  aspect-ratio: 16/4;
+  object-fit:contain;
+  background:linear-gradient(135deg,#1a1a26,#0e0e14);
+}
+.hero-caption{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--muted);
+  text-align:right;
+  margin-top:6px;
+}
+.hero-caption b{ color:var(--yellow); }
+
+/* ── 섹션 타이틀 ── */
+.section-title{
+  display:flex; align-items:center; gap:10px;
+  margin: 30px 0 14px;
+}
+.section-title .tag{
+  font-family:var(--pixel);
+  font-size:12px;
+  color:var(--bg);
+  background:var(--green);
+  padding:7px 12px;
+  border-radius:10px;
+  box-shadow:3px 3px 0 0 #000;
+  white-space:nowrap;
+}
+.section-title .line{
+  flex:1; height:3px; background:var(--line);
+}
+.section-title p{
+  font-family:var(--mono); font-size:11px; color:var(--muted);
+  margin-top:2px;
+}
+
+/* ── 서브 배너 그리드 (이벤트/공지 등) ── */
+.banner-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;
+}
+.banner-card{
+  position:relative; overflow:hidden;
+  border:3px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 0 0 3px var(--bg), 4px 4px 0 0 #000;
+  cursor:default;
+}
+.banner-card img{
+  width:100%; height:150px; object-fit:contain; display:block;
+  image-rendering:pixelated;
+  background:linear-gradient(135deg,#1a1a26,#0e0e14);
+}
+.banner-card .label{
+  position:absolute; bottom:0; left:0; right:0;
+  background:rgba(10,10,14,0.85);
+  font-family:var(--mono); font-size:10px; color:var(--yellow);
+  padding:6px 10px; border-top:2px solid var(--line);
+}
+
+@media (max-width:900px){
+  .banner-grid{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width:560px){
+  .banner-grid{ grid-template-columns:1fr; }
+}
+
+/* ── 공지사항 목록 ── */
+.notice-list{
+  margin-top:16px;
+  background:var(--panel);
+  border:3px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 0 0 3px var(--bg), 4px 4px 0 0 #000;
+  overflow:hidden;
+}
+.notice-item{
+  display:flex; align-items:baseline; gap:12px;
+  padding:13px 18px;
+  border-bottom:2px dashed var(--line);
+}
+.notice-item:last-child{ border-bottom:none; }
+.notice-date{
+  font-family:var(--mono); font-size:10px; color:var(--blue);
+  flex-shrink:0; white-space:nowrap;
+}
+.notice-tag{
+  font-family:var(--pixel); font-size:8px;
+  padding:4px 7px; border-radius:6px;
+  flex-shrink:0;
+  background:var(--line); color:var(--text);
+  white-space:nowrap;
+}
+.notice-tag.event{ background:var(--pink); color:#1a0a12; }
+.notice-tag.update{ background:var(--green); color:#06140a; }
+.notice-tag.fix{ background:var(--yellow); color:#1a1404; }
+.notice-text{
+  font-family:var(--sans); font-size:12.5px; color:var(--text); line-height:1.5;
+}
+.notice-empty{
+  padding:20px 18px; text-align:center;
+  font-family:var(--mono); font-size:11px; color:var(--muted);
+}
+
+@media (max-width:560px){
+  .notice-item{ flex-wrap:wrap; gap:6px 10px; }
+}
+
+/* ── 게임 목록 ── */
+.game-list{
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+}
+.game-card{
+  display:flex; gap:16px; align-items:stretch;
+  padding:16px;
+  text-decoration:none; color:var(--text);
+  background:var(--panel);
+  border:3px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 0 0 3px var(--bg), 4px 4px 0 0 #000;
+  transition:transform .08s, border-color .12s, box-shadow .12s;
+  position:relative;
+}
+.game-card.featured{ grid-column:1 / -1; }
+.game-card:hover{
+  transform:translate(-2px,-2px);
+  border-color:var(--green);
+  box-shadow:0 0 0 3px var(--bg), 6px 6px 0 0 #000;
+}
+.game-card:active{
+  transform:translate(1px,1px);
+  box-shadow:0 0 0 3px var(--bg), 2px 2px 0 0 #000;
+}
+.game-thumb{
+  width:104px; height:104px; flex-shrink:0;
+  object-fit:contain;
+  border:2px solid var(--line);
+  border-radius:14px;
+  image-rendering:pixelated;
+  background:linear-gradient(135deg,#22222e,#101016);
+}
+.game-info{ flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center; gap:6px; }
+.game-title-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.game-title{
+  font-family:var(--pixel);
+  font-size:13px;
+  color:var(--text);
+}
+.game-badge{
+  font-family:var(--mono); font-size:9px;
+  padding:4px 8px;
+  border:2px solid var(--pink);
+  border-radius:8px;
+  color:var(--pink);
+  white-space:nowrap;
+}
+.game-badge.new{ border-color:var(--green); color:var(--green); }
+.game-desc{
+  font-family:var(--sans); font-size:12px; color:var(--muted); line-height:1.5;
+}
+.game-meta{
+  font-family:var(--mono); font-size:10px; color:var(--blue);
+  display:flex; gap:10px;
+}
+.game-arrow{
+  align-self:center; font-size:20px; color:var(--muted); flex-shrink:0;
+  transition:color .12s, transform .12s;
+}
+.game-card:hover .game-arrow{ color:var(--green); transform:translateX(3px); }
+
+.game-card.placeholder{
+  opacity:.55; cursor:default; filter:grayscale(0.3);
+}
+.game-card.placeholder:hover{ transform:none; border-color:var(--line); box-shadow:0 0 0 3px var(--bg), 4px 4px 0 0 #000; }
+.game-card.placeholder .game-arrow{ visibility:hidden; }
+
+@media (max-width:700px){
+  .game-list{ grid-template-columns:1fr; }
+}
+
+/* ── 직원 목록 ── */
+.staff-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+.staff-card{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  padding:18px;
+  background:var(--panel);
+  border:3px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 0 0 3px var(--bg), 4px 4px 0 0 #000;
+}
+.staff-photo{
+  width:92px;
+  height:92px;
+  flex-shrink:0;
+  object-fit:cover;
+  border:2px solid var(--line);
+  border-radius:16px;
+  image-rendering:pixelated;
+  background:linear-gradient(135deg,#22222e,#101016);
+}
+.staff-info{
+  flex:1;
+  min-width:0;
+}
+.staff-name-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:6px;
+}
+.staff-name{
+  font-family:var(--pixel);
+  font-size:13px;
+  color:var(--text);
+}
+.staff-role{
+  font-family:var(--mono);
+  font-size:9px;
+  padding:4px 8px;
+  border:2px solid var(--yellow);
+  border-radius:8px;
+  color:var(--yellow);
+  white-space:nowrap;
+}
+.staff-desc{
+  font-family:var(--sans);
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+@media (max-width:560px){
+  .staff-card{ flex-direction:column; text-align:center; }
+  .staff-name-row{ justify-content:center; }
+}
+
+/* ── 개발자 정보 ── */
+.dev-card{
+  margin-top:16px;
+  display:flex; gap:20px; align-items:center;
+  padding:22px;
+  background:var(--panel);
+  border:3px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 0 0 3px var(--bg), 4px 4px 0 0 #000;
+  flex-wrap:wrap;
+}
+.dev-photo{
+  width:96px; height:96px; flex-shrink:0;
+  object-fit:cover;
+  border:2px solid var(--line);
+  border-radius:50%;
+  image-rendering:pixelated;
+  background:linear-gradient(135deg,#22222e,#101016);
+}
+.dev-info{ flex:1; min-width:200px; }
+.dev-name-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px; }
+.dev-name{
+  font-family:var(--pixel);
+  font-size:13px;
+  color:var(--text);
+}
+.dev-role{
+  font-family:var(--mono); font-size:9px;
+  padding:4px 8px;
+  border:2px solid var(--blue);
+  border-radius:8px;
+  color:var(--blue);
+  white-space:nowrap;
+}
+.dev-desc{
+  font-family:var(--sans); font-size:12.5px; color:var(--muted); line-height:1.6;
+  margin-bottom:10px;
+}
+.dev-links{
+  display:flex; gap:8px; flex-wrap:wrap;
+  font-family:var(--mono); font-size:10px;
+}
+.dev-links a{
+  color:var(--text); text-decoration:none;
+  padding:6px 12px;
+  border:2px solid var(--line);
+  border-radius:8px;
+  background:var(--bg2);
+  transition:border-color .12s, color .12s;
+}
+.dev-links a:hover{ border-color:var(--green); color:var(--green); }
+
+@media (max-width:560px){
+  .dev-card{ flex-direction:column; text-align:center; }
+  .dev-name-row, .dev-links{ justify-content:center; }
+}
+
+/* ── 하단 광고/스폰서 배너 ── */
+.wide-banner{
+  margin-top:28px;
+}
+.wide-banner img{
+  width:100%; height:140px; object-fit:contain; display:block;
+  border:3px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 0 0 3px var(--bg), 4px 4px 0 0 #000;
+  image-rendering:pixelated;
+  background:linear-gradient(135deg,#1a1a26,#0e0e14);
+}
+
+/* ── 한줄 공지 티커 ── */
+.ticker-bar{
+  background:var(--bg2);
+  border:3px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  white-space:nowrap;
+  padding:8px 0;
+  margin-top:26px;
+}
+.ticker-track{
+  display:inline-block;
+  font-family:var(--mono); font-size:11px; color:var(--yellow);
+  animation:scrollTicker 18s linear infinite;
+  padding-left:100%;
+}
+@keyframes scrollTicker{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-100%); }
+}
+
+/* ── 푸터 ── */
+footer{
+  margin-top:50px;
+  padding-top:20px;
+  border-top:3px solid var(--line);
+  font-family:var(--mono); font-size:10px; color:var(--muted);
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+  flex-wrap:wrap;
+}
+footer .grow{ color:var(--green); }
+
+/* 작은 픽셀 새싹 아이콘용 깜빡임 */
+@keyframes blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0.4;} }
+.blink{ animation:blink 1.4s steps(1) infinite; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-mark blink">🌱</span>
+    <div>
+      <div class="logo-text">정새싹게임즈</div>
+      <div class="logo-sub">SPROUTY GAMES — ai로 똥만드는데</div>
+    </div>
+  </div>
+  <nav>
+    <a href="#games">게임목록</a>
+    <a href="#notice">공지</a>
+    <a href="#staff">직원목록</a>
+    <a href="#dev">개발자</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- 메인 히어로 배너: 같은 폴더의 banner_main.jpg -->
+  <div class="hero">
+    <img class="hero-banner" src="banner_main.jpg" alt="정새싹게임즈 메인 배너">
+    <div class="hero-caption">대표 이미지<b>banner_main.jpg</b> 아 졸려</div>
+  </div>
+
+  <!-- 공지/이벤트 서브 배너 2개: banner_notice.jpg, banner_event.jpg -->
+  <div id="notice" class="section-title">
+    <span class="tag">NOTICE</span>
+    <div class="line"></div>
+  </div>
+  <div class="banner-grid">
+    <div class="banner-card">
+      <img src="banner_notice.jpg" alt="공지 배너">
+      <div class="label">📢 banner_notice.jpg</div>
+    </div>
+    <div class="banner-card">
+      <img src="banner_event.jpg" alt="이벤트 배너">
+      <div class="label">🎉 banner_event.jpg</div>
+    </div>
+  </div>
+
+  <!-- 공지사항 목록: 아래 NOTICES 배열만 수정하면 자동으로 반영됨 -->
+  <div id="noticeList" class="notice-list"></div>
+
+  <!-- 게임 목록 -->
+  <div id="games" class="section-title">
+    <span class="tag">GAMES</span>
+    <div class="line"></div>
+  </div>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin:-8px 0 14px;">
+    감튀키우기 출시!
+  </p>
+
+  <div class="game-list">
+
+    <a class="game-card featured" href="https://sproutyspt.github.io/Zoosick---gang/" target="_blank" rel="noopener">
+      <img class="game-thumb" src="game_stock.jpg" alt="주식시뮬레이터: 폭락도락이다 썸네일">
+      <div class="game-info">
+        <div class="game-title-row">
+          <span class="game-title">주식시뮬레이터: 폭락도락이다 🎰</span>
+          <span class="game-badge new">대표작</span>
+        </div>
+        <div class="game-desc">주식을 가장한 도박 시뮬레이터.</div>
+        <div class="game-meta">
+          <span>📈 시뮬레이션</span>
+          <span>🌐 웹게임</span>
+        </div>
+      </div>
+      <div class="game-arrow">▶</div>
+    </a>
+
+    <a class="game-card" href="https://sproutyspt.github.io/GAMJA/" target="_blank" rel="noopener">
+      <img class="game-thumb" src="game_coming1.jpg" alt="감튀키우기 썸네일">
+      <div class="game-info">
+        <div class="game-title-row">
+          <span class="game-title">감튀키우기 🍟</span>
+          <span class="game-badge new">출시</span>
+        </div>
+        <div class="game-desc">수상한 시뮬게임. 아 배고프다</div>
+        <div class="game-meta"><span>🍟 성장</span><span>🌐 웹게임</span></div>
+      </div>
+      <div class="game-arrow">▶</div>
+    </a>
+
+    <div class="game-card placeholder">
+      <img class="game-thumb" src="game_coming2.jpg" alt="다음 게임 썸네일 2">
+      <div class="game-info">
+        <div class="game-title-row">
+          <span class="game-title">여기에 다음 게임</span>
+          <span class="game-badge">준비중</span>
+        </div>
+        <div class="game-desc">미루는중.</div>
+        <div class="game-meta"><span>🌱 새싹 단계</span></div>
+      </div>
+      <div class="game-arrow">▶</div>
+    </div>
+
+  </div>
+
+  <!-- 하단 와이드 배너: banner_footer.jpg -->
+  <div class="wide-banner">
+    <img src="banner_footer.jpg" alt="하단 배너">
+  </div>
+
+  <!-- 개발자 정보: 같은 폴더의 dev.jpg -->
+  <div id="dev" class="section-title">
+    <span class="tag">DEVELOPER</span>
+    <div class="line"></div>
+  </div>
+  <div class="dev-card pixel-box">
+    <img class="dev-photo" src="dev.jpg" alt="개발자 사진">
+    <div class="dev-info">
+      <div class="dev-name-row">
+        <span class="dev-name">정새싹</span>
+        <span class="dev-role">1인 개발(ai 딸깍.)</span>
+      </div>
+      <div class="dev-desc">
+        맨날 똥만 만들다가 똥이된사람
+      </div>
+      <div class="dev-links">
+        <a href="https://github.com/SproutySPT" target="_blank" rel="noopener">🐙 GitHub</a>
+        <a href="mailto:boogye1012@gmail.com">✉️ Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="staff-grid">
+    <div class="staff-card">
+      <img class="staff-photo" src="junghoo.jpg" alt="이정후 프로필 이미지">
+      <div class="staff-info">
+        <div class="staff-name-row">
+          <span class="staff-name">이정후</span>
+          <span class="staff-role">도와주는애</span>
+        </div>
+        <div class="staff-desc">
+          배추 좋아함 근데 배고프다(지가이렇게써달랬음)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker-bar">
+    <span class="ticker-track">🌱 정새싹게임즈 — 버그제보는 112-감자튀김먹고싶다-아 잠만 히히히 1743원에사서 50원으로떨어짐-이끾끼</span>
+  </div>
+
+  <footer>
+    <div>© 2026 정새싹게임즈.</div>
+    <div class="grow">뿡 뿡 뿡</div>
+  </footer>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   📢 공지사항 — 여기 NOTICES 배열만 수정하면 화면에 자동 반영됩니다.
+
+   각 항목 형식:
+   { date: '2026.06.26', tag: 'update', text: '공지 내용' }
+
+   tag 종류 (색깔만 다름, 자유롭게 바꿔도 됨):
+     'update' → 초록 (업데이트/패치)
+     'event'  → 핑크 (이벤트/이벤트 종료)
+     'fix'    → 노랑 (버그 수정)
+     'notice' → 기본 회색 (일반 공지)
+
+   배열 맨 위에 추가할수록 위쪽(최신)에 표시됩니다.
+   ════════════════════════════════════════════════════ */
+const NOTICES = [
+  { date: '2026.06.26', tag: 'update', text: '정새싹게임즈 홈페이지 오픈했습니다. 환영합니다 🌱' },
+  { date: '2026.06.26', tag: 'notice', text: '주식시뮬레이터: 폭락도락이다, 감튀키우기 서비스 중입니다.' },
+  { date: '2026.06.27', tag: 'notice', text: '정새싹게임즈 들어올사람구함 들어오면 게임이랑 홈페이지에 니이름적힘' },
+  { date: '2026.06.27', tag: 'notice', text: '앞으로 주식 시뮬레이터는 업뎃이 많지않을예정! 버그고치기제외' }
+];
+// ↑ 이 위에 새 공지를 추가하세요. 예시:
+// { date: '2026.07.01', tag: 'event', text: '오픈 기념 이벤트 진행 중!' },
+
+function renderNotices(){
+  const wrap = document.getElementById('noticeList');
+  if(!wrap) return;
+  if(!NOTICES.length){
+    wrap.innerHTML = '<div class="notice-empty">아직 공지사항이 없습니다.</div>';
+    return;
+  }
+  wrap.innerHTML = NOTICES.map(n => `
+    <div class="notice-item">
+      <span class="notice-date">${n.date}</span>
+      <span class="notice-tag ${n.tag || ''}">${(n.tag || 'notice').toUpperCase()}</span>
+      <span class="notice-text">${n.text}</span>
+    </div>
+  `).join('');
+}
+
+// DOM 로드 완료 후 실행
+document.addEventListener('DOMContentLoaded', renderNotices);
+</script>
+
+</body>
+</html>
