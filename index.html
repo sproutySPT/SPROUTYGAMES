@@ -250,25 +250,25 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
 }
 
 
-/* ── 게임 목록 ── */
+/* ── 게임 목록 (축소된 가로 길쭉한 카드) ── */
 .game-list{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1fr;
   gap:16px;
 }
 .game-card{
   display:grid;
-  grid-template-columns:128px 1fr auto;
-  gap:16px;
+  grid-template-columns:100px 1fr auto;
+  gap:14px;
   align-items:stretch;
-  padding:14px;
+  padding:12px;
   text-decoration:none;
   color:var(--text);
   background:
     linear-gradient(135deg, rgba(92,255,143,0.05), rgba(255,92,168,0.03)),
     var(--panel);
   border:3px solid var(--line);
-  border-radius:18px;
+  border-radius:16px;
   box-shadow:0 0 0 3px var(--bg), 4px 4px 0 0 #000;
   transition:transform .08s, border-color .12s, box-shadow .12s, background .12s;
   position:relative;
@@ -283,7 +283,7 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
 }
 .game-card.featured{
   grid-column:1 / -1;
-  grid-template-columns:160px 1fr auto;
+  grid-template-columns:120px 1fr auto;
 }
 .game-card:hover{
   transform:translate(-2px,-2px);
@@ -300,10 +300,10 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
 .game-thumb{
   width:100%;
   height:100%;
-  min-height:112px;
+  min-height:90px;
   object-fit:cover;
   border:2px solid var(--line);
-  border-radius:14px;
+  border-radius:12px;
   image-rendering:pixelated;
   background:linear-gradient(135deg,#22222e,#101016);
 }
@@ -313,7 +313,7 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
   display:flex;
   flex-direction:column;
   justify-content:center;
-  gap:8px;
+  gap:6px;
 }
 .game-title-row{
   display:flex;
@@ -323,14 +323,14 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
 }
 .game-title{
   font-family:var(--pixel);
-  font-size:13px;
+  font-size:12px;
   line-height:1.35;
   color:var(--text);
 }
 .game-badge{
   font-family:var(--mono);
-  font-size:9px;
-  padding:4px 8px;
+  font-size:8px;
+  padding:3px 6px;
   border:2px solid var(--pink);
   border-radius:999px;
   color:var(--pink);
@@ -340,20 +340,20 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
 .game-badge.new{ border-color:var(--green); color:var(--green); background:rgba(92,255,143,0.08); }
 .game-desc{
   font-family:var(--sans);
-  font-size:12px;
+  font-size:11px;
   color:var(--muted);
-  line-height:1.55;
+  line-height:1.5;
 }
 .game-meta{
   font-family:var(--mono);
-  font-size:10px;
+  font-size:9px;
   color:var(--blue);
   display:flex;
-  gap:8px;
+  gap:6px;
   flex-wrap:wrap;
 }
 .game-meta span{
-  padding:4px 8px;
+  padding:3px 6px;
   border:1px solid rgba(110,168,255,0.35);
   border-radius:999px;
   background:rgba(110,168,255,0.06);
@@ -364,14 +364,14 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:64px;
-  padding:10px 12px;
+  min-width:56px;
+  padding:8px 10px;
   height:max-content;
   font-family:var(--mono);
-  font-size:10px;
+  font-size:9px;
   color:var(--text);
   border:2px solid var(--line-bright);
-  border-radius:12px;
+  border-radius:10px;
   background:linear-gradient(180deg,#2a2a39,#17171f);
   box-shadow:2px 2px 0 0 #000;
   transition:color .12s, transform .12s, border-color .12s;
@@ -401,7 +401,7 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
 @media (max-width:850px){
   .game-card,
   .game-card.featured{
-    grid-template-columns:112px 1fr;
+    grid-template-columns:90px 1fr;
   }
   .game-arrow{
     grid-column:1 / -1;
@@ -417,7 +417,7 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
     grid-template-columns:1fr;
   }
   .game-thumb{
-    min-height:180px;
+    min-height:160px;
   }
   .game-arrow{
     width:100%;
@@ -565,7 +565,7 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
   color:var(--muted);
   line-height:1.5;
 }
-.team-open-btn, .team-close-btn{
+.team-open-btn, .team-close-btn, .feedback-btn{
   font-family:var(--mono);
   border:none;
   cursor:pointer;
@@ -581,6 +581,16 @@ nav a:hover{ border-color:var(--green); color:var(--green); transform:translateY
 }
 .team-open-btn:hover{ transform:translateY(-2px); }
 .team-open-btn:active{ transform:translate(1px,1px); box-shadow:1px 1px 0 0 #000; }
+
+.feedback-btn{
+  padding:12px 18px;
+  color:var(--bg);
+  background:linear-gradient(135deg, var(--pink), #ff9bc8);
+  font-weight:700;
+  box-shadow:3px 3px 0 0 #000;
+}
+.feedback-btn:hover{ transform:translateY(-2px); }
+.feedback-btn:active{ transform:translate(1px,1px); box-shadow:1px 1px 0 0 #000; }
 
 .team-overlay{
   position:fixed;
@@ -897,6 +907,7 @@ footer .grow{ color:var(--green); }
   </div>
   <div class="team-launch">
     <button class="team-open-btn" id="openTeamBtn" type="button">개발자 / 직원</button>
+    <button class="feedback-btn" id="feedbackBtn" type="button">💬 잔소리하기</button>
   </div>
 
   <div id="teamOverlay" class="team-overlay" aria-hidden="true">
@@ -999,88 +1010,86 @@ const NOTICES = [
   - 길게 쓰고 싶으면 줄을 여러 개로 나눠도 됩니다.
   - HTML 태그는 넣지 않는 걸 추천합니다.
 */
-const SPROUT_NOTE = [
-  '다음 게임 초성 힌트: ㅈㅅㅆ ㅍㅂ.',
-  '신작은 8월에....',
-];
+const SPROUT_NOTE = `개발 중입니다. 버그나 아이디어가 있으시면 아래 "잔소리하기" 버튼으로 피드백을 보내주세요!
+정새싹게임즈는 <hint>AI + 1인 개발</hint>로 만들어지고 있습니다.
+조금 느릴 수도, 버그가 있을 수도 있으니 너그럽게 봐주세요 😭`;
 
-// 텍스트를 그대로 넣어도 HTML이 깨지지 않도록 이스케이프 처리
-function escapeHtml(value){
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-}
+// ════════════════════════════════════════════════════
+// 아래는 자동 실행 코드입니다. 수정 금지!
+// ════════════════════════════════════════════════════
 
-function renderNotices(){
-  const wrap = document.getElementById('noticeList');
-  if(!wrap) return;
-
-  if(!NOTICES.length){
-    wrap.innerHTML = '<div class="notice-empty">아직 공지사항이 없습니다.</div>';
+function renderNotices() {
+  const container = document.getElementById('noticeList');
+  if (!NOTICES || NOTICES.length === 0) {
+    container.innerHTML = '<div class="notice-empty">공지사항이 없습니다.</div>';
     return;
   }
-
-  // innerHTML을 쓰되, 각 값은 escapeHtml로 감싸서 입력 버그를 막습니다.
-  // 특히 공지 text에 < > & 같은 문자가 들어와도 화면 구조가 깨지지 않습니다.
-  wrap.innerHTML = NOTICES.map(n => `
+  container.innerHTML = NOTICES.map(n => `
     <div class="notice-item">
-      <span class="notice-date">${escapeHtml(n.date)}</span>
-      <span class="notice-tag ${escapeHtml(n.tag || '')}">${escapeHtml((n.tag || 'notice').toUpperCase())}</span>
+      <span class="notice-date">${n.date}</span>
+      <span class="notice-tag ${n.tag}">${n.tag.toUpperCase()}</span>
       <span class="notice-text">${escapeHtml(n.text)}</span>
     </div>
   `).join('');
 }
 
-function renderSproutNote(){
-  const wrap = document.getElementById('sproutNoteBody');
-  if(!wrap) return;
-  wrap.innerHTML = SPROUT_NOTE.map(line => {
-    if (String(line).trim().startsWith('예:')) {
-      return `<span class="hint">${escapeHtml(line)}</span>`;
-    }
-    return escapeHtml(line);
-  }).join('<br>');
+function renderSproutNote() {
+  const body = document.getElementById('sproutNoteBody');
+  if (!SPROUT_NOTE) {
+    body.textContent = '(노트가 비어있습니다)';
+    return;
+  }
+  body.innerHTML = SPROUT_NOTE.split('\n').map(line => {
+    return line.replace(/<hint>(.*?)<\/hint>/g, '<span class="hint">$1</span>');
+  }).join('\n');
 }
 
-
-function setupTeamOverlay(){
-  const overlay = document.getElementById('teamOverlay');
-  const openBtn = document.getElementById('openTeamBtn');
-  const closeBtn = document.getElementById('closeTeamBtn');
-  if(!overlay || !openBtn || !closeBtn) return;
-
-  const open = () => {
-    overlay.classList.add('open');
-    overlay.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('modal-open');
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
   };
-
-  const close = () => {
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
-  };
-
-  openBtn.addEventListener('click', open);
-  closeBtn.addEventListener('click', close);
-  overlay.addEventListener('click', (e) => {
-    if(e.target === overlay) close();
-  });
-  document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape') close();
-  });
+  return text.replace(/[&<>"']/g, m => map[m]);
 }
 
-// DOM 로드 완료 후 실행
-document.addEventListener('DOMContentLoaded', () => {
-  renderNotices();
-  renderSproutNote();
-  setupTeamOverlay();
+// 팀 모달 토글
+const openTeamBtn = document.getElementById('openTeamBtn');
+const closeTeamBtn = document.getElementById('closeTeamBtn');
+const teamOverlay = document.getElementById('teamOverlay');
+
+openTeamBtn.addEventListener('click', () => {
+  teamOverlay.classList.add('open');
+  document.body.classList.add('modal-open');
+  teamOverlay.setAttribute('aria-hidden', 'false');
 });
-</script>
 
+closeTeamBtn.addEventListener('click', () => {
+  teamOverlay.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  teamOverlay.setAttribute('aria-hidden', 'true');
+});
+
+teamOverlay.addEventListener('click', (e) => {
+  if (e.target === teamOverlay) {
+    closeTeamBtn.click();
+  }
+});
+
+// 잔소리하기 버튼
+const feedbackBtn = document.getElementById('feedbackBtn');
+feedbackBtn.addEventListener('click', () => {
+  const email = 'sproutygames@gmail.com';
+  const subject = encodeURIComponent('정새싹게임즈에 대한 피드백');
+  const body = encodeURIComponent('안녕하세요! 정새싹게임즈에 대해 말씀하고 싶은 것이 있습니다:\n\n[여기에 피드백을 입력해주세요]\n');
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+});
+
+// 초기 렌더링
+renderNotices();
+renderSproutNote();
+</script>
 </body>
 </html>
