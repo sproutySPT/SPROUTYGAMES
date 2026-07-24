@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="naver-site-verification" content="6d93907bd3303a642bfd3fa96dd62dbca6fc66db" />
 <title>정새싹게임즈 🌱</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@400;700;900&display=swap');
@@ -907,6 +906,7 @@ footer .grow{ color:var(--green); }
     <div class="sprout-note-head">
       <div class="sprout-note-title">정새싹 노트</div>
       <div class="sprout-note-help">개발자가 남긴 흔적</div>
+      아이고 안녕하쇼
     </div>
     <div id="sproutNoteBody" class="sprout-note-body"></div>
   </div>
@@ -999,107 +999,154 @@ footer .grow{ color:var(--green); }
             <span>모든 작품</span>
           </div>
           <div class="team-desc">
-            🎮 웹 게임 개발자. 쓸데없는 게임 전문. <span class="hint">ai의 도움을 받습니다</span>
+            1인 개발을 담당하는 핵심 제작자. 기획, 수정, 업로드, 버그 대응, 호스팅(와 진짜 멱살잡고 캐리)까지 전반을 맡고 있습니다.
+          </div>
+        </article>
+
+        <article class="team-card">
+          <img class="team-photo" src="junghoo.jpg" alt="이정후 사진">
+          <div class="team-name-row">
+            <span class="team-name">이정후</span>
+            <span class="team-role">공동개발자</span>
+          </div>
+          <div class="team-contrib">
+            <span><b>주요 기여작</b></span>
+            <span>나무패기</span>
+          </div>
+          <div class="team-desc">
+            배추를 좋아함
+          </div>
+        </article>
+
+      
           </div>
         </article>
       </div>
     </div>
   </div>
 
-  <!-- 티커 -->
   <div class="ticker-bar">
-    <div class="ticker-track">
-      히히히히히히히히히히 정새싹게임즈 와주셔서 감사함미다
-    </div>
+    <span class="ticker-track">🌱 정새싹게임즈 — 버그제보는 112-감자튀김먹고싶다-아 잠만 히히히 1743원에사서 50원으로떨어짐-이끾끼</span>
   </div>
+
+  <footer>
+    <div>© 2026 정새싹게임즈.</div>
+    <div class="grow">뿡 뿡 뿡</div>
+  </footer>
 
 </div>
 
-<!-- 푸터 -->
-<footer>
-  <p>© 2025 정새싹게임즈 </p>
-</footer>
-
-<div id="serviceEndModal" class="service-end-modal">
+<!-- 서비스 종료 팝업 -->
+<div id="serviceEndModal" class="service-end-modal show">
   <div class="service-end-content">
-    <h2>알림</h2>
-    <p>
-      일부 게임이 폐지되었을 수 있습니다. 그럴땐 계속 이용 가능한 게임을 즐겨주세요.
-    </p>
-    <button class="service-end-close" id="closeServiceEnd" type="button">확인</button>
+    <h2>감튀키우기 서비스 종료</h2>
+    <p>감튀키우기 서비스가 종료하였습니다.<br><br>그동안 보내주신 많은 성원에 감사드립니다.왜 섭종했냐면 노잼이니까요..</p>
+    <button class="service-end-close" id="closeServiceEndBtn" type="button">닫기</button>
   </div>
 </div>
 
 <script>
-// 공지사항 데이터
-const NOTICES = [];
+/* ════════════════════════════════════════════════════
+   📢 공지사항 — 여기 NOTICES 배열만 수정하면 화면에 자동 반영됩니다.
 
-// 정새싹 노트 내용
-const SPROUT_NOTE = `
-🌱 정새싹게임즈 노트
+   각 항목 형식:
+   { date: '2026.06.26', tag: 'update', text: '공지 내용' }
 
-아 다음게임 뭐하지;;
-아이디어 고갈됨ㅁ;;;
+   tag 종류 (색깔만 다름, 자유롭게 바꿔도 됨):
+     'update' → 초록 (업데이트/패치)
+     'event'  → 핑크 (이벤트/이벤트 종료)
+     'fix'    → 노랑 (버그 수정)
+     'notice' → 기본 회색 (일반 공지)
 
+   배열 맨 위에 추가할수록 위쪽(최신)에 표시됩니다.
+   ════════════════════════════════════════════════════ */
+// 공지 입력 규칙:
+// 1) 새 공지는 배열 맨 위에 추가하면 최신순으로 보입니다.
+// 2) text에는 HTML 태그를 넣지 마세요. 화면에 그대로 글자로 나오도록 안전하게 처리합니다.
+// 3) 항목 사이에는 반드시 쉼표(,)가 필요합니다. 쉼표가 없으면 화면이 통째로 깨집니다.
+const NOTICES = [
+  { date: '2026.07.19', tag: 'update', text: '감튀키우기 서비스가 종료되었습니다.' },
+];
 
-`;
-
-// DOM 요소 찾기
-const noticeListEl = document.getElementById('noticeList');
-const sproutNoteBodyEl = document.getElementById('sproutNoteBody');
-const openTeamBtn = document.getElementById('openTeamBtn');
-const closeTeamBtn = document.getElementById('closeTeamBtn');
-const teamOverlay = document.getElementById('teamOverlay');
-const closeServiceEndBtn = document.getElementById('closeServiceEnd');
-const serviceEndModal = document.getElementById('serviceEndModal');
-const feedbackBtnNav = document.getElementById('navFeedbackBtn');
+const SPROUT_NOTE = `감튀키우기 서비스 종료로 인해 게임 목록이 업데이트되었습니다.
+계속 지원해주시는 모든 분들께 감사드립니다!`;
 
 // 공지사항 렌더링
-function renderNotices() {
-  if (NOTICES.length === 0) {
-    noticeListEl.innerHTML = '<div class="notice-empty">공지사항이 없습니다.</div>';
+function renderNotices(){
+  const listEl = document.getElementById('noticeList');
+  if(!NOTICES || NOTICES.length === 0){
+    listEl.innerHTML = '<div class="notice-empty">공지사항이 없습니다.</div>';
     return;
   }
-  noticeListEl.innerHTML = NOTICES.map(notice => `
-    <div class="notice-item">
-      <div class="notice-date">${notice.date}</div>
-      <div class="notice-tag ${notice.type}">${notice.type.toUpperCase()}</div>
-      <div class="notice-text">${notice.text}</div>
-    </div>
-  `).join('');
+  let html = '';
+  NOTICES.forEach(n => {
+    const textEl = document.createElement('div');
+    textEl.textContent = n.text;
+    html += `
+      <div class="notice-item">
+        <div class="notice-date">${n.date}</div>
+        <span class="notice-tag ${n.tag}">${n.tag}</span>
+        <div class="notice-text">${textEl.innerHTML}</div>
+      </div>
+    `;
+  });
+  listEl.innerHTML = html;
 }
 
 // 정새싹 노트 렌더링
-function renderNote() {
-  sproutNoteBodyEl.innerHTML = SPROUT_NOTE.split('<hint>').join('<span class="hint">').split('</hint>').join('</span>');
+function renderSproutNote(){
+  const noteEl = document.getElementById('sproutNoteBody');
+  noteEl.textContent = SPROUT_NOTE;
 }
 
-// 팀 오버레이 토글
-function toggleTeamOverlay() {
-  teamOverlay.classList.toggle('open');
-  document.body.classList.toggle('modal-open');
-}
+// 팀 모달
+const openTeamBtn = document.getElementById('openTeamBtn');
+const closeTeamBtn = document.getElementById('closeTeamBtn');
+const teamOverlay = document.getElementById('teamOverlay');
 
-openTeamBtn.addEventListener('click', toggleTeamOverlay);
-closeTeamBtn.addEventListener('click', toggleTeamOverlay);
+openTeamBtn.addEventListener('click', () => {
+  teamOverlay.classList.add('open');
+  teamOverlay.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+});
 
-// 피드백 버튼
-feedbackBtnNav.addEventListener('click', () => {
-  const message = prompt('💬 불만있음?\n\n(이메일: sproutyspt@gmail.com)');
-  if (message && message.trim()) {
-    alert('감사합니다! 더 재밌는 게임을 만들기 위해 노력하겠습니다.');
+closeTeamBtn.addEventListener('click', () => {
+  teamOverlay.classList.remove('open');
+  teamOverlay.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+});
+
+teamOverlay.addEventListener('click', (e) => {
+  if(e.target === teamOverlay){
+    closeTeamBtn.click();
   }
 });
 
-// 서비스 종료 모달 닫기
+// 피드백 버튼 (상단 네비게이션)
+const navFeedbackBtn = document.getElementById('navFeedbackBtn');
+if(navFeedbackBtn){
+  navFeedbackBtn.addEventListener('click', () => {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSc5cXfZ1b95r9KJD-jz5LlVTNSLm4n_eN5GQDEv1QMTbIEaWA/viewform?usp=sf_link', '_blank');
+  });
+}
+
+// 서비스 종료 팝업
+const serviceEndModal = document.getElementById('serviceEndModal');
+const closeServiceEndBtn = document.getElementById('closeServiceEndBtn');
+
 closeServiceEndBtn.addEventListener('click', () => {
   serviceEndModal.classList.remove('show');
 });
 
-// 초기화
-renderNotices();
-renderNote();
-</script>
+serviceEndModal.addEventListener('click', (e) => {
+  if(e.target === serviceEndModal){
+    serviceEndModal.classList.remove('show');
+  }
+});
 
+// 페이지 로드 시 렌더링
+renderNotices();
+renderSproutNote();
+</script>
 </body>
 </html>
