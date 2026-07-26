@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>모기 잡기 대소동 | 정새싹게임즈</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    width:100%; height:100%; overflow:hidden;
+    background:#0a0e27;
+    font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+    touch-action: none;
+    user-select: none;
+  }
+  #gameContainer {
+    position:relative;
+    width:100vw; height:100vh;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #gameCanvas {
+    display:block;
+    cursor: crosshair;
+    max-width:100%; max-height:100%;
+  }
+  #hud {
+    position:absolute; top:0; left:0; width:100%;
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:16px 20px;
+    gap:8px;
+    pointer-events:none;
+    z-index:10;
+  }
+  .hud-box {
+    background:rgba(20,10,40,0.65);
+    border:2px solid rgba(255,220,120,0.4);
+    border-radius:12px;
+    padding:8px 16px;
+    color:#ffe9a8;
+    font-weight:bold;
+    font-size:18px;
+    text-shadow:0 2px 4px rgba(0,0,0,0.6);
+    backdrop-filter: blur(3px);
+    white-space:nowrap;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  #missBox.warn {
+    border-color:#ff4d4d;
+    background:rgba(80,10,20,0.75);
+    animation: missShake 0.4s ease-in-out;
+  }
+  @keyframes missShake {
+    0%,100% { transform:translateX(0); }
+    25% { transform:translateX(-3px); }
+    75% { transform:translateX(3px); }
+  }
+  #comboBox {
+    position:absolute; top:70px; left:20px;
+    color:#ff6b6b;
+    font-size:16px; font-weight:bold;
+    text-shadow:0 2px 4px rgba(0,0,0,0.8);
+    opacity:0;
+    transition: opacity 0.2s;
+    z-index:10;
+    pointer-events:none;
+  }
+  #startScreen, #endScreen {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:radial-gradient(ellipse at center, #1a1040 0%, #05030f 100%);
+    z-index:20;
+    text-align:center;
+    padding:20px;
+  }
+  #endScreen { display:none; }
+  .title {
+    font-size:clamp(28px, 6vw, 48px);
+    color:#ffe9a8;
+    text-shadow:0 0 20px rgba(255,180,60,0.6), 0 4px 8px rgba(0,0,0,0.8);
+    margin-bottom:8px;
+    font-weight:900;
+    letter-spacing:2px;
+  }
+  .subtitle {
+    font-size:clamp(14px, 3vw, 18px);
+    color:#a8c4ff;
+    margin-bottom:32px;
+    opacity:0.85;
+  }
+  .bigMosquito {
+    font-size:80px;
+    margin-bottom:16px;
+    animation: floaty 2s ease-in-out infinite;
+  }
+  @keyframes floaty {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+  .playBtn {
+    background:linear-gradient(180deg, #ff8a5c, #ff5c5c);
+    color:white;
+    border:none;
+    padding:16px 48px;
+    font-size:22px;
+    font-weight:bold;
+    border-radius:50px;
+    cursor:pointer;
+    box-shadow:0 6px 0 #b83a3a, 0 8px 20px rgba(255,80,80,0.4);
+    transition: transform 0.1s;
+    font-family: inherit;
+  }
+  .playBtn:active {
+    transform: translateY(4px);
+    box-shadow:0 2px 0 #b83a3a, 0 4px 10px rgba(255,80,80,0.4);
+  }
+  .instructions {
+    margin-top:24px;
+    color:#8899cc;
+    font-size:14px;
+    max-width:320px;
+    line-height:1.6;
+  }
+  .resultTitle {
+    font-size:clamp(24px, 5vw, 36px);
+    color:#ffe9a8;
+    margin-bottom:12px;
+    font-weight:900;
+  }
+  .resultScore {
+    font-size:clamp(40px, 10vw, 64px);
+    color:#ff6b6b;
+    font-weight:900;
+    text-shadow:0 4px 10px rgba(0,0,0,0.6);
+    margin-bottom:8px;
+  }
+  .resultComment {
+    font-size:16px;
+    color:#a8c4ff;
+    margin-bottom:28px;
+    max-width:340px;
+    line-height:1.6;
+  }
+  .rank-badge {
+    display:inline-block;
+    background:rgba(255,220,120,0.15);
+    border:2px solid #ffd76a;
+    color:#ffd76a;
+    padding:4px 16px;
+    border-radius:20px;
+    font-size:14px;
+    margin-bottom:20px;
+  }
+  #floatingTexts {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events:none; z-index:15; overflow:hidden;
+  }
+  .floatText {
+    position:absolute;
+    font-weight:900;
+    font-size:24px;
+    color:#ffe9a8;
+    text-shadow:0 2px 6px rgba(0,0,0,0.7);
+    animation: floatUp 0.8s ease-out forwards;
+    pointer-events:none;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0.6); opacity:1; }
+    30% { transform: translateY(-10px) scale(1.2); opacity:1; }
+    100% { transform: translateY(-60px) scale(1); opacity:0; }
+  }
+  .footer-credit {
+    position:absolute; bottom:12px; width:100%; text-align:center;
+    color:#4a5580; font-size:11px; z-index:20;
+  }
+
+  /* ---- Coin display & shop button on start screen ---- */
+  .coinDisplay {
+    display:flex; align-items:center; gap:6px;
+    background:rgba(255,220,120,0.12);
+    border:1.5px solid rgba(255,215,106,0.5);
+    border-radius:20px;
+    padding:6px 18px;
+    color:#ffd76a;
+    font-weight:bold;
+    font-size:16px;
+    margin-bottom:18px;
+  }
+  .weaponBadge {
+    display:flex; align-items:center; gap:6px;
+    color:#a8c4ff;
+    font-size:13px;
+    margin-bottom:14px;
+  }
+  .secondaryBtn {
+    background:rgba(120,140,220,0.15);
+    color:#c8d4ff;
+    border:1.5px solid rgba(160,180,255,0.4);
+    padding:10px 28px;
+    font-size:15px;
+    font-weight:bold;
+    border-radius:40px;
+    cursor:pointer;
+    margin-top:14px;
+    font-family:inherit;
+  }
+  .secondaryBtn:active { transform: translateY(2px); }
+
+  /* ---- Shop screen ---- */
+  #shopScreen {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    display:none; flex-direction:column; align-items:center; justify-content:flex-start;
+    background:radial-gradient(ellipse at center, #1a1040 0%, #05030f 100%);
+    z-index:25;
+    padding:24px 16px 16px;
+    overflow-y:auto;
+  }
+  .shopTitle {
+    font-size:clamp(22px,5vw,30px);
+    color:#ffe9a8;
+    font-weight:900;
+    margin-bottom:4px;
+  }
+  .shopCoin {
+    color:#ffd76a; font-weight:bold; font-size:16px; margin-bottom:20px;
+  }
+  .shopList {
+    width:100%; max-width:420px;
+    display:flex; flex-direction:column; gap:14px;
+    margin-bottom:16px;
+  }
+  .shopItem {
+    display:flex; align-items:center; gap:14px;
+    background:rgba(255,255,255,0.05);
+    border:2px solid rgba(255,255,255,0.12);
+    border-radius:16px;
+    padding:14px 16px;
+    text-align:left;
+  }
+  .shopItem.equipped { border-color:#ffd76a; background:rgba(255,215,106,0.1); }
+  .shopItem .itemEmoji { font-size:36px; line-height:1; flex-shrink:0; }
+  .shopItem .itemInfo { flex:1; min-width:0; }
+  .shopItem .itemName { color:#ffe9a8; font-weight:bold; font-size:16px; }
+  .shopItem .itemDesc { color:#8899cc; font-size:12.5px; margin-top:2px; line-height:1.4; }
+  .shopItem .itemPrice { color:#ffd76a; font-size:13px; margin-top:4px; font-weight:bold; }
+  .shopBtn {
+    flex-shrink:0;
+    border:none; border-radius:20px;
+    padding:9px 16px;
+    font-size:13px; font-weight:bold;
+    cursor:pointer;
+    font-family:inherit;
+    color:white;
+    background:linear-gradient(180deg,#ff8a5c,#ff5c5c);
+  }
+  .shopBtn:disabled {
+    background:rgba(255,255,255,0.1);
+    color:#666;
+    cursor:default;
+  }
+  .shopBtn.equippedBtn {
+    background:linear-gradient(180deg,#6bd47a,#3fa855);
+  }
+  .shopItem.saberItem { border-color:rgba(255,80,220,0.5); box-shadow:0 0 20px rgba(255,80,220,0.15); }
+  .shopItem.saberItem .itemName { color:#ff9bff; }
+
+  /* ---- Settings icon & screen ---- */
+  #settingsIconBtn {
+    position:absolute; top:16px; right:16px;
+    width:40px; height:40px;
+    border-radius:50%;
+    background:rgba(20,10,40,0.6);
+    border:1.5px solid rgba(255,220,120,0.3);
+    color:#ffe9a8;
+    font-size:19px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    z-index:21;
+  }
+  #settingsScreen {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    display:none; flex-direction:column; align-items:center; justify-content:flex-start;
+    background:radial-gradient(ellipse at center, #1a1040 0%, #05030f 100%);
+    z-index:26;
+    padding:28px 20px 16px;
+    overflow-y:auto;
+  }
+  .settingsTitle {
+    font-size:clamp(22px,5vw,28px);
+    color:#ffe9a8; font-weight:900; margin-bottom:22px;
+  }
+  .settingsSection {
+    width:100%; max-width:380px;
+    background:rgba(255,255,255,0.05);
+    border:1.5px solid rgba(255,255,255,0.12);
+    border-radius:14px;
+    padding:16px 18px;
+    margin-bottom:14px;
+    text-align:left;
+  }
+  .settingsLabel {
+    color:#8899cc; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;
+  }
+  .settingsRow {
+    display:flex; align-items:center; justify-content:space-between;
+    color:#e0e6ff; font-size:15px; padding:4px 0;
+  }
+  .devAuthBtn {
+    margin-top:10px;
+    width:100%;
+    background:linear-gradient(180deg,#7a8fff,#4a5ecc);
+    color:white; border:none; border-radius:10px;
+    padding:10px; font-size:14px; font-weight:bold;
+    cursor:pointer; font-family:inherit;
+  }
+  #devAuthModal {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.6);
+    z-index:30;
+  }
+  .devAuthBox {
+    background:#1a1040;
+    border:2px solid rgba(160,180,255,0.4);
+    border-radius:16px;
+    padding:24px 22px;
+    width:min(300px, 82vw);
+    text-align:center;
+  }
+  .devAuthBox .settingsLabel { text-align:center; margin-bottom:10px; }
+  #devAuthInput {
+    width:100%;
+    background:rgba(255,255,255,0.08);
+    border:1.5px solid rgba(255,255,255,0.2);
+    border-radius:10px;
+    color:#ffe9a8;
+    font-size:20px;
+    text-align:center;
+    letter-spacing:6px;
+    padding:10px;
+    margin-bottom:14px;
+    font-family:inherit;
+  }
+  .devAuthBtnRow { display:flex; gap:8px; }
+  .devAuthBtnRow button {
+    flex:1; border:none; border-radius:10px;
+    padding:10px; font-size:14px; font-weight:bold;
+    cursor:pointer; font-family:inherit;
+  }
+  #devAuthCancel { background:rgba(255,255,255,0.1); color:#c8d4ff; }
+  #devAuthConfirm { background:linear-gradient(180deg,#ff8a5c,#ff5c5c); color:white; }
+  #devAuthMsg { font-size:12.5px; margin-top:10px; min-height:16px; }
+  #devAuthMsg.ok { color:#8affa0; }
+  #devAuthMsg.err { color:#ff8a8a; }
+</style>
+</head>
+<body>
+<div id="gameContainer">
+  <canvas id="gameCanvas"></canvas>
+
+  <button id="settingsIconBtn">⚙️</button>
+
+  <div id="hud" style="display:none;">
+    <div class="hud-box">⏱ <span id="timeLeft">60</span>초</div>
+    <div class="hud-box">🩸 <span id="score">0</span>점</div>
+    <div class="hud-box" id="missBox">💢 <span id="missCount">0</span>/7</div>
+  </div>
+  <div id="comboBox"></div>
+  <div id="floatingTexts"></div>
+
+  <div id="startScreen">
+    <div class="bigMosquito">🦟</div>
+    <div class="title">모기 잡기 대소동</div>
+    <div class="subtitle">— 여름 한정 이벤트 —</div>
+    <div class="coinDisplay">🪙 <span id="coinDisplayStart">0</span></div>
+    <div class="weaponBadge">장착 무기: <span id="equippedLabel">파리채 🏓</span></div>
+    <button class="playBtn" id="startBtn">게임 시작</button>
+    <button class="secondaryBtn" id="openShopBtn">🛒 아이템 상점</button>
+    <div class="instructions">위이이이이이ㅣㅣㅣㅇ이잉ㅇ</div>
+  </div>
+
+  <div id="shopScreen">
+    <div class="shopTitle">🛒 아이템 상점</div>
+    <div class="shopCoin">보유 코인: 🪙 <span id="coinDisplayShop">0</span></div>
+    <div class="shopList" id="shopList"></div>
+    <button class="secondaryBtn" id="closeShopBtn">← 돌아가기</button>
+  </div>
+
+  <div id="endScreen">
+    <div class="resultTitle">타임 아웃!</div>
+    <div class="resultScore" id="finalScore">0</div>
+    <div class="rank-badge" id="rankBadge">모기 신입</div>
+    <div class="resultComment" id="resultComment"></div>
+    <div class="coinDisplay" id="coinEarnedBox">🪙 +<span id="coinEarned">0</span> 획득!</div>
+    <button class="playBtn" id="retryBtn">다시 도전</button>
+    <button class="secondaryBtn" id="shopFromEndBtn">🛒 상점 가기</button>
+  </div>
+
+  <div id="settingsScreen">
+    <div class="settingsTitle">⚙️ 설정</div>
+
+    <div class="settingsSection">
+      <div class="settingsLabel">게임 정보</div>
+      <div class="settingsRow"><span>제작</span><span>정새싹게임즈</span></div>
+      <div class="settingsRow"><span>개발자</span><span>정지호</span></div>
+    </div>
+
+    <div class="settingsSection">
+      <div class="settingsLabel">보유 현황</div>
+      <div class="settingsRow"><span>코인</span><span>🪙 <span id="coinDisplaySettings">0</span></span></div>
+      <div class="settingsRow"><span>장착 무기</span><span id="equippedLabelSettings">파리채 🏓</span></div>
+    </div>
+
+    <div class="settingsSection">
+      <div class="settingsLabel">개발자 인증</div>
+      <div class="settingsRow" style="color:#8899cc; font-size:13px;">인증 시 모든 무기가 즉시 해금됩니다.</div>
+      <button class="devAuthBtn" id="devAuthOpenBtn">🔒 개발자 인증</button>
+    </div>
+
+    <button class="secondaryBtn" id="closeSettingsBtn">← 돌아가기</button>
+  </div>
+
+  <div id="devAuthModal">
+    <div class="devAuthBox">
+      <div class="settingsLabel">개발자 인증 코드 입력</div>
+      <input id="devAuthInput" type="password" inputmode="numeric" maxlength="8" placeholder="••••">
+      <div class="devAuthBtnRow">
+        <button id="devAuthCancel">취소</button>
+        <button id="devAuthConfirm">확인</button>
+      </div>
+      <div id="devAuthMsg"></div>
+    </div>
+  </div>
+
+  <div class="footer-credit">정새싹게임즈 — 망해도 웃긴 게임을 만듭니다</div>
+</div>
+
+<script>
+(function(){
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const startScreen = document.getElementById('startScreen');
+  const endScreen = document.getElementById('endScreen');
+  const hud = document.getElementById('hud');
+  const startBtn = document.getElementById('startBtn');
+  const retryBtn = document.getElementById('retryBtn');
+  const timeLeftEl = document.getElementById('timeLeft');
+  const scoreEl = document.getElementById('score');
+  const comboBox = document.getElementById('comboBox');
+  const missCountEl = document.getElementById('missCount');
+  const missBox = document.getElementById('missBox');
+  const floatingTexts = document.getElementById('floatingTexts');
+  const finalScoreEl = document.getElementById('finalScore');
+  const rankBadge = document.getElementById('rankBadge');
+  const resultComment = document.getElementById('resultComment');
+  const shopScreen = document.getElementById('shopScreen');
+  const shopList = document.getElementById('shopList');
+  const coinDisplayStart = document.getElementById('coinDisplayStart');
+  const coinDisplayShop = document.getElementById('coinDisplayShop');
+  const equippedLabel = document.getElementById('equippedLabel');
+  const openShopBtn = document.getElementById('openShopBtn');
+  const closeShopBtn = document.getElementById('closeShopBtn');
+  const shopFromEndBtn = document.getElementById('shopFromEndBtn');
+  const coinEarnedBox = document.getElementById('coinEarnedBox');
+  const coinEarnedEl = document.getElementById('coinEarned');
+  const settingsIconBtn = document.getElementById('settingsIconBtn');
+  const settingsScreen = document.getElementById('settingsScreen');
+  const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+  const coinDisplaySettings = document.getElementById('coinDisplaySettings');
+  const equippedLabelSettings = document.getElementById('equippedLabelSettings');
+  const devAuthOpenBtn = document.getElementById('devAuthOpenBtn');
+  const devAuthModal = document.getElementById('devAuthModal');
+  const devAuthInput = document.getElementById('devAuthInput');
+  const devAuthCancel = document.getElementById('devAuthCancel');
+  const devAuthConfirm = document.getElementById('devAuthConfirm');
+  const devAuthMsg = document.getElementById('devAuthMsg');
+
+  let W, H, DPR;
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---------- Audio (Web Audio API only, no external files) ----------
+  let audioCtx = null;
+  function ensureAudio(){
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function playSplat(){
+    if(!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const bufferSize = audioCtx.sampleRate * 0.15;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++){
+      data[i] = (Math.random()*2-1) * Math.pow(1 - i/bufferSize, 3);
+    }
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 900;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now+0.15);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    noise.start(now);
+  }
+
+  function playMiss(){
+    if(!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(160, now);
+    osc.frequency.exponentialRampToValueAtTime(60, now+0.2);
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now+0.2);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now+0.2);
+  }
+
+  function playCombo(){
+    if(!audioCtx) return;
+    const now = audioCtx.currentTime;
+    [0,0.06,0.12].forEach((t,i)=>{
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type='sine';
+      osc.frequency.value = 500 + i*180;
+      gain.gain.setValueAtTime(0.001, now+t);
+      gain.gain.linearRampToValueAtTime(0.06, now+t+0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now+t+0.12);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(now+t); osc.stop(now+t+0.13);
+    });
+  }
+
+  function playCoil(){
+    if(!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type='triangle';
+    osc.frequency.setValueAtTime(300,now);
+    osc.frequency.exponentialRampToValueAtTime(900, now+0.3);
+    gain.gain.setValueAtTime(0.05, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now+0.3);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now); osc.stop(now+0.3);
+  }
+
+  function playSpray(){
+    if(!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const bufferSize = audioCtx.sampleRate * 0.35;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++){
+      data[i] = (Math.random()*2-1) * Math.pow(1 - i/bufferSize, 1.5);
+    }
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 2200;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.16, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now+0.35);
+    noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+    noise.start(now);
+  }
+
+  function playSaber(){
+    if(!audioCtx) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc2.type = 'square';
+    osc.frequency.setValueAtTime(900, now);
+    osc.frequency.exponentialRampToValueAtTime(120, now+0.35);
+    osc2.frequency.setValueAtTime(1400, now);
+    osc2.frequency.exponentialRampToValueAtTime(200, now+0.35);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.09, now+0.03);
+    gain.gain.exponentialRampToValueAtTime(0.001, now+0.4);
+    osc.connect(gain); osc2.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now); osc.stop(now+0.4);
+    osc2.start(now); osc2.stop(now+0.4);
+  }
+
+  // ---------- Game state ----------
+  let state = 'idle'; // idle | playing | ended
+  let score = 0;
+  let combo = 0;
+  let maxCombo = 0;
+  let missCount = 0;
+  const MAX_MISS = 7;
+  let gameOverReason = 'timeout'; // 'timeout' | 'miss'
+  let timeLeft = 60;
+  let timerId = null;
+  let mosquitoes = [];
+  let particles = [];
+  let cracks = [];
+  let fireflies = [];
+  let flashEffects = [];
+  let comboRings = [];
+  let comboStars = [];
+  let screenShake = { x:0, y:0, time:0, mag:0 };
+  let sprayClouds = [];
+  let saberSlashes = [];
+  let lastSpawn = 0;
+  let spawnInterval = 1100;
+  let elapsed = 0;
+
+  function rand(a,b){ return a + Math.random()*(b-a); }
+
+  // ---------- Shop / Weapon system (persisted via localStorage) ----------
+  const SAVE_KEY = 'mosquitoHunt_save_v1';
+  const WEAPONS = {
+    swatter: {
+      id:'swatter', name:'파리채', emoji:'🏓', price:0,
+      hitRadiusMul:1.4, aoeRadius:0, oneHitKill:false,
+      desc:'기본 지급 무기. 정확히 노려야 맞습니다.'
+    },
+    spray: {
+      id:'spray', name:'에프킬라', emoji:'🧴', price:150,
+      hitRadiusMul:1.4, aoeRadius:70, oneHitKill:false,
+      desc:'분사! 클릭 지점 주변 모기를 한번에 처치하는 광역 무기.'
+    },
+    saber: {
+      id:'saber', name:'광선검', emoji:'🗡️', price:500,
+      hitRadiusMul:1.6, aoeRadius:100, oneHitKill:true,
+      desc:'엄청 세고 화끈하고 좋고 비쌈. 튼튼한 모기도 한방, 넓은 범위 즉사.'
+    }
+  };
+  const WEAPON_ORDER = ['swatter','spray','saber'];
+
+  function loadSave(){
+    try{
+      const raw = localStorage.getItem(SAVE_KEY);
+      if(!raw) return { coins:0, owned:['swatter'], equipped:'swatter' };
+      const parsed = JSON.parse(raw);
+      if(!parsed.owned || !parsed.owned.includes('swatter')) parsed.owned = ['swatter', ...(parsed.owned||[])];
+      if(!parsed.equipped) parsed.equipped = 'swatter';
+      if(typeof parsed.coins !== 'number') parsed.coins = 0;
+      return parsed;
+    }catch(e){
+      return { coins:0, owned:['swatter'], equipped:'swatter' };
+    }
+  }
+  function saveSave(){
+    try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){}
+  }
+
+  let save = loadSave();
+
+  function currentWeapon(){ return WEAPONS[save.equipped] || WEAPONS.swatter; }
+
+  function refreshCoinDisplays(){
+    coinDisplayStart.textContent = save.coins;
+    coinDisplayShop.textContent = save.coins;
+    coinDisplaySettings.textContent = save.coins;
+    const w = currentWeapon();
+    equippedLabel.textContent = w.name + ' ' + w.emoji;
+    equippedLabelSettings.textContent = w.name + ' ' + w.emoji;
+  }
+
+  function renderShop(){
+    shopList.innerHTML = '';
+    for(const id of WEAPON_ORDER){
+      const w = WEAPONS[id];
+      const owned = save.owned.includes(id);
+      const equipped = save.equipped === id;
+      const div = document.createElement('div');
+      div.className = 'shopItem' + (equipped?' equipped':'') + (id==='saber'?' saberItem':'');
+      const priceText = w.price===0 ? '기본 지급' : ('🪙 ' + w.price);
+      let btnHtml;
+      if(equipped){
+        btnHtml = '<button class="shopBtn equippedBtn" disabled>장착중</button>';
+      } else if(owned){
+        btnHtml = '<button class="shopBtn equippedBtn" data-action="equip" data-id="'+id+'">장착하기</button>';
+      } else {
+        const canAfford = save.coins >= w.price;
+        btnHtml = '<button class="shopBtn" data-action="buy" data-id="'+id+'" '+(canAfford?'':'disabled')+'>구매</button>';
+      }
+      div.innerHTML =
+        '<div class="itemEmoji">'+w.emoji+'</div>'+
+        '<div class="itemInfo">'+
+          '<div class="itemName">'+w.name+'</div>'+
+          '<div class="itemDesc">'+w.desc+'</div>'+
+          '<div class="itemPrice">'+priceText+'</div>'+
+        '</div>'+
+        btnHtml;
+      shopList.appendChild(div);
+    }
+    refreshCoinDisplays();
+  }
+
+  shopList.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button[data-action]');
+    if(!btn) return;
+    const id = btn.dataset.id;
+    const w = WEAPONS[id];
+    if(btn.dataset.action==='buy'){
+      if(save.coins >= w.price && !save.owned.includes(id)){
+        save.coins -= w.price;
+        save.owned.push(id);
+        save.equipped = id;
+        saveSave();
+        renderShop();
+      }
+    } else if(btn.dataset.action==='equip'){
+      save.equipped = id;
+      saveSave();
+      renderShop();
+    }
+  });
+
+  openShopBtn.addEventListener('click', ()=>{
+    startScreen.style.display = 'none';
+    shopScreen.style.display = 'flex';
+    renderShop();
+  });
+  closeShopBtn.addEventListener('click', ()=>{
+    shopScreen.style.display = 'none';
+    startScreen.style.display = 'flex';
+    refreshCoinDisplays();
+  });
+  shopFromEndBtn.addEventListener('click', ()=>{
+    endScreen.style.display = 'none';
+    shopScreen.style.display = 'flex';
+    renderShop();
+  });
+
+  // ---------- Settings screen ----------
+  settingsIconBtn.addEventListener('click', ()=>{
+    // 어느 화면에서 눌러도 설정으로 전환 (게임 중엔 비활성)
+    if(state==='playing') return;
+    startScreen.style.display = 'none';
+    endScreen.style.display = 'none';
+    shopScreen.style.display = 'none';
+    settingsScreen.style.display = 'flex';
+    refreshCoinDisplays();
+  });
+  closeSettingsBtn.addEventListener('click', ()=>{
+    settingsScreen.style.display = 'none';
+    startScreen.style.display = 'flex';
+  });
+
+  // ---------- Developer auth (1234 → 모든 무기 해금) ----------
+  const DEV_CODE = '1234';
+  function openDevAuth(){
+    devAuthInput.value = '';
+    devAuthMsg.textContent = '';
+    devAuthMsg.className = '';
+    devAuthModal.style.display = 'flex';
+    setTimeout(()=>devAuthInput.focus(), 50);
+  }
+  function closeDevAuth(){
+    devAuthModal.style.display = 'none';
+  }
+  function tryDevAuth(){
+    if(devAuthInput.value === DEV_CODE){
+      let added = false;
+      for(const id of WEAPON_ORDER){
+        if(!save.owned.includes(id)){ save.owned.push(id); added = true; }
+      }
+      saveSave();
+      devAuthMsg.textContent = '인증 성공! 모든 무기가 해금되었습니다 🎉';
+      devAuthMsg.className = 'ok';
+      refreshCoinDisplays();
+      setTimeout(()=>{ closeDevAuth(); }, 1100);
+    } else {
+      devAuthMsg.textContent = '인증 코드가 올바르지 않습니다.';
+      devAuthMsg.className = 'err';
+      devAuthInput.value = '';
+      devAuthInput.focus();
+    }
+  }
+  devAuthOpenBtn.addEventListener('click', openDevAuth);
+  devAuthCancel.addEventListener('click', closeDevAuth);
+  devAuthConfirm.addEventListener('click', tryDevAuth);
+  devAuthInput.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter') tryDevAuth();
+  });
+
+
+
+  // ---------- Mosquito ----------
+  function spawnMosquito(){
+    const edge = Math.floor(rand(0,4));
+    let x,y;
+    const margin = 40;
+    if(edge===0){ x=rand(margin,W-margin); y=-margin; }
+    else if(edge===1){ x=W+margin; y=rand(margin,H-margin); }
+    else if(edge===2){ x=rand(margin,W-margin); y=H+margin; }
+    else { x=-margin; y=rand(margin,H-margin); }
+
+    const targetX = rand(W*0.15, W*0.85);
+    const targetY = rand(H*0.15, H*0.75);
+
+    const speedMul = 1 + Math.min(score/150, 1.8);
+    mosquitoes.push({
+      x, y,
+      baseX: targetX, baseY: targetY,
+      angle: Math.random()*Math.PI*2,
+      angleSpeed: rand(0.03,0.06)*(Math.random()<0.5?1:-1),
+      radius: rand(30,90),
+      size: rand(16,26),
+      wingPhase: Math.random()*Math.PI*2,
+      arriveSpeed: rand(0.02,0.035)*speedMul,
+      alive: true,
+      hp: score > 200 && Math.random() < 0.25 ? 2 : 1,
+      maxHp: 1,
+      spawnTime: performance.now(),
+      panFactor: (x/W)*2-1
+    });
+    mosquitoes[mosquitoes.length-1].maxHp = mosquitoes[mosquitoes.length-1].hp;
+  }
+
+  function updateMosquitoes(dt){
+    for(const m of mosquitoes){
+      if(!m.alive) continue;
+      // ease toward orbit center
+      m.x += (m.baseX - m.x) * m.arriveSpeed;
+      m.y += (m.baseY - m.y) * m.arriveSpeed;
+      m.angle += m.angleSpeed;
+      m.wingPhase += 0.9;
+    }
+  }
+
+  function mosquitoScreenPos(m){
+    return {
+      x: m.x + Math.cos(m.angle)*m.radius,
+      y: m.y + Math.sin(m.angle)*m.radius*0.6
+    };
+  }
+
+  function drawMosquito(m){
+    const p = mosquitoScreenPos(m);
+    const wingFlap = Math.sin(m.wingPhase)*0.5+0.5;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    const dirAngle = m.angleSpeed>0 ? m.angle+Math.PI/2 : m.angle-Math.PI/2;
+    ctx.rotate(dirAngle*0.15);
+
+    // wings
+    ctx.fillStyle = 'rgba(220,230,255,0.55)';
+    ctx.beginPath();
+    ctx.ellipse(-m.size*0.3, -m.size*0.2 - wingFlap*3, m.size*0.55, m.size*0.25, -0.4, 0, Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(m.size*0.3, -m.size*0.2 - wingFlap*3, m.size*0.55, m.size*0.25, 0.4, 0, Math.PI*2);
+    ctx.fill();
+
+    // body
+    const bodyGrad = ctx.createLinearGradient(0,-m.size*0.5,0,m.size*0.5);
+    bodyGrad.addColorStop(0,'#3a2a1a');
+    bodyGrad.addColorStop(1,'#1a1008');
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.ellipse(0,0,m.size*0.22,m.size*0.55,0,0,Math.PI*2);
+    ctx.fill();
+
+    // legs
+    ctx.strokeStyle = 'rgba(20,12,6,0.8)';
+    ctx.lineWidth = 1.2;
+    for(let i=-1;i<=1;i++){
+      ctx.beginPath();
+      ctx.moveTo(0, i*m.size*0.15);
+      ctx.lineTo(m.size*0.5*(i===0?0.3:0.9), i*m.size*0.15 + m.size*0.4);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0, i*m.size*0.15);
+      ctx.lineTo(-m.size*0.5*(i===0?0.3:0.9), i*m.size*0.15 + m.size*0.4);
+      ctx.stroke();
+    }
+
+    // proboscis
+    ctx.strokeStyle = '#1a1008';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(0,-m.size*0.5);
+    ctx.lineTo(0,-m.size*0.9);
+    ctx.stroke();
+
+    // hp indicator (tougher mosquito glow)
+    if(m.maxHp>1){
+      ctx.strokeStyle = m.hp>1 ? 'rgba(255,90,90,0.9)':'rgba(255,220,120,0.9)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0,0,m.size*0.9,0,Math.PI*2);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  // ---------- Particles (splat) ----------
+  function spawnSplat(x,y,big,comboLevel){
+    comboLevel = comboLevel || 0;
+    const tier = Math.min(Math.floor(comboLevel/3), 4); // 0~4단계
+    const n = (big ? 14 : 8) + tier*6;
+    const speedMul = 1 + tier*0.4;
+    const palette = [
+      ['#8a1f2b','#c93a45'],
+      ['#c93a45','#ff6b4a'],
+      ['#ff6b4a','#ffb347'],
+      ['#ffb347','#ffe066'],
+      ['#ffe066','#ffffff']
+    ][tier];
+    for(let i=0;i<n;i++){
+      particles.push({
+        x, y,
+        vx: rand(-3,3)*speedMul, vy: rand(-4,-1)*speedMul,
+        life: 1,
+        size: rand(2,5)*(big?1.3:1)*(1+tier*0.15),
+        color: Math.random()<0.6 ? palette[0] : palette[1]
+      });
+    }
+  }
+
+  function updateParticles(){
+    for(const p of particles){
+      p.x += p.vx; p.y += p.vy;
+      p.vy += 0.25;
+      p.life -= 0.025;
+    }
+    particles = particles.filter(p=>p.life>0);
+  }
+
+  function drawParticles(){
+    for(const p of particles){
+      ctx.globalAlpha = Math.max(p.life,0);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // ---------- Combo hit effects (grows flashier with combo) ----------
+  function spawnComboEffect(x,y,comboLevel){
+    const tier = Math.min(Math.floor(comboLevel/3), 4); // 0~4단계
+    // 링 이펙트: 콤보 3부터 등장, 단계 오를수록 링 개수/두께 증가
+    if(comboLevel>=3){
+      const ringCount = 1 + tier;
+      for(let i=0;i<ringCount;i++){
+        comboRings.push({
+          x, y, life:1,
+          delay: i*0.08,
+          maxR: 30 + tier*18,
+          color: tier>=3 ? '#ffe066' : (tier>=1 ? '#ff9b4a' : '#ffd76a')
+        });
+      }
+    }
+    // 별 파편: 콤보 5부터, 단계 오를수록 개수/크기 증가
+    if(comboLevel>=5){
+      const starCount = 4 + tier*3;
+      for(let i=0;i<starCount;i++){
+        const ang = rand(0,Math.PI*2);
+        const speed = rand(2,5)+tier;
+        comboStars.push({
+          x, y,
+          vx: Math.cos(ang)*speed, vy: Math.sin(ang)*speed,
+          life:1, rot: rand(0,Math.PI*2), rotSpeed: rand(-0.2,0.2),
+          size: rand(4,8)+tier*1.5
+        });
+      }
+    }
+    // 화면 흔들림: 콤보 7부터
+    if(comboLevel>=7){
+      screenShake.time = 0.25;
+      screenShake.mag = 3 + tier*2;
+    }
+  }
+
+  function updateComboEffects(){
+    for(const r of comboRings){
+      if(r.delay>0){ r.delay -= 0.02; continue; }
+      r.life -= 0.045;
+    }
+    comboRings = comboRings.filter(r=>r.life>0);
+
+    for(const s of comboStars){
+      s.x += s.vx; s.y += s.vy;
+      s.vx *= 0.96; s.vy *= 0.96;
+      s.rot += s.rotSpeed;
+      s.life -= 0.02;
+    }
+    comboStars = comboStars.filter(s=>s.life>0);
+
+    if(screenShake.time>0){
+      screenShake.time -= 0.016;
+      screenShake.x = rand(-1,1)*screenShake.mag*(screenShake.time/0.25);
+      screenShake.y = rand(-1,1)*screenShake.mag*(screenShake.time/0.25);
+    } else {
+      screenShake.x = 0; screenShake.y = 0;
+    }
+  }
+
+  function drawComboEffects(){
+    for(const r of comboRings){
+      if(r.delay>0) continue;
+      ctx.save();
+      ctx.globalAlpha = Math.max(r.life,0)*0.8;
+      ctx.strokeStyle = r.color;
+      ctx.lineWidth = 3*r.life+1;
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, r.maxR*(1-r.life)+8, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    for(const s of comboStars){
+      ctx.save();
+      ctx.globalAlpha = Math.max(s.life,0);
+      ctx.translate(s.x,s.y);
+      ctx.rotate(s.rot);
+      ctx.fillStyle = '#ffe066';
+      ctx.shadowColor = '#ffb347';
+      ctx.shadowBlur = 6;
+      drawStarShape(s.size);
+      ctx.restore();
+    }
+  }
+
+  function drawStarShape(size){
+    ctx.beginPath();
+    for(let i=0;i<5;i++){
+      const outerAng = (i/5)*Math.PI*2 - Math.PI/2;
+      const innerAng = outerAng + Math.PI/5;
+      const ox = Math.cos(outerAng)*size, oy = Math.sin(outerAng)*size;
+      const ix = Math.cos(innerAng)*size*0.45, iy = Math.sin(innerAng)*size*0.45;
+      if(i===0) ctx.moveTo(ox,oy); else ctx.lineTo(ox,oy);
+      ctx.lineTo(ix,iy);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // ---------- Weapon-specific effects: 에프킬라 분사구름 ----------
+  function spawnSprayCloud(x,y,radius){
+    sprayClouds.push({x,y,radius,life:1});
+    for(let i=0;i<16;i++){
+      const ang = rand(0,Math.PI*2);
+      const dist = rand(0,radius);
+      particles.push({
+        x:x+Math.cos(ang)*dist*0.3, y:y+Math.sin(ang)*dist*0.3,
+        vx:Math.cos(ang)*rand(0.5,2), vy:Math.sin(ang)*rand(0.5,2)-0.5,
+        life:1, size:rand(4,9),
+        color: Math.random()<0.5 ? '#9be89b' : '#c9ffb0'
+      });
+    }
+  }
+  function updateSprayClouds(){
+    for(const c of sprayClouds) c.life -= 0.03;
+    sprayClouds = sprayClouds.filter(c=>c.life>0);
+  }
+  function drawSprayClouds(){
+    for(const c of sprayClouds){
+      ctx.save();
+      ctx.globalAlpha = Math.max(c.life,0)*0.35;
+      const g = ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,c.radius*(1.3-c.life*0.3));
+      g.addColorStop(0,'rgba(180,255,180,0.6)');
+      g.addColorStop(1,'rgba(180,255,180,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(c.x,c.y,c.radius*(1.3-c.life*0.3),0,Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // ---------- Weapon-specific effects: 광선검 슬래시 ----------
+  function spawnSaberSlash(x,y,radius){
+    const angle = rand(0,Math.PI*2);
+    saberSlashes.push({x,y,angle,radius,life:1});
+    for(let i=0;i<24;i++){
+      const ang = rand(0,Math.PI*2);
+      const speed = rand(2,7);
+      particles.push({
+        x, y,
+        vx:Math.cos(ang)*speed, vy:Math.sin(ang)*speed - 1,
+        life:1, size:rand(3,7),
+        color: Math.random()<0.5 ? '#ff5cf0' : '#ffb347'
+      });
+    }
+    screenShake.time = 0.3;
+    screenShake.mag = 8;
+  }
+  function updateSaberSlashes(){
+    for(const s of saberSlashes) s.life -= 0.07;
+    saberSlashes = saberSlashes.filter(s=>s.life>0);
+  }
+  function drawSaberSlashes(){
+    for(const s of saberSlashes){
+      ctx.save();
+      ctx.globalAlpha = Math.max(s.life,0);
+      ctx.translate(s.x,s.y);
+      ctx.rotate(s.angle);
+      const len = s.radius*2.2;
+      const grad = ctx.createLinearGradient(-len/2,0,len/2,0);
+      grad.addColorStop(0,'rgba(255,92,240,0)');
+      grad.addColorStop(0.5,'rgba(255,255,255,0.95)');
+      grad.addColorStop(1,'rgba(255,92,240,0)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 6*s.life+2;
+      ctx.shadowColor = '#ff5cf0';
+      ctx.shadowBlur = 20;
+      ctx.beginPath();
+      ctx.moveTo(-len/2,0);
+      ctx.lineTo(len/2,0);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+
+  function spawnCrack(x,y){
+    const lines = [];
+    const n = Math.floor(rand(5,8));
+    for(let i=0;i<n;i++){
+      const ang = rand(0,Math.PI*2);
+      const len = rand(20,55);
+      lines.push({ang, len});
+    }
+    cracks.push({x,y,lines,life:1, size:rand(0.8,1.3)});
+    flashEffects.push({x,y,life:1});
+  }
+
+  function updateCracks(){
+    for(const c of cracks) c.life -= 0.004;
+    cracks = cracks.filter(c=>c.life>0);
+    for(const f of flashEffects) f.life -= 0.08;
+    flashEffects = flashEffects.filter(f=>f.life>0);
+  }
+
+  function drawCracks(){
+    for(const c of cracks){
+      ctx.save();
+      ctx.globalAlpha = Math.min(c.life*2, 0.7);
+      ctx.strokeStyle = '#dddddd';
+      ctx.lineWidth = 1.5;
+      ctx.translate(c.x,c.y);
+      ctx.scale(c.size,c.size);
+      for(const l of c.lines){
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.lineTo(Math.cos(l.ang)*l.len, Math.sin(l.ang)*l.len);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    for(const f of flashEffects){
+      ctx.save();
+      ctx.globalAlpha = f.life*0.5;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(f.x,f.y,40*(1-f.life)+10,0,Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // ---------- Fireflies (ambient) ----------
+  function initFireflies(){
+    fireflies = [];
+    for(let i=0;i<14;i++){
+      fireflies.push({
+        x: rand(0,W), y: rand(0,H),
+        phase: rand(0,Math.PI*2),
+        speed: rand(0.005,0.015),
+        r: rand(1.5,3)
+      });
+    }
+  }
+
+  function updateFireflies(){
+    for(const f of fireflies){
+      f.phase += f.speed;
+      f.x += Math.sin(f.phase*1.3)*0.4;
+      f.y += Math.cos(f.phase*0.9)*0.3;
+      if(f.x<0)f.x=W; if(f.x>W)f.x=0;
+      if(f.y<0)f.y=H; if(f.y>H)f.y=H;
+    }
+  }
+
+  function drawFireflies(){
+    for(const f of fireflies){
+      const glow = Math.sin(f.phase*2)*0.5+0.5;
+      ctx.save();
+      ctx.globalAlpha = 0.3+glow*0.5;
+      ctx.fillStyle = '#c9ff8a';
+      ctx.shadowColor = '#c9ff8a';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // ---------- Background ----------
+  let moonPulse = 0;
+  function drawBackground(){
+    const grad = ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,'#0d1233');
+    grad.addColorStop(0.6,'#161045');
+    grad.addColorStop(1,'#1e1030');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,W,H);
+
+    // stars
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    for(let i=0;i<starPositions.length;i++){
+      const s = starPositions[i];
+      const tw = 0.5+Math.sin(moonPulse*2+i)*0.3;
+      ctx.globalAlpha = tw;
+      ctx.beginPath();
+      ctx.arc(s.x*W, s.y*H*0.6, s.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // moon
+    ctx.save();
+    ctx.fillStyle = '#fff6d8';
+    ctx.shadowColor = 'rgba(255,246,216,0.6)';
+    ctx.shadowBlur = 30;
+    ctx.beginPath();
+    ctx.arc(W*0.85, H*0.15, 36, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+
+    // silhouette hills / window frame feel
+    ctx.fillStyle = 'rgba(5,5,20,0.5)';
+    ctx.beginPath();
+    ctx.moveTo(0,H);
+    ctx.lineTo(0,H*0.82);
+    ctx.quadraticCurveTo(W*0.25,H*0.72,W*0.5,H*0.8);
+    ctx.quadraticCurveTo(W*0.75,H*0.88,W,H*0.78);
+    ctx.lineTo(W,H);
+    ctx.closePath();
+    ctx.fill();
+
+    // mosquito coil (bottom corner, decorative)
+    drawMosquitoCoil(W*0.5, H*0.94);
+  }
+
+  let starPositions = [];
+  function initStars(){
+    starPositions = [];
+    for(let i=0;i<60;i++){
+      starPositions.push({x:Math.random(), y:Math.random(), r:rand(0.5,1.8)});
+    }
+  }
+
+  function drawMosquitoCoil(cx,cy){
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.strokeStyle = 'rgba(60,40,20,0.6)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for(let a=0;a<Math.PI*5;a+=0.1){
+      const r = 3+a*2.2;
+      const x = Math.cos(a)*r;
+      const y = Math.sin(a)*r*0.4;
+      if(a===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // smoke
+    const smokeAlpha = 0.15+Math.sin(moonPulse*3)*0.05;
+    ctx.globalAlpha = smokeAlpha;
+    ctx.fillStyle = '#cccccc';
+    ctx.beginPath();
+    ctx.ellipse(0,-30+Math.sin(moonPulse*2)*10, 6, 20, 0,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // ---------- Floating combat text ----------
+  function spawnFloatText(x,y,text,color){
+    const el = document.createElement('div');
+    el.className = 'floatText';
+    el.textContent = text;
+    el.style.left = x+'px';
+    el.style.top = y+'px';
+    el.style.color = color || '#ffe9a8';
+    floatingTexts.appendChild(el);
+    setTimeout(()=>el.remove(), 850);
+  }
+
+  // ---------- Combo UI ----------
+  let comboTimeout = null;
+  function showCombo(){
+    if(combo>=2){
+      const tier = Math.min(Math.floor(combo/3), 4);
+      const emojis = ['🔥','🔥✨','💥🔥','⚡💥🔥','🌟⚡💥'];
+      const colors = ['#ff6b6b','#ff9b4a','#ffb347','#ffe066','#ffffff'];
+      const sizes = [16,18,20,23,26];
+      comboBox.textContent = combo + ' 콤보! ' + emojis[tier];
+      comboBox.style.color = colors[tier];
+      comboBox.style.fontSize = sizes[tier]+'px';
+      comboBox.style.opacity = 1;
+      clearTimeout(comboTimeout);
+      comboTimeout = setTimeout(()=>{ comboBox.style.opacity=0; }, 900);
+    }
+  }
+
+  // ---------- Input handling ----------
+  function getPointerPos(e){
+    const rect = canvas.getBoundingClientRect();
+    const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    const cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    return {x:cx, y:cy};
+  }
+
+  function handleTap(e){
+    if(state!=='playing') return;
+    e.preventDefault();
+    ensureAudio();
+    const pos = getPointerPos(e);
+    const weapon = currentWeapon();
+
+    // 사정거리 안의 모기들 모두 수집 (파리채는 사실상 1마리, 에프킬라/광선검은 광역)
+    let hits = [];
+    for(let i=0;i<mosquitoes.length;i++){
+      const m = mosquitoes[i];
+      if(!m.alive) continue;
+      const p = mosquitoScreenPos(m);
+      const d = Math.hypot(p.x-pos.x, p.y-pos.y);
+      const effRadius = weapon.aoeRadius>0 ? Math.max(weapon.aoeRadius, m.size*weapon.hitRadiusMul) : m.size*weapon.hitRadiusMul;
+      if(d < effRadius) hits.push({m,d,p});
+    }
+
+    if(hits.length>0){
+      hits.sort((a,b)=>a.d-b.d);
+
+      // 무기별 타격 이펙트 (범위 표시)
+      if(weapon.id==='spray'){ spawnSprayCloud(pos.x,pos.y,weapon.aoeRadius); playSpray(); }
+      if(weapon.id==='saber'){ spawnSaberSlash(pos.x,pos.y,weapon.aoeRadius); playSaber(); }
+
+      let killedAny = false;
+      for(const h of hits){
+        const m = h.m;
+        const p = h.p;
+        m.hp = weapon.oneHitKill ? 0 : m.hp-1;
+        if(m.hp<=0){
+          m.alive = false;
+          killedAny = true;
+          combo++;
+          maxCombo = Math.max(maxCombo, combo);
+          const base = 10;
+          const comboBonus = Math.min(combo-1,10)*2;
+          const gained = base + comboBonus;
+          score += gained;
+          spawnSplat(p.x,p.y, m.maxHp>1, combo);
+          spawnComboEffect(p.x,p.y,combo);
+          spawnFloatText(p.x-10, p.y-10, '+'+gained, combo>=3?'#ff9b6b':'#ffe9a8');
+          if(weapon.id==='swatter') playSplat();
+          if(combo>=3) playCombo();
+          showCombo();
+        } else {
+          spawnSplat(p.x,p.y,false,combo);
+          spawnFloatText(p.x-10,p.y-10,'맞았다!','#ffd76a');
+          if(weapon.id==='swatter') playSplat();
+        }
+      }
+    } else {
+      combo = 0;
+      comboBox.style.opacity = 0;
+      spawnCrack(pos.x,pos.y);
+      missCount++;
+      missCountEl.textContent = missCount;
+      missBox.classList.remove('warn');
+      void missBox.offsetWidth; // reflow to restart animation
+      missBox.classList.add('warn');
+      const remaining = MAX_MISS - missCount;
+      if(remaining<=0){
+        spawnFloatText(pos.x-10,pos.y-10,'아웃! 😵','#ff4d4d');
+        playMiss();
+        scoreEl.textContent = score;
+        gameOverReason = 'miss';
+        endGame();
+        return;
+      } else if(remaining<=2){
+        spawnFloatText(pos.x-10,pos.y-10,'헛스윙! (남은 '+remaining+'번)','#ff8a5c');
+      } else {
+        spawnFloatText(pos.x-10,pos.y-10,'헛스윙 😅','#8899cc');
+      }
+      playMiss();
+    }
+    scoreEl.textContent = score;
+  }
+
+  canvas.addEventListener('mousedown', handleTap);
+  canvas.addEventListener('touchstart', handleTap, {passive:false});
+
+  // ---------- Game loop ----------
+  let lastTime = performance.now();
+  function loop(now){
+    const dt = now-lastTime;
+    lastTime = now;
+    moonPulse += 0.01;
+
+    if(state==='playing'){
+      elapsed += dt;
+      if(elapsed - lastSpawn > spawnInterval){
+        spawnMosquito();
+        lastSpawn = elapsed;
+        spawnInterval = Math.max(450, 1100 - score*3);
+      }
+      updateMosquitoes(dt);
+      // 살아있는데 너무 오래 버틴 모기는 도망친 것으로 처리하고 제거
+      mosquitoes = mosquitoes.filter(m=>{
+        if(m.alive && performance.now()-m.spawnTime > 8500) return false;
+        return m.alive || particles.length>=0; // 죽은 모기는 스플랫만 남기고 즉시 제거
+      });
+      mosquitoes = mosquitoes.filter(m=>m.alive);
+    }
+
+    updateParticles();
+    updateCracks();
+    updateFireflies();
+    updateComboEffects();
+    updateSprayClouds();
+    updateSaberSlashes();
+
+    ctx.save();
+    ctx.translate(screenShake.x, screenShake.y);
+    drawBackground();
+    drawFireflies();
+    drawCracks();
+    for(const m of mosquitoes) if(m.alive) drawMosquito(m);
+    drawSprayClouds();
+    drawParticles();
+    drawSaberSlashes();
+    drawComboEffects();
+    ctx.restore();
+
+    requestAnimationFrame(loop);
+  }
+
+  // ---------- Timer ----------
+  function startTimer(){
+    timeLeft = 60;
+    timeLeftEl.textContent = timeLeft;
+    timerId = setInterval(()=>{
+      timeLeft--;
+      timeLeftEl.textContent = Math.max(timeLeft,0);
+      if(timeLeft<=0){
+        endGame();
+      }
+    },1000);
+  }
+
+  function rankFor(score){
+    if(score>=400) return {rank:'모기계의 저승사자', comment:'이 정도면 여름밤이 무서워서 모기가 피해다닐 지경입니다.'};
+    if(score>=250) return {rank:'베테랑 모기 헌터', comment:'손목 스냅이 예사롭지 않네요. 파리채 자격증 발급 가능.'};
+    if(score>=120) return {rank:'숙련된 모기 사냥꾼', comment:'제법인데요? 하지만 몇 마리는 도망쳤을지도.'};
+    if(score>=50) return {rank:'열정 모기 헌터', comment:'허공만 열심히 치신 것 같기도 하고... 다음엔 더 잘하실 거예요.'};
+    return {rank:'모기 신입', comment:'벽에 크랙만 잔뜩 남기셨네요. 파리채 다시 잡아보세요 😅'};
+  }
+
+  const resultTitleEl = document.querySelector('.resultTitle');
+  function endGame(){
+    state = 'ended';
+    clearInterval(timerId);
+    hud.style.display = 'none';
+    settingsIconBtn.style.display = 'flex';
+    resultTitleEl.textContent = gameOverReason==='miss' ? '헛스윙 아웃! 💢' : '타임 아웃!';
+    finalScoreEl.textContent = score;
+    const r = rankFor(score);
+    rankBadge.textContent = r.rank;
+    resultComment.textContent = gameOverReason==='miss'
+      ? '헛스윙을 7번이나... 파리채 잡는 법부터 다시 배워야 할지도? 😅 ' + r.comment
+      : r.comment;
+
+    const coinsGained = Math.floor(score/5);
+    save.coins += coinsGained;
+    saveSave();
+    coinEarnedEl.textContent = coinsGained;
+    refreshCoinDisplays();
+
+    endScreen.style.display = 'flex';
+  }
+
+  function startGame(){
+    ensureAudio();
+    playCoil();
+    score = 0; combo = 0; maxCombo = 0; elapsed=0; lastSpawn=0; spawnInterval=1100;
+    missCount = 0; gameOverReason = 'timeout';
+    missCountEl.textContent = 0;
+    missBox.classList.remove('warn');
+    mosquitoes = []; particles = []; cracks = []; flashEffects=[];
+    comboRings = []; comboStars = []; screenShake = {x:0,y:0,time:0,mag:0};
+    sprayClouds = []; saberSlashes = [];
+    scoreEl.textContent = 0;
+    startScreen.style.display = 'none';
+    endScreen.style.display = 'none';
+    shopScreen.style.display = 'none';
+    hud.style.display = 'flex';
+    settingsIconBtn.style.display = 'none';
+    state = 'playing';
+    startTimer();
+  }
+
+  startBtn.addEventListener('click', startGame);
+  retryBtn.addEventListener('click', startGame);
+
+  initStars();
+  initFireflies();
+  refreshCoinDisplays();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
