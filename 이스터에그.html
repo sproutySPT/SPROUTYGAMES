@@ -1,1 +1,263 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>이스터에그 🎉</title>
+  <style>
+    html,body{height:100%;margin:0;background:#0b0f1a;overflow:hidden;font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "돋움", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif}
+    .message{
+      position:fixed;
+      padding:12px 18px;
+      background:rgba(255,255,255,0.95);
+      color:#111;
+      border-radius:10px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.45);
+      transform:translate(-50%,-50%) scale(0.85);
+      opacity:0;
+      pointer-events:none;
+      white-space:nowrap;
+      font-weight:700;
+      z-index:9999;
+      animation:pop 1s cubic-bezier(.2,1.1,.2,1) forwards;
+    }
+    @keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(0.6)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 
+    .small-note{position:fixed;left:12px;bottom:12px;color:#fff;opacity:.85;font-size:13px}
+
+    canvas#fireworks{position:fixed;inset:0;z-index:1000;pointer-events:none}
+  </style>
+</head>
+<body>
+  <canvas id="fireworks"></canvas>
+  <div class="small-note">이스터에그를 찾으셨군요 — 축하합니다! 🎊 (별 의미 없음)</div>
+
+  <script>
+    // The message to display
+    const MESSAGE = '축하함미다 이슽ㅌㅌ터에그를 발견하셨군요!@!@@!!!! 별 의미는 없는것에 주의하세요';
+
+    // Create multiple popping messages at random positions with varying colors
+    function spawnMessage() {
+      const el = document.createElement('div');
+      el.className = 'message';
+      el.textContent = MESSAGE;
+
+      // Random position within viewport with margin
+      const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+      const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+      const x = Math.random() * (vw - 200) + 100; // padding from edges
+      const y = Math.random() * (vh - 200) + 100;
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+
+      // Random background color palette
+      const palettes = [
+        ['#FFECB3','#FF6F61'],
+        ['#E1BEE7','#7E57C2'],
+        ['#C8E6C9','#2E7D32'],
+        ['#BBDEFB','#0288D1'],
+        ['#FFF59D','#F9A825']
+      ];
+      const p = palettes[Math.floor(Math.random() * palettes.length)];
+      el.style.background = 'linear-gradient(135deg,'+p[0]+','+p[1]+')';
+      el.style.color = '#040404';
+
+      document.body.appendChild(el);
+
+      // Remove after a while with a fade-out scale
+      setTimeout(() => {
+        el.style.transition = 'opacity 750ms, transform 750ms';
+        el.style.opacity = '0';
+        el.style.transform = 'translate(-50%,-50%) scale(1.2)';
+        setTimeout(() => el.remove(), 800);
+      }, 2200 + Math.random()*2000);
+    }
+
+    // Spawn a burst of messages
+    function burstMessages(count) {
+      for(let i=0;i<count;i++){
+        setTimeout(spawnMessage, i*120 + Math.random()*200);
+      }
+    }
+
+    // fireworks canvas implementation (lightweight)
+    class Fireworks {
+      constructor(canvas){
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.dpr = Math.max(1, window.devicePixelRatio || 1);
+        this.resize();
+        this.particles = [];
+        this.anim = null;
+        window.addEventListener('resize', ()=>this.resize());
+      }
+
+      resize(){
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        this.canvas.width = Math.floor(w * this.dpr);
+        this.canvas.height = Math.floor(h * this.dpr);
+        this.canvas.style.width = w + 'px';
+        this.canvas.style.height = h + 'px';
+        this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
+      }
+
+      // launch a firework burst at (x,y)
+      burst(x,y,colors,particleCount=40){
+        for(let i=0;i<particleCount;i++){
+          const angle = Math.random()*Math.PI*2;
+          const speed = Math.random()*5+2;
+          const life = Math.random()*80+60; // frames
+          const vx = Math.cos(angle)*speed;
+          const vy = Math.sin(angle)*speed;
+          const size = Math.random()*3+1.5;
+          const color = colors[Math.floor(Math.random()*colors.length)];
+          this.particles.push({x,y,vx,vy,life,age:0,size,color,gravity:0.05,alpha:1,friction:0.99});
+        }
+        this.start();
+      }
+
+      start(){
+        if(!this.anim) this.anim = requestAnimationFrame(()=>this.update());
+      }
+      stop(){
+        if(this.anim){
+          cancelAnimationFrame(this.anim);
+          this.anim = null;
+        }
+      }
+
+      update(){
+        const ctx = this.ctx;
+        const w = this.canvas.width/this.dpr;
+        const h = this.canvas.height/this.dpr;
+        ctx.clearRect(0,0,w,h);
+        for(let i=this.particles.length-1;i>=0;i--){
+          const p = this.particles[i];
+          p.vx *= p.friction;
+          p.vy *= p.friction;
+          p.vy += p.gravity;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.age++;
+          // fade
+          p.alpha = Math.max(0, 1 - p.age / p.life);
+          ctx.globalAlpha = p.alpha;
+          // glow
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+          ctx.fill();
+
+          // small sparkle
+          if(Math.random() < 0.02 && p.alpha>0.3){
+            ctx.globalAlpha = Math.min(1, p.alpha+0.2);
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(p.x, p.y, 1.5, 1.5);
+          }
+
+          if(p.age > p.life || p.alpha<=0){
+            this.particles.splice(i,1);
+          }
+        }
+        ctx.globalAlpha = 1;
+        if(this.particles.length>0){
+          this.anim = requestAnimationFrame(()=>this.update());
+        } else {
+          this.stop();
+        }
+      }
+    }
+
+    // confetti rectangles that fall
+    class Confetti {
+      constructor(container){
+        this.container = container;
+        this.confetti = [];
+        this.looping = false;
+      }
+      spawnBurst(count){
+        const w = window.innerWidth; const h = window.innerHeight;
+        for(let i=0;i<count;i++){
+          const el = document.createElement('div');
+          el.style.position='fixed';
+          el.style.zIndex='9998';
+          el.style.width = (6+Math.random()*10)+'px';
+          el.style.height = (8+Math.random()*12)+'px';
+          el.style.left = (Math.random()*w)+'px';
+          el.style.top = (-20 - Math.random()*60)+'px';
+          el.style.opacity = (0.9-Math.random()*0.5)+'';
+          el.style.transform = 'rotate('+Math.random()*360+'deg)';
+          const cols = ['#FF6F61','#FFD54F','#4DD0E1','#BA68C8','#81C784','#F48FB1'];
+          el.style.background = cols[Math.floor(Math.random()*cols.length)];
+          el.style.borderRadius = '2px';
+          el.style.pointerEvents='none';
+          const duration = 3000+Math.random()*3500;
+          el.style.transition = `transform ${duration}ms linear, top ${duration}ms linear, opacity 800ms linear`;
+          document.body.appendChild(el);
+          // animate to bottom
+          requestAnimationFrame(()=>{
+            el.style.top = (h + 60 + Math.random()*80) + 'px';
+            el.style.transform = 'translateY(0) rotate('+ (Math.random()*720-360) +'deg)';
+          });
+          setTimeout(()=>{
+            el.style.opacity='0';
+            setTimeout(()=>el.remove(),900);
+          }, duration-700);
+        }
+      }
+    }
+
+    // initialize on load
+    (function(){
+      const canvas = document.getElementById('fireworks');
+      const fw = new Fireworks(canvas);
+      const conf = new Confetti(document.body);
+
+      // Make a few initial bursts and message bursts
+      burstMessages(6);
+      conf.spawnBurst(28);
+      // center bursts
+      setTimeout(()=>{ fw.burst(window.innerWidth/2, window.innerHeight/3, ['#FF6F61','#FFD54F','#FF8A65','#FFF59D','#FFCDD2'], 60); }, 250);
+      setTimeout(()=>{ fw.burst(window.innerWidth*0.25, window.innerHeight*0.45, ['#81C784','#4DD0E1','#4DB6AC','#C5E1A5'], 50); }, 450);
+      setTimeout(()=>{ fw.burst(window.innerWidth*0.75, window.innerHeight*0.5, ['#9966CC','#BA68C8','#E1BEE7','#CE93D8'], 56); }, 650);
+
+      // repeat bursts and message rain
+      let repeat = 0;
+      const loop = setInterval(()=>{
+        burstMessages(4 + Math.floor(Math.random()*3));
+        conf.spawnBurst(10 + Math.floor(Math.random()*12));
+        const x = 80 + Math.random()*(window.innerWidth-160);
+        const y = 80 + Math.random()*(window.innerHeight-160);
+        fw.burst(x,y, ['#FF6F61','#FFD54F','#4DD0E1','#BA68C8','#81C784','#F48FB1'], 36 + Math.floor(Math.random()*30));
+        repeat++;
+        if(repeat>12){
+          clearInterval(loop);
+          // final grand burst
+          setTimeout(()=>{
+            for(let i=0;i<6;i++) fw.burst(window.innerWidth*(0.15+0.14*i), window.innerHeight*0.4, ['#FF6F61','#FFD54F','#4DD0E1','#BA68C8','#81C784','#F48FB1'], 90);
+            burstMessages(12);
+            conf.spawnBurst(80);
+          }, 900);
+        }
+      }, 1700);
+
+      // also spawn on click/tap
+      window.addEventListener('click', (e)=>{
+        burstMessages(3);
+        conf.spawnBurst(18);
+        fw.burst(e.clientX, e.clientY, ['#FF6F61','#FFD54F','#4DD0E1','#BA68C8','#81C784','#F48FB1'], 64);
+      });
+
+      // occasionally show an alert-style modal
+      setInterval(()=>{
+        const show = Math.random() < 0.4;
+        if(show){
+          burstMessages(1 + Math.floor(Math.random()*2));
+        }
+      }, 1200);
+
+    })();
+  </script>
+</body>
+</html>
