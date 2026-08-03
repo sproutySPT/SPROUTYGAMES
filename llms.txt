@@ -1,0 +1,8 @@
+# 정새싹게임즈 🌱
+
+> 라면 끓는동안 즐길 간단하고 중독성넘치는 미니게임!
+
+## Links
+
+- [사이트맵](http://www.xn--o79as79adsb7uhvuat1e.xn--hk3b17f.xn--3e0b707e/sitemap.xml): 이 사이트의 전체 페이지 목록
+- [홈페이지](https://www.xn--o79as79adsb7uhvuat1e.xn--hk3b17f.xn--3e0b707e): 메인 페이지
