@@ -323,15 +323,14 @@ nav .feedback-btn-nav:active{ transform:translate(1px,1px); }
   position:relative;
   margin-bottom:28px;
 }
-.hero-banner{
+.hero-video{
   width:100%;
   display:block;
   border:3px solid var(--line);
   border-radius:20px;
   box-shadow:0 0 0 3px var(--bg), 5px 5px 0 0 #000;
-  image-rendering:pixelated;
-  aspect-ratio: 16/4;
-  object-fit:contain;
+  aspect-ratio: 4 / 3;
+  object-fit:cover;
   background:linear-gradient(135deg,#1a1a26,#0e0e14);
 }
 /* ── 섹션 타이틀 ── */
@@ -1069,9 +1068,12 @@ footer .grow{ color:var(--green); }
 <!-- ══════════════════ 홈 탭 ══════════════════ -->
 <section class="tab-panel active" id="tab-home" data-tab-panel="home">
 
-  <!-- 메인 히어로 배너: 같은 폴더의 banner_main.jpg -->
+  <!-- 메인 히어로 영상: 같은 폴더의 Yo.mp4 -->
   <div class="hero">
-    <img class="hero-banner" src="banner_main.jpg" alt="정새싹게임즈 메인 배너">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-label="정새싹게임즈 메인 영상">
+      <source src="Yo.mp4" type="video/mp4">
+      브라우저가 video 태그를 지원하지 않습니다.
+    </video>
   </div>
 
   <!-- 공지/이벤트 서브 배너 2개: banner_notice.jpg, banner_event.jpg -->
