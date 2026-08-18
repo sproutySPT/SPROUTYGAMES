@@ -502,9 +502,12 @@ nav .feedback-btn-nav:active{ transform:translate(1px,1px); }
 }
 .game-thumb{
   width:100%;
-  height:100%;
-  min-height:90px;
+  height:auto;
+  aspect-ratio:1 / 1;
+  min-height:0;
   object-fit:cover;
+  align-self:start;
+  justify-self:stretch;
   border:2px solid var(--line);
   border-radius:12px;
   image-rendering:pixelated;
@@ -628,7 +631,7 @@ nav .feedback-btn-nav:active{ transform:translate(1px,1px); }
     grid-template-columns:100px 1fr auto !important;
   }
   .game-thumb{
-    min-height:90px;
+    min-height:0;
   }
   .game-arrow{
     grid-column:auto !important;
@@ -986,6 +989,293 @@ footer .grow{ color:var(--green); }
 @keyframes blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0.4;} }
 .blink{ animation:blink 1.4s steps(1) infinite; }
 
+/* ── 게임 상세 팝업 ── */
+.game-detail-modal{
+  position:fixed;
+  inset:0;
+  z-index:10001;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(0,0,0,.62);
+  backdrop-filter:blur(7px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease;
+}
+.game-detail-modal.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.game-detail-shell{
+  position:relative;
+  width:min(820px,92vw);
+  max-height:88vh;
+  overflow:auto;
+  background:#17171f;
+  color:var(--text);
+  border:3px solid var(--line);
+  border-radius:20px;
+  box-shadow:
+    0 0 0 3px rgba(12,12,16,.9),
+    10px 10px 0 rgba(0,0,0,.55),
+    0 25px 70px rgba(0,0,0,.55);
+}
+
+.game-detail-top{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  padding:12px 14px 0;
+}
+
+.game-detail-close{
+  width:38px;
+  height:38px;
+  border:2px solid var(--line);
+  border-radius:10px;
+  background:#22222d;
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  font-size:24px;
+  line-height:34px;
+  cursor:pointer;
+  padding:0;
+  transition:.12s;
+}
+.game-detail-close:hover{
+  border-color:var(--pink);
+  color:var(--pink);
+  transform:scale(1.04);
+}
+
+.game-detail-main{
+  display:grid;
+  grid-template-columns:230px minmax(0,1fr);
+  gap:22px;
+  padding:10px 24px 22px;
+  align-items:center;
+}
+
+.game-detail-cover{
+  width:230px;
+  height:230px;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  display:block;
+  border:2px solid var(--line);
+  border-radius:14px;
+  background:linear-gradient(135deg,#22222e,#101016);
+  image-rendering:pixelated;
+}
+
+.game-detail-info{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:10px;
+}
+
+.game-detail-title{
+  font-family:var(--pixel);
+  font-size:clamp(15px,2vw,22px);
+  line-height:1.45;
+  color:var(--text);
+  text-shadow:2px 2px 0 #000;
+}
+
+.game-detail-desc{
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.7;
+  color:var(--text);
+}
+
+.game-detail-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:2px;
+}
+
+.game-detail-meta span{
+  padding:5px 8px;
+  border:1px solid rgba(110,168,255,.4);
+  border-radius:999px;
+  background:rgba(110,168,255,.07);
+  color:var(--blue);
+  font-family:var(--mono);
+  font-size:9px;
+}
+
+.game-detail-long{
+  margin:0 24px 18px;
+  padding:16px;
+  background:#101016;
+  border:2px solid var(--line);
+  border-radius:14px;
+}
+
+.game-detail-long-title{
+  font-family:var(--pixel);
+  font-size:11px;
+  color:var(--green);
+  margin-bottom:9px;
+}
+
+.game-detail-long-body{
+  font-family:var(--sans);
+  font-size:12.5px;
+  line-height:1.7;
+  color:var(--text);
+}
+
+.game-detail-info-row{
+  margin:0 24px 18px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px 28px;
+  padding:12px 16px;
+  background:#101016;
+  border:2px solid var(--line);
+  border-radius:12px;
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--muted);
+}
+
+.game-detail-info-row div{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+}
+
+.game-detail-info-row .label{
+  color:var(--blue);
+}
+
+.game-detail-info-row a{
+  color:var(--text) !important;
+  text-decoration:none !important;
+  overflow-wrap:anywhere;
+}
+
+.game-detail-footer{
+  padding:0 24px 24px;
+}
+
+.game-play-btn{
+  width:100%;
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  border:2px solid var(--green);
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--green),#b8ffcf);
+  color:#06140a;
+  font-family:var(--pixel);
+  font-size:14px;
+  cursor:pointer;
+  box-shadow:4px 4px 0 #000;
+  transition:transform .1s, filter .12s, box-shadow .1s;
+}
+
+.game-play-btn:hover{
+  filter:brightness(1.04);
+  transform:translateY(-2px);
+}
+
+.game-play-btn:active{
+  transform:translate(2px,2px);
+  box-shadow:1px 1px 0 #000;
+}
+
+@media (max-width:720px){
+  .game-detail-modal{
+    padding:14px;
+  }
+
+  .game-detail-shell{
+    width:min(92vw,560px);
+    max-height:88vh;
+    border-radius:18px;
+  }
+
+  .game-detail-main{
+    grid-template-columns:120px minmax(0,1fr);
+    gap:14px;
+    padding:8px 16px 16px;
+  }
+
+  .game-detail-cover{
+    width:120px;
+    height:120px;
+    border-radius:10px;
+  }
+
+  .game-detail-title{
+    font-size:13px;
+  }
+
+  .game-detail-desc{
+    font-size:11px;
+  }
+
+  .game-detail-meta span{
+    font-size:8px;
+    padding:4px 6px;
+  }
+
+  .game-detail-long{
+    margin:0 16px 14px;
+    padding:13px;
+  }
+
+  .game-detail-long-title{
+    font-size:9px;
+  }
+
+  .game-detail-long-body{
+    font-size:11px;
+  }
+
+  .game-detail-info-row{
+    margin:0 16px 14px;
+    padding:10px 12px;
+    font-size:9px;
+  }
+
+  .game-detail-footer{
+    padding:0 16px 16px;
+  }
+
+  .game-play-btn{
+    min-height:50px;
+    font-size:11px;
+  }
+}
+
+@media (max-width:430px){
+  .game-detail-main{
+    grid-template-columns:1fr;
+  }
+
+  .game-detail-cover{
+    width:150px;
+    height:150px;
+    margin:0 auto;
+  }
+
+  .game-detail-info{
+    text-align:left;
+  }
+}
 /* ── 서비스 종료 팝업 ── */
 .service-end-modal{
   position:fixed;
@@ -1125,7 +1415,7 @@ footer .grow{ color:var(--green); }
 
   <div class="game-list">
 
-    <a class="game-card featured" href="https://sproutySPT.github.io/Zoosick---gang/" target="_blank" rel="noopener">
+    <a class="game-card featured" data-game-id="stock" href="https://sproutySPT.github.io/Zoosick---gang/" target="_blank" rel="noopener">
       <img class="game-thumb" src="game_stock.jpg" alt="주식시뮬레이터: 폭락도락이다 썸네일">
       <div class="game-info">
         <div class="game-title-row">
@@ -1141,7 +1431,7 @@ footer .grow{ color:var(--green); }
       <div class="game-arrow">▶</div>
     </a>
 
-    <a class="game-card" href="https://sproutyspt.github.io/SPTDEF" target="_blank" rel="noopener">
+    <a class="game-card" data-game-id="defense" href="https://sproutyspt.github.io/SPTDEF" target="_blank" rel="noopener">
       <img class="game-thumb" src="DEF.jpg" alt="정새싹디펜스 썸네일">
       <div class="game-info">
         <div class="game-title-row">
@@ -1154,7 +1444,7 @@ footer .grow{ color:var(--green); }
       <div class="game-arrow">▶</div>
     </a>
 
-    <a class="game-card" href="https://sproutyspt.github.io/LUMBERJAAAACK/" target="_blank" rel="noopener">
+    <a class="game-card" data-game-id="lumberjack" href="https://sproutyspt.github.io/LUMBERJAAAACK/" target="_blank" rel="noopener">
       <img class="game-thumb" src="game_lumberjack.jpg" alt="나무패기 썸네일">
       <div class="game-info">
         <div class="game-title-row">
@@ -1167,7 +1457,7 @@ footer .grow{ color:var(--green); }
       <div class="game-arrow">▶</div>
     </a>
 
-    <a class="game-card" href="http://sproutySPT.github.io/NEONRIDER/" target="_blank" rel="noopener">
+    <a class="game-card" data-game-id="neonrider" href="http://sproutySPT.github.io/NEONRIDER/" target="_blank" rel="noopener">
       <img class="game-thumb" src="NEONRIDER.jpg" alt="네온라이더 썸네일">
       <div class="game-info">
         <div class="game-title-row">
@@ -1176,6 +1466,19 @@ footer .grow{ color:var(--green); }
         </div>
         <div class="game-desc">개발자's 최애</div>
         <div class="game-meta"><span>🏍️ 슈팅</span><span>🌐 웹게임</span></div>
+      </div>
+      <div class="game-arrow">▶</div>
+    </a>
+
+    <a class="game-card" data-game-id="frontline" href="https://sproutyspt.github.io/FPS" target="_blank" rel="noopener">
+      <img class="game-thumb" src="FPS.png" alt="정새싹:프론트라인 썸네일">
+      <div class="game-info">
+        <div class="game-title-row">
+          <span class="game-title">정새싹:프론트라인</span>
+          <span class="game-badge new">신규</span>
+        </div>
+        <div class="game-desc">간단하게 즐기는 짜릿한 FPS!</div>
+        <div class="game-meta"><span>🎯 FPS</span><span>🌐 웹게임</span></div>
       </div>
       <div class="game-arrow">▶</div>
     </a>
@@ -1289,6 +1592,44 @@ footer .grow{ color:var(--green); }
 
 </section>
 
+</div>
+
+<!-- ══════════════════ 게임 상세 팝업 ══════════════════ -->
+<div id="gameDetailModal" class="game-detail-modal" aria-hidden="true">
+  <div class="game-detail-shell" role="dialog" aria-modal="true" aria-labelledby="gameDetailTitle">
+    <div class="game-detail-top">
+      <button class="game-detail-close" id="gameDetailClose" type="button" aria-label="닫기">×</button>
+    </div>
+
+    <div class="game-detail-main">
+      <img id="gameDetailCover" class="game-detail-cover" src="" alt="">
+      <div class="game-detail-info">
+        <div id="gameDetailTitle" class="game-detail-title"></div>
+        <div id="gameDetailDesc" class="game-detail-desc"></div>
+        <div id="gameDetailMeta" class="game-detail-meta"></div>
+      </div>
+    </div>
+
+    <section class="game-detail-long">
+      <div class="game-detail-long-title">게임 설명</div>
+      <div id="gameDetailLongBody" class="game-detail-long-body"></div>
+    </section>
+
+    <div class="game-detail-info-row">
+      <div>
+        <span class="label">링크</span>
+        <a id="gameDetailLink" href="#" target="_blank" rel="noopener" style="color:#111;text-decoration:underline;word-break:break-all;"></a>
+      </div>
+      <div>
+        <span class="label">개발자</span>
+        <span id="gameDetailDeveloper">정새싹게임즈</span>
+      </div>
+    </div>
+
+    <div class="game-detail-footer">
+      <button id="gameDetailPlay" class="game-play-btn" type="button">플레이</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════════ 하단 탭바 ══════════════════ -->
@@ -1407,6 +1748,157 @@ function switchTab(name){
 
 tabBtns.forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tabTarget));
+});
+
+// ═══════════════════════════════════════════════════════════════
+// 게임별 상세 팝업 정보
+// 여기만 수정하면 게임마다 팝업 내용을 마음대로 바꿀 수 있습니다.
+// gameId는 각 게임 카드의 data-game-id와 맞아야 합니다.
+// ═══════════════════════════════════════════════════════════════
+const GAME_DETAILS = {
+
+  stock: {
+    title: '정새싹게임즈 주식게임: 폭락도 락이다 🎰',
+    shortDescription: '주식을 가장한 유사도박 시뮬레이터.',
+    description: '주식 시뮬레이터가 이름이긴 한디..ㅋㅋ 사실상 전략보다 운과 찍기 실력으로 끝나는 도파민덩어리입니다. 짧게 즐기기도 좋고, 오래즐겨도 좋아요.',
+    genres: ['📈 시뮬레이션', '🌐 웹게임'],
+    developer: '정지호',
+    link: 'https://sproutySPT.github.io/Zoosick---gang/'
+  },
+
+  defense: {
+    title: '정새싹게임즈 좀비디펜스',
+    shortDescription: '몰려오는 좀비들을 포탑으로 쓸어버리세요!!',
+    description: '끝없이 몰려오는 적들을 막아내면서 포탑을 활용해 전장을 지켜내는 디펜스 게임입니다. 별의별 무기를 조합해서 쓸어버립시다',
+    genres: ['🛡️ 디펜스', '⚔️ 배틀'],
+    developer: '정지호',
+    link: 'https://sproutyspt.github.io/SPTDEF'
+  },
+
+  lumberjack: {
+    title: '정새싹게임즈 나무패기 🪓',
+    shortDescription: '패고싶은 친구가 있다고요? 친구대신 나무를 패세요!',
+    description: '간단한 조작으로 신나게 나무를 패는 미니게임입니다. 빠른 순발력과 운이 모든것을 결정합니다.',
+    genres: ['🪓 액션', '🌐 웹게임'],
+    developer: '이정후, 정지호',
+    link: 'https://sproutyspt.github.io/LUMBERJAAAACK/'
+  },
+
+  neonrider: {
+    title: '정새싹게임즈 네온라이더 🏍️',
+    shortDescription: "개발자's 최애",
+    description: '우주선을 수집하고, 주행하며 적들을 기술과 궁극기로 모두 쓸어버리세요. 스펙타클함과 순발력 모두 챙긴 강추게임.',
+    genres: ['🏍️ 슈팅', '🌐 웹게임'],
+    developer: '염시우, 정지호',
+    link: 'http://sproutySPT.github.io/NEONRIDER/'
+  },
+
+  frontline: {
+    title: '정새싹:프론트라인',
+    shortDescription: '간단하게 즐기는 짜릿한 FPS!',
+    description: '빠르게 시작해서 바로 즐길 수 있는 간단한 웹 FPS입니다. 다양한 무기로 전장을 누비며 적을 상대해 보세요.',
+    genres: ['🎯 FPS', '🌐 웹게임'],
+    developer: '정새싹게임즈',
+    link: 'https://sproutyspt.github.io/FPS'
+  }
+
+};
+
+// 기본값: GAME_DETAILS에 없는 게임도 카드 정보로 팝업이 열립니다.
+const gameDetailModal = document.getElementById('gameDetailModal');
+const gameDetailClose = document.getElementById('gameDetailClose');
+const gameDetailCover = document.getElementById('gameDetailCover');
+const gameDetailTitle = document.getElementById('gameDetailTitle');
+const gameDetailDesc = document.getElementById('gameDetailDesc');
+const gameDetailMeta = document.getElementById('gameDetailMeta');
+const gameDetailLongBody = document.getElementById('gameDetailLongBody');
+const gameDetailLink = document.getElementById('gameDetailLink');
+const gameDetailDeveloper = document.getElementById('gameDetailDeveloper');
+const gameDetailPlay = document.getElementById('gameDetailPlay');
+
+let selectedGameUrl = '';
+
+function openGameDetail(card){
+  const gameId = card.dataset.gameId;
+  const detail = GAME_DETAILS[gameId] || {};
+
+  const titleEl = card.querySelector('.game-title');
+  const descEl = card.querySelector('.game-desc');
+  const thumbEl = card.querySelector('.game-thumb');
+  const metaEls = card.querySelectorAll('.game-meta span');
+
+  const title = detail.title || titleEl?.textContent?.trim() || '게임';
+  const shortDescription = detail.shortDescription || descEl?.textContent?.trim() || '';
+  const longDescription = detail.description || shortDescription || '게임 설명이 없습니다.';
+  const genres = Array.isArray(detail.genres) && detail.genres.length
+    ? detail.genres
+    : Array.from(metaEls).map(el => el.textContent.trim());
+
+  selectedGameUrl = detail.link || card.href;
+
+  gameDetailCover.src = thumbEl?.src || '';
+  gameDetailCover.alt = thumbEl?.alt || title + ' 썸네일';
+
+  gameDetailTitle.textContent = title;
+  gameDetailDesc.textContent = shortDescription;
+  gameDetailLongBody.textContent = longDescription;
+
+  gameDetailMeta.innerHTML = '';
+  genres.forEach(text => {
+    const span = document.createElement('span');
+    span.textContent = text;
+    gameDetailMeta.appendChild(span);
+  });
+
+  gameDetailLink.textContent = selectedGameUrl;
+  gameDetailLink.href = selectedGameUrl;
+  gameDetailDeveloper.textContent = detail.developer || '정새싹게임즈';
+
+  gameDetailModal.classList.add('show');
+  gameDetailModal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+}
+
+function closeGameDetail(){
+  gameDetailModal.classList.remove('show');
+  gameDetailModal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+  selectedGameUrl = '';
+}
+
+document.addEventListener('click', (e) => {
+  const card = e.target.closest('.game-card:not(.placeholder)');
+  if(!card) return;
+  e.preventDefault();
+  openGameDetail(card);
+});
+
+if(gameDetailClose && gameDetailModal){
+  gameDetailClose.addEventListener('click', closeGameDetail);
+
+  gameDetailModal.addEventListener('click', (e) => {
+    if(e.target === gameDetailModal){
+      closeGameDetail();
+    }
+  });
+}
+
+gameDetailPlay.addEventListener('click', () => {
+  if(!selectedGameUrl) return;
+
+  const popup = window.open(selectedGameUrl, '_blank', 'noopener,noreferrer');
+  if(!popup){
+    window.location.href = selectedGameUrl;
+    return;
+  }
+
+  closeGameDetail();
+});
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && gameDetailModal.classList.contains('show')){
+    closeGameDetail();
+  }
 });
 
 // 페이지 로드 시 렌더링
