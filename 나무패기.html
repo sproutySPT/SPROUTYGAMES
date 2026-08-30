@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🪓 나무꾼 - 강화 & 가이드</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0d2b0d 0%, #1a4a10 35%, #2d6b1a 65%, #4a8c2a 100%);
+  font-family: 'Segoe UI', sans-serif;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16px 8px 60px;
+  overflow-x: hidden;
+  user-select: none;
+}
+.stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.star { position: absolute; width: 3px; height: 3px; background: #fff; border-radius: 50%; opacity: 0.55; }
+#app { position: relative; z-index: 1; width: 100%; max-width: 400px; }
+
+/* ── HEADER ── */
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.stat-box { text-align: center; }
+.stat-label { color: #a8d5a2; font-size: 11px; font-weight: 600; }
+.stat-val { color: #fff; font-size: 28px; font-weight: 900; line-height: 1; }
+.stat-val.gold { color: #ffd700; }
+.title { color: #c8e6c9; font-size: 20px; font-weight: 900; letter-spacing: 1px; text-align: center; }
+
+/* level badge */
+.level-row {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-bottom: 6px;
+}
+.level-badge {
+  background: linear-gradient(135deg, #6b46c1, #553c9a);
+  color: #fff; font-size: 13px; font-weight: 900;
+  padding: 3px 12px; border-radius: 20px;
+  border: 2px solid #9f7aea;
+  box-shadow: 0 0 10px rgba(159,122,234,0.5);
+}
+.level-xp-wrap {
+  flex: 1; height: 7px; background: rgba(0,0,0,0.35); border-radius: 4px; overflow: hidden;
+}
+#xp-bar { height: 100%; background: linear-gradient(90deg, #9f7aea, #e9d8fd); border-radius: 4px; transition: width 0.3s; }
+
+/* coin row */
+.coin-row {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-bottom: 8px;
+  background: rgba(0,0,0,0.25); border-radius: 10px; padding: 5px 14px;
+}
+.coin-label { color: #ffd700; font-size: 15px; font-weight: 800; }
+
+/* timer */
+.timer-wrap { height: 10px; background: rgba(0,0,0,0.35); border-radius: 5px; margin-bottom: 14px; overflow: hidden; }
+#timer-bar { height: 100%; width: 100%; border-radius: 5px; background: #68d391; box-shadow: 0 0 8px #68d391; transition: background 0.3s; }
+
+/* game area */
+.game-area { position: relative; display: flex; justify-content: center; margin-bottom: 0; }
+
+/* tree */
+.tree-col { position: relative; display: flex; flex-direction: column-reverse; align-items: center; width: 68px; }
+.treetop { font-size: 54px; line-height: 1; margin-top: -6px; z-index: 2; }
+.trunk-block { display: flex; align-items: center; justify-content: center; position: relative; height: 50px; width: 100%; }
+.trunk {
+  width: 64px; height: 46px; border-radius: 4px;
+  position: relative; overflow: hidden;
+  border: 2px solid #3d1f08;
+  background: linear-gradient(180deg, #8B4513 0%, #6b3410 100%);
+  box-shadow: inset 2px 0 6px rgba(0,0,0,0.3), inset -2px 0 6px rgba(255,255,255,0.05);
+}
+.trunk.bottom {
+  background: linear-gradient(180deg, #5d3a1a 0%, #4a2c0a 100%);
+  border-radius: 4px 4px 8px 8px;
+  border: 3px solid #ffd700;
+  box-shadow: 0 0 18px #ffd700;
+}
+.grain {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,0.07) 10px, rgba(0,0,0,0.07) 11px);
+}
+/* chest block on trunk */
+.chest-block {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; z-index: 3;
+  cursor: pointer;
+  animation: chestPulse 1s ease-in-out infinite;
+}
+@keyframes chestPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+.branch { position: absolute; top: 50%; transform: translateY(-50%); font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+.branch.left { left: -40px; }
+.branch.right { right: -40px; }
+.stump { width: 74px; height: 18px; background: linear-gradient(180deg, #5d3a1a, #3d1f08); border-radius: 4px 4px 8px 8px; border: 2px solid #2a1205; margin-top: 2px; }
+
+/* player */
+.player { position: absolute; bottom: 0; display: flex; flex-direction: column; align-items: center; transition: transform 0.08s; }
+.player.left { right: calc(50% + 40px); }
+.player.right { left: calc(50% + 40px); }
+.player-emoji { font-size: 44px; line-height: 1; }
+.player-key { font-size: 11px; color: #fff; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.8); margin-top: 2px; }
+
+/* ground */
+.ground { height: 28px; background: linear-gradient(180deg, #5a3e1b 0%, #3d2810 100%); border-radius: 0 0 12px 12px; margin-top: -2px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+
+/* chop buttons */
+.chop-row { display: flex; gap: 14px; margin-top: 16px; }
+.chop-btn {
+  flex: 1; height: 70px;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 16px; color: #fff;
+  font-size: 26px; cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.1s, transform 0.08s;
+  line-height: 1.3;
+}
+.chop-btn span { display: block; font-size: 12px; font-weight: 700; opacity: 0.8; }
+.chop-btn:active { transform: scale(0.93); }
+.chop-btn.active { background: rgba(104,211,145,0.25); }
+
+/* floating */
+.float-score { position: absolute; bottom: 60px; font-size: 20px; font-weight: 900; text-shadow: 0 2px 6px rgba(0,0,0,0.5); pointer-events: none; z-index: 10; animation: floatUp 0.75s ease-out forwards; }
+.float-score.left { right: 55%; color: #ffd700; }
+.float-score.right { left: 55%; color: #ffd700; }
+.float-score.center { left: 50%; transform: translateX(-50%); color: #fff; }
+
+/* info / gameover */
+.info-box { text-align: center; margin-top: 16px; }
+.info-msg { color: rgba(255,255,255,0.8); font-size: 15px; }
+.info-msg small { font-size: 12px; opacity: 0.6; display: block; margin-top: 4px; }
+.gameover-title { color: #fc8181; font-size: 24px; font-weight: 900; margin-bottom: 6px; }
+.gameover-score { color: #ffd700; font-size: 15px; margin-bottom: 14px; line-height: 1.6; }
+.restart-btn { background: linear-gradient(135deg, #68d391, #38a169); color: #fff; border: none; border-radius: 14px; padding: 12px 34px; font-size: 17px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 16px rgba(56,161,105,0.4); }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 0; margin-top: 18px; border-radius: 14px 14px 0 0; overflow: hidden; }
+.tab-btn {
+  flex: 1; padding: 10px 4px; font-size: 13px; font-weight: 800; cursor: pointer;
+  background: rgba(0,0,0,0.25); color: rgba(255,255,255,0.5);
+  border: none; border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.tab-btn.active { background: rgba(0,0,0,0.45); color: #ffd700; border-bottom: 2px solid #ffd700; }
+
+.panel {
+  background: rgba(0,0,0,0.3); border-radius: 0 0 18px 18px;
+  padding: 14px 12px 18px;
+  border: 1px solid rgba(255,255,255,0.1); border-top: none;
+  backdrop-filter: blur(6px);
+  display: none;
+}
+.panel.active { display: block; }
+
+/* ── AXE UPGRADES ── */
+.upgrade-list { display: flex; flex-direction: column; gap: 8px; }
+.upgrade-item { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.07); border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.1); }
+.upgrade-icon { font-size: 26px; flex-shrink: 0; }
+.upgrade-info { flex: 1; min-width: 0; }
+.upgrade-name { color: #fff; font-size: 13px; font-weight: 800; }
+.upgrade-desc { color: #a0b0a0; font-size: 11px; margin-top: 1px; }
+.pip-row { display: flex; gap: 3px; margin-top: 4px; }
+.pip { width: 10px; height: 10px; border-radius: 3px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); }
+.pip.filled { background: #ffd700; border-color: #e6b800; box-shadow: 0 0 4px #ffd700; }
+.upgrade-btn { background: linear-gradient(135deg, #f6ad55, #dd6b20); color: #fff; border: none; border-radius: 10px; padding: 7px 10px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; flex-shrink: 0; box-shadow: 0 2px 8px rgba(221,107,32,0.4); transition: opacity 0.15s, transform 0.1s; }
+.upgrade-btn:disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); box-shadow: none; cursor: not-allowed; }
+.upgrade-btn:not(:disabled):active { transform: scale(0.94); }
+.maxed { color: #68d391; font-size: 12px; font-weight: 800; padding: 7px 8px; white-space: nowrap; }
+
+/* ── MATERIALS / CRAFT ── */
+.mat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mat-card {
+  background: rgba(255,255,255,0.07); border-radius: 12px;
+  padding: 10px 10px 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  position: relative;
+}
+.mat-icon { font-size: 28px; }
+.mat-name { color: #fff; font-size: 11px; font-weight: 800; text-align: center; line-height: 1.2; }
+.mat-grade { font-size: 10px; font-weight: 900; padding: 1px 7px; border-radius: 8px; margin-top: 1px; }
+.mat-count { color: #ffd700; font-size: 13px; font-weight: 900; }
+.mat-rate { color: #a0b0a0; font-size: 10px; }
+
+/* grade colors */
+.grade-일반 { background: #e53e3e20; color: #fc8181; border: 1px solid #e53e3e; }
+.grade-노멀 { background: #2d3a5020; color: #90cdf4; border: 1px solid #4299e1; }
+.grade-영웅 { background: #44337a20; color: #b794f4; border: 1px solid #805ad5; }
+.grade-신화 { background: #7b341e20; color: #fbd38d; border: 1px solid #ed8936; }
+.grade-전설 { background: #74400320; color: #f6ad55; border: 1px solid #dd6b20; }
+.grade-무한 { background: #1a365d20; color: #63b3ed; border: 1px solid #2b6cb0; box-shadow: 0 0 8px #2b6cb088; }
+
+/* craft button */
+.craft-section { margin-top: 14px; }
+.craft-title { color: #ffd700; font-size: 13px; font-weight: 900; margin-bottom: 8px; text-align: center; }
+.craft-row { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 12px; margin-bottom: 6px; }
+.craft-row select {
+  flex: 1; background: rgba(0,0,0,0.4); color: #fff;
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+  padding: 6px 8px; font-size: 12px; outline: none;
+}
+.craft-btn { background: linear-gradient(135deg, #9f7aea, #6b46c1); color: #fff; border: none; border-radius: 10px; padding: 8px 14px; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.craft-btn:disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); cursor: not-allowed; }
+
+/* ── CRAFT PANEL REDESIGN ── */
+.craft-power-row {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 10px 12px; margin-bottom: 10px;
+}
+.craft-power-label { color: #b794f4; font-size: 12px; font-weight: 900; white-space: nowrap; }
+.craft-power-bar-wrap { flex: 1; height: 9px; background: rgba(0,0,0,0.35); border-radius: 5px; overflow: hidden; }
+.craft-power-bar { height: 100%; background: linear-gradient(90deg, #9f7aea, #63b3ed); border-radius: 5px; transition: width .3s; }
+.craft-power-num { color: #fff; font-size: 12px; font-weight: 800; white-space: nowrap; }
+
+.craft-quick-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.craft-quick-btn {
+  flex: 1; border: none; border-radius: 12px; padding: 10px 8px;
+  font-size: 12px; font-weight: 800; cursor: pointer; color: #fff;
+  transition: opacity .15s, transform .1s;
+}
+.craft-quick-btn.best { background: linear-gradient(135deg, #9f7aea, #6b46c1); }
+.craft-quick-btn.auto { background: linear-gradient(135deg, #f6ad55, #dd6b20); }
+.craft-quick-btn.auto.running { background: linear-gradient(135deg, #fc8181, #c53030); }
+.craft-quick-btn:disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); cursor: not-allowed; }
+.craft-quick-btn:not(:disabled):active { transform: scale(0.96); }
+
+.craft-card-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 8px; }
+.craft-card {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 8px 10px;
+  transition: border-color .15s, background .15s;
+}
+.craft-card.has-mat { border-color: rgba(255,215,0,0.3); }
+.craft-card.empty { opacity: 0.55; }
+.craft-card-icon { font-size: 24px; flex-shrink: 0; }
+.craft-card-info { flex: 1; min-width: 0; }
+.craft-card-name { color: #fff; font-size: 12px; font-weight: 800; line-height: 1.25; }
+.craft-card-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
+.craft-card-rate { color: #a0b0a0; font-size: 10px; }
+.craft-card-count { color: #ffd700; font-size: 11px; font-weight: 800; }
+.craft-card-btn {
+  background: linear-gradient(135deg, #9f7aea, #6b46c1); color: #fff; border: none;
+  border-radius: 9px; padding: 7px 12px; font-size: 12px; font-weight: 800; cursor: pointer;
+  white-space: nowrap; flex-shrink: 0; transition: transform .1s;
+}
+.craft-card-btn:disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); cursor: not-allowed; }
+.craft-card-btn:not(:disabled):active { transform: scale(0.94); }
+.craft-card-btn.flash { animation: upgradeFlash 0.35s ease; }
+
+body.light-mode .craft-power-row,
+body.light-mode .craft-card { background: rgba(255,255,255,0.72); border-color: rgba(23,49,23,0.12); }
+body.light-mode .craft-card-name { color: #173117; }
+body.light-mode .craft-card-rate,
+body.light-mode .craft-power-num { color: #35543a; }
+#craft-result { text-align: center; font-size: 14px; font-weight: 800; min-height: 24px; margin-top: 6px; }
+
+/* chest modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.78); display: flex; align-items: center; justify-content: center; z-index: 200; }
+.modal-box { background: #1a202c; border-radius: 22px; padding: 28px 24px; text-align: center; max-width: 320px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.15); }
+.modal-title { color: #ffd700; font-size: 20px; font-weight: 900; margin-bottom: 16px; }
+.modal-item { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 18px; }
+.modal-icon { font-size: 52px; }
+.modal-item-name { font-size: 15px; font-weight: 900; }
+.modal-item-grade { font-size: 12px; padding: 2px 10px; border-radius: 10px; font-weight: 800; }
+.modal-close { background: linear-gradient(135deg, #68d391, #38a169); color: #fff; border: none; border-radius: 12px; padding: 11px 32px; font-size: 16px; font-weight: 800; cursor: pointer; }
+
+@keyframes floatUp { 0% { opacity:1; transform:translateY(0) scale(1.2); } 100% { opacity:0; transform:translateY(-52px) scale(0.8); } }
+@keyframes shake { 0%,100% { transform:translateX(0); } 25% { transform:translateX(-5px); } 75% { transform:translateX(5px); } }
+@keyframes popIn { 0% { transform:scale(0.7); opacity:0; } 100% { transform:scale(1); opacity:1; } }
+
+/* ── ENHANCEMENTS ── */
+.header { gap: 10px; align-items: center; flex-wrap: wrap; }
+.header-center { flex: 1; min-width: 150px; text-align: center; }
+.subtitle { color: #d7ead6; font-size: 11px; line-height: 1.35; margin-top: 4px; opacity: 0.9; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 72px; }
+.top-actions { display: flex; gap: 8px; }
+.top-btn {
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.09);
+  color: #fff;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .1s, background .15s;
+}
+.top-btn:active { transform: scale(.96); }
+.top-btn:hover { background: rgba(255,255,255,0.16); }
+
+.panel-note {
+  color: #d7ead6;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+.modal-box.modal-wide { max-width: 360px; }
+.guide-list { display: flex; flex-direction: column; gap: 10px; }
+.guide-item {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.guide-item strong { display: block; color: #ffd700; margin-bottom: 4px; font-size: 13px; }
+.guide-item span { color: #e7f3e7; font-size: 12px; line-height: 1.4; }
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+.setting-row .label { color: #fff; font-size: 13px; font-weight: 800; }
+.setting-row .hint { display:block; color: #b8c8b8; font-size: 11px; font-weight: 500; margin-top: 3px; line-height: 1.35; }
+.toggle {
+  width: 50px;
+  height: 28px;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.2);
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition: background .2s;
+}
+.toggle::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .2s;
+}
+.toggle:checked { background: #68d391; }
+.toggle:checked::before { transform: translateX(22px); }
+
+.credit-line {
+  background: rgba(255,255,255,0.07);
+  border: 1px dashed rgba(255,255,255,0.18);
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: center;
+  color: #ffe9a8;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+body.light-mode {
+  background: linear-gradient(180deg, #f2fbf0 0%, #dff0d9 40%, #cce8c4 100%);
+}
+body.light-mode .star { background: rgba(0,0,0,0.12); }
+body.light-mode .title,
+body.light-mode .stat-val,
+body.light-mode .player-key,
+body.light-mode .top-btn,
+body.light-mode .guide-item span,
+body.light-mode .credit-line,
+body.light-mode .setting-row .label {
+  color: #173117;
+}
+body.light-mode .subtitle,
+body.light-mode .stat-label,
+body.light-mode .info-msg,
+body.light-mode .info-msg small,
+body.light-mode .upgrade-desc,
+body.light-mode .mat-rate,
+body.light-mode .craft-title,
+body.light-mode #craft-result {
+  color: #35543a;
+}
+body.light-mode .coin-row,
+body.light-mode .panel,
+body.light-mode .upgrade-item,
+body.light-mode .mat-card,
+body.light-mode .craft-row,
+body.light-mode .guide-item,
+body.light-mode .setting-row,
+body.light-mode .credit-line,
+body.light-mode .modal-box {
+  background: rgba(255,255,255,0.72);
+  border-color: rgba(23,49,23,0.12);
+}
+body.light-mode .tab-btn { background: rgba(255,255,255,0.56); color: #4d6a52; }
+body.light-mode .tab-btn.active { background: rgba(255,255,255,0.9); color: #3f7d39; }
+body.light-mode .chop-btn {
+  background: rgba(255,255,255,0.74);
+  border-color: rgba(23,49,23,0.14);
+  color: #173117;
+}
+body.light-mode .chop-btn.active { background: rgba(104,211,145,0.2); }
+body.light-mode .top-btn { background: rgba(255,255,255,0.72); border-color: rgba(23,49,23,0.12); }
+body.light-mode .top-btn:hover { background: rgba(255,255,255,0.92); }
+
+body.light-mode .modal-title { color: #d97706; }
+body.light-mode .modal-item-name,
+body.light-mode .upgrade-name,
+body.light-mode .mat-name { color: #173117; }
+body.light-mode .modal-item-grade { color: #173117 !important; }
+body.light-mode .level-badge { box-shadow: none; }
+
+
+/* player image */
+.player-visual { position: relative; width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; }
+.player-img {
+  width: 54px; height: 54px; object-fit: contain;
+  image-rendering: auto;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+  pointer-events: none;
+}
+.player-emoji {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 44px; line-height: 1;
+}
+
+
+/* achievement system */
+.achievement-summary {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.achievement-summary-title { color:#ffd700; font-size:14px; font-weight:900; }
+.achievement-summary-sub { color:#d7ead6; font-size:11px; margin-top:4px; }
+.achievement-list { display:flex; flex-direction:column; gap:8px; }
+.achievement-item {
+  display:flex; gap:10px; align-items:flex-start;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.achievement-item.unlocked {
+  background: linear-gradient(135deg, rgba(104,211,145,0.16), rgba(159,122,234,0.12));
+  border-color: rgba(104,211,145,0.35);
+}
+.achievement-icon { font-size: 24px; flex-shrink:0; width:28px; text-align:center; margin-top:1px; }
+.achievement-main { flex:1; min-width:0; }
+.achievement-name { color:#fff; font-size:13px; font-weight:900; }
+.achievement-desc { color:#a0b0a0; font-size:11px; margin-top:2px; line-height:1.35; }
+.achievement-meta { margin-top:6px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.achievement-progress {
+  height: 7px; border-radius:999px; background: rgba(255,255,255,0.10); overflow:hidden; flex:1;
+}
+.achievement-progress-bar { height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg, #68d391, #9f7aea); transition: width .25s; }
+.achievement-status { font-size:11px; font-weight:800; white-space:nowrap; }
+.achievement-status.locked { color:#a0b0a0; }
+.achievement-status.unlocked { color:#68d391; }
+#achievement-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%) translateY(120%);
+  opacity: 0;
+  z-index: 400;
+  background: rgba(17,24,39,0.95);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 16px;
+  padding: 10px 14px;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.35);
+  max-width: min(92vw, 360px);
+  pointer-events: none;
+  transition: opacity .25s, transform .25s;
+}
+#achievement-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+#achievement-toast .toast-title { color:#ffd700; font-size:13px; font-weight:900; }
+#achievement-toast .toast-sub { color:#e5e7eb; font-size:11px; margin-top:2px; line-height:1.35; }
+
+/* item-get toast (non-blocking) */
+#item-toast-wrap {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.item-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(17,24,39,0.92);
+  border: 1px solid rgba(255,215,0,0.4);
+  border-radius: 999px;
+  padding: 8px 16px 8px 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 14px rgba(255,215,0,0.15);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  animation: itemToastIn 0.28s cubic-bezier(.2,.9,.3,1.3) forwards, itemToastOut 0.35s ease-in forwards 1.85s;
+}
+.item-toast .it-icon { font-size: 18px; line-height: 1; }
+.item-toast .it-grade { font-size: 10px; font-weight: 900; padding: 1px 7px; border-radius: 8px; }
+@keyframes itemToastIn {
+  0% { opacity: 0; transform: translateY(-14px) scale(0.9); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes itemToastOut {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-10px) scale(0.95); }
+}
+
+/* opening screen */
+#opening-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+#opening-overlay.show { opacity: 1; pointer-events: auto; }
+#opening-overlay.hide { opacity: 0; pointer-events: none; }
+#opening-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  animation: openingZoom 1s ease-out forwards;
+}
+@keyframes openingZoom {
+  0% { transform: scale(1.08); filter: brightness(0.78) saturate(1.05); }
+  100% { transform: scale(1); filter: brightness(1) saturate(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #opening-overlay img { animation: none; transform: scale(1); }
+}
+
+/* ── AXE SLASH EFFECT ── */
+.slash-fx {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 90px; height: 90px;
+  margin: -45px 0 0 -45px;
+  pointer-events: none;
+  z-index: 8;
+}
+.slash-fx svg { width: 100%; height: 100%; overflow: visible; }
+.slash-fx .slash-path {
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0;
+}
+.slash-fx.s1 .slash-path { animation: slashCut 0.28s ease-out forwards; }
+.slash-fx.s2 .slash-path.p1 { animation: slashCut 0.24s ease-out forwards; }
+.slash-fx.s2 .slash-path.p2 { animation: slashCut 0.24s ease-out 0.05s forwards; }
+.slash-fx.s3 .slash-path.p1 { animation: slashCut 0.22s ease-out forwards; }
+.slash-fx.s3 .slash-path.p2 { animation: slashCut 0.22s ease-out 0.05s forwards; }
+.slash-fx.s3 .slash-path.p3 { animation: slashCut 0.22s ease-out 0.1s forwards; }
+.slash-fx .spark {
+  position: absolute; font-size: 20px; opacity: 0;
+  animation: sparkPop 0.4s ease-out forwards;
+}
+@keyframes slashCut {
+  0% { opacity: 0; stroke-dashoffset: 120; }
+  15% { opacity: 1; }
+  60% { opacity: 1; stroke-dashoffset: 0; }
+  100% { opacity: 0; stroke-dashoffset: 0; }
+}
+@keyframes sparkPop {
+  0% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+  30% { opacity: 1; transform: scale(1.15) rotate(20deg); }
+  100% { opacity: 0; transform: scale(0.9) rotate(40deg) translateY(-10px); }
+}
+
+/* ── AXE POWER GLOW on player/axe icons, scales with power tier ── */
+.axe-tier-glow { filter: drop-shadow(0 0 4px rgba(255,215,0,0.7)); }
+.axe-tier-glow-strong { filter: drop-shadow(0 0 8px rgba(255,120,50,0.85)) drop-shadow(0 0 3px #fff); }
+
+/* ── UPGRADE PANEL UX ── */
+.upgrade-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin-bottom: 10px;
+}
+.buy-mode-group { display: flex; gap: 4px; background: rgba(0,0,0,0.25); border-radius: 10px; padding: 3px; }
+.buy-mode-btn {
+  border: none; background: transparent; color: rgba(255,255,255,0.55);
+  font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px; cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.buy-mode-btn.active { background: linear-gradient(135deg, #f6ad55, #dd6b20); color: #fff; }
+.upgrade-power-hint { color: #a0b0a0; font-size: 11px; font-weight: 700; }
+.upgrade-item.can-afford { border-color: rgba(255,215,0,0.35); box-shadow: 0 0 0 1px rgba(255,215,0,0.08) inset; }
+.upgrade-item.is-maxed { opacity: 0.72; }
+.upgrade-btn .sub { display:block; font-size: 9px; font-weight:700; opacity:0.85; margin-top:1px; }
+.upgrade-btn.flash { animation: upgradeFlash 0.35s ease; }
+@keyframes upgradeFlash {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.18); filter: brightness(1.3); }
+  100% { transform: scale(1); }
+}
+.upgrade-all-btn {
+  background: linear-gradient(135deg, #68d391, #2f855a);
+  color: #fff; border: none; border-radius: 10px;
+  padding: 8px 12px; font-size: 12px; font-weight: 900; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(47,133,90,0.4);
+  transition: opacity .15s, transform .1s;
+}
+.upgrade-all-btn:disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); box-shadow: none; cursor: not-allowed; }
+.upgrade-all-btn:not(:disabled):active { transform: scale(0.95); }
+
+body.light-mode .buy-mode-group { background: rgba(0,0,0,0.08); }
+body.light-mode .buy-mode-btn { color: #567056; }
+body.light-mode .upgrade-power-hint { color: #4d6a52; }
+
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+
+<div id="opening-overlay" aria-hidden="true">
+  <img src="opening.jpg" alt="opening">
+</div>
+<div id="app">
+  <!-- Header -->
+  <div class="header">
+    <div class="stat-box">
+      <div class="stat-label">점수</div>
+      <div class="stat-val" id="score-display">0</div>
+    </div>
+
+    <div class="header-center">
+      <div class="title">🪓 나무꾼</div>
+      <div class="subtitle">A / ← 는 왼쪽, D / → 는 오른쪽입니다. 설정과 가이드는 위 버튼에서 열 수 있어요.</div>
+    </div>
+
+    <div class="header-right">
+      <div class="top-actions">
+        <button class="top-btn" onclick="openGuide()">가이드</button>
+        <button class="top-btn" onclick="openSettings()">설정</button>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">최고</div>
+        <div class="stat-val gold" id="best-display">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Level + XP -->
+  <div class="level-row">
+    <div class="level-badge" id="level-badge">Lv.1</div>
+    <div class="level-xp-wrap"><div id="xp-bar" style="width:0%"></div></div>
+    <div style="color:#a0b0a0;font-size:11px;" id="xp-label">0/50 XP</div>
+  </div>
+
+  <!-- Coins -->
+  <div class="coin-row">
+    <span>🪙</span>
+    <span class="coin-label" id="coin-display">0</span>
+    <span style="color:#a0b0a0;font-size:12px;">G</span>
+    <span style="color:#a0b0a0;font-size:11px;margin-left:8px;">나무당</span>
+    <span style="color:#68d391;font-size:12px;font-weight:800;" id="gold-per-chop">+10G</span>
+  </div>
+
+  <!-- Timer -->
+  <div class="timer-wrap"><div id="timer-bar"></div></div>
+
+  <!-- Game area -->
+  <div class="game-area" id="game-area">
+    <div class="tree-col" id="tree-col">
+      <div class="treetop" id="treetop">🌲</div>
+      <div class="stump"></div>
+    </div>
+    <div class="player left" id="player">
+      <div class="player-visual">
+        <img class="player-img" id="player-img" src="rumber.jpg" alt="캐릭터" onerror="this.style.display='none'; document.getElementById('player-emoji').style.display='block';">
+        <div class="player-emoji" id="player-emoji" style="display:none;">🧑‍🌾</div>
+      </div>
+      <div class="player-key" id="player-key">← A</div>
+    </div>
+  </div>
+  <div class="ground"></div>
+
+  <!-- Chop buttons -->
+  <div class="chop-row">
+    <button class="chop-btn" id="btn-left" onclick="triggerChop('left')">
+      <span id="axe-left">🪓</span>
+      <span>왼쪽 (A)</span>
+    </button>
+    <button class="chop-btn" id="btn-right" onclick="triggerChop('right')">
+      <span id="axe-right">🪓</span>
+      <span>오른쪽 (D)</span>
+    </button>
+  </div>
+
+  <!-- Info / Game Over -->
+  <div class="info-box" id="info-box">
+    <div class="info-msg">A / ← 또는 D / → 로 나무를 베세요. 🌲<small>같은 방향의 가지를 베면 바로 게임 오버입니다.</small></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('axe')">⚒️ 강화</button>
+    <button class="tab-btn" onclick="switchTab('mat')">🎒 재료</button>
+    <button class="tab-btn" onclick="switchTab('craft')">✨ 합성</button>
+    <button class="tab-btn" onclick="switchTab('achieve')">🏆 업적</button>
+  </div>
+
+  <!-- Panel: Axe Upgrades -->
+  <div class="panel active" id="panel-axe">
+    <div class="upgrade-toolbar">
+      <div class="buy-mode-group" id="buy-mode-group">
+        <button type="button" class="buy-mode-btn" data-mode="1" onclick="setBuyMode(1)">x1</button>
+        <button type="button" class="buy-mode-btn" data-mode="10" onclick="setBuyMode(10)">x10</button>
+        <button type="button" class="buy-mode-btn" data-mode="max" onclick="setBuyMode('max')">MAX</button>
+      </div>
+      <button type="button" class="upgrade-all-btn" id="upgrade-all-btn" onclick="buyAllAffordable()">전체 강화</button>
+    </div>
+    <div class="upgrade-list" id="upgrade-list"></div>
+  </div>
+
+  <!-- Panel: Materials -->
+  <div class="panel" id="panel-mat">
+    <div class="mat-grid" id="mat-grid"></div>
+  </div>
+
+  <!-- Panel: Craft -->
+  <div class="panel" id="panel-craft">
+    <div class="craft-power-row">
+      <div class="craft-power-label">⚔️ 도끼 파워</div>
+      <div class="craft-power-bar-wrap"><div class="craft-power-bar" id="craft-power-bar" style="width:0%"></div></div>
+      <div class="craft-power-num" id="craft-power-num">0 / 50</div>
+    </div>
+    <div class="craft-quick-row">
+      <button class="craft-quick-btn best" id="craft-best-btn" onclick="craftBest()">✨ 최고 확률 합성</button>
+      <button class="craft-quick-btn auto" id="craft-auto-btn" onclick="toggleAutoCraft()">🔁 자동 합성</button>
+    </div>
+    <div id="craft-result"></div>
+    <div class="craft-card-list" id="craft-card-list"></div>
+    <div style="margin-top:4px;color:#a0b0a0;font-size:11px;text-align:center;">
+      재료를 사용해 도끼 파워를 높입니다. 성공하면 +1 (최대 50).<br>
+      성공률이 가장 높은 재료부터 자동으로 골라 합성할 수 있어요.
+    </div>
+  </div>
+
+  <!-- Panel: Achievements -->
+  <div class="panel" id="panel-achieve">
+    <div class="achievement-summary">
+      <div class="achievement-summary-title">업적 현황</div>
+      <div class="achievement-summary-sub" id="achievement-summary">0 / 0 달성</div>
+    </div>
+    <div class="achievement-list" id="achievement-list"></div>
+  </div>
+</div>
+
+
+<div id="achievement-toast" aria-live="polite"></div>
+<div id="item-toast-wrap" aria-live="polite"></div>
+
+<!-- Settings modal -->
+<div class="modal-overlay" id="settings-modal" style="display:none;">
+  <div class="modal-box modal-wide" style="animation:popIn 0.3s ease-out;">
+    <div class="modal-title">⚙️ 설정</div>
+    <div class="modal-content">
+      <div class="setting-row">
+        <div>
+          <div class="label">다크모드</div>
+          <span class="hint">켜면 어두운 테마, 끄면 밝은 테마로 바뀝니다.</span>
+        </div>
+        <input type="checkbox" class="toggle" id="dark-toggle" onchange="toggleDarkMode()">
+      </div>
+      <div class="credit-line">made by 정새싹게임즈's 이정후,정지호</div>
+      <div class="hint" style="margin-top:8px;text-align:center;">자동 저장: 켜짐 · 진행도와 설정은 기기에 저장됩니다.</div>
+      <button class="modal-close" onclick="closeOverlay('settings-modal')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Guide modal -->
+<div class="modal-overlay" id="guide-modal" style="display:none;">
+  <div class="modal-box modal-wide" style="animation:popIn 0.3s ease-out;">
+    <div class="modal-title">📘 가이드</div>
+    <div class="modal-content">
+      <div class="guide-list">
+        <div class="guide-item">
+          <strong>1. 나무 베기</strong>
+          <span>A / ← 는 왼쪽, D / → 는 오른쪽입니다. 버튼을 누를 때마다 내가 선 쪽으로 이동합니다.</span>
+        </div>
+        <div class="guide-item">
+          <strong>2. 가지 피하기</strong>
+          <span>내가 베려는 방향에 가지가 있으면 즉시 게임 오버가 됩니다. 길을 먼저 보고 누르세요.</span>
+        </div>
+        <div class="guide-item">
+          <strong>3. 상자와 재료</strong>
+          <span>상자를 만나면 게임이 잠깐 멈추고 재료를 얻습니다. 재료는 합성 탭에서 도끼 파워를 올리는 데 씁니다.</span>
+        </div>
+        <div class="guide-item">
+          <strong>4. 강화와 골드</strong>
+          <span>강화 탭에서는 골드를 써서 시간, 점수, 회복량을 올릴 수 있습니다. 레벨이 오르면 나무 한 번에 얻는 골드도 늘어납니다.</span>
+        </div>
+        <div class="guide-item">
+          <strong>5. 설정</strong>
+          <span>설정에서 다크모드를 바꾸고 제작자 정보를 확인할 수 있습니다.</span>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeOverlay('guide-modal')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ──────────────────────────────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────────────────────────────
+const GRADES = [
+  { name:"일반",  emoji:"🚨", color:"#fc8181" },
+  { name:"노멀",  emoji:"🚧", color:"#90cdf4" },
+  { name:"영웅",  emoji:"🎇", color:"#b794f4" },
+  { name:"신화",  emoji:"🎆", color:"#fbd38d" },
+  { name:"전설",  emoji:"🎑", color:"#f6ad55" },
+  { name:"무한",  emoji:"🧩", color:"#63b3ed" },
+];
+
+const MATERIALS = [
+  { id:"jangwa",   icon:"🥸",  name:"냄새나는 장화",                     grade:"일반", cost:50,   rate:1.0  },
+  { id:"vinyl",    icon:"🪨",  name:"비닐봉지",                           grade:"일반", cost:10,   rate:0.05 },
+  { id:"socks",    icon:"🙀",  name:"냄새나는 양말",                      grade:"노멀", cost:60,   rate:15   },
+  { id:"fishrod",  icon:"🎣",  name:"부러진 낚시대",                      grade:"영웅", cost:90,   rate:33   },
+  { id:"powder",   icon:"☄️",  name:"마법의 가루",                        grade:"영웅", cost:950,  rate:65   },
+  { id:"tooth",    icon:"👻",  name:"아이스크림 먹다 빠진 용사의 이빨",   grade:"신화", cost:400,  rate:78   },
+  { id:"dragon",   icon:"🌌",  name:"드래곤 발톱",                        grade:"전설", cost:1200, rate:91   },
+  { id:"uniform",  icon:"🤍",  name:"아침에 세탁기에 안 넣은 교복",       grade:"무한", cost:2500, rate:99.3 },
+  { id:"gourd",    icon:"💫",  name:"무한의 호리병",                      grade:"무한", cost:3000, rate:99.95 },
+];
+
+// Chest drop weights by grade
+const CHEST_WEIGHTS = { "일반":59, "노멀":25, "영웅":10, "신화":3, "전설":2, "무한":1 };
+
+const AXE_UPGRADES = [
+  { id:"speed",   icon:"⚡", name:"날카로움",        desc:"시간 바가 천천히 줄어듭니다",   maxLevel:5, baseCost:15, costMult:1.8, effect: l=>`시간 +${l*20}%` },
+  { id:"coinup",  icon:"💰", name:"금빛 도끼날",     desc:"베기당 추가 골드 획득",          maxLevel:5, baseCost:20, costMult:2.0, effect: l=>`+${l*10}G/베기` },
+  { id:"scoreup", icon:"🔥", name:"강철 도끼",        desc:"베기당 추가 점수",               maxLevel:4, baseCost:25, costMult:2.2, effect: l=>`+${l} 점수/베기` },
+  { id:"restore", icon:"⏳", name:"마법의 도끼자루",  desc:"성공 시 시간 회복 증가",         maxLevel:4, baseCost:30, costMult:2.0, effect: l=>`+${l*10}% 회복` },
+];
+
+// ──────────────────────────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────────────────────────
+const TREE_HEIGHT = 8;
+const BASE_TICK_MS = 3800;
+const MAX_LEVEL = 200;
+const CHEST_CHANCE = 0.07; // 7% per block
+
+let tree = [];
+let playerSide = "left";
+let score = 0;
+let best = 0;
+let coins = 0;
+let phase = "idle";
+let timeLeft = 1.0;
+let lastChopTime = Date.now();
+let timerInterval = null;
+let upgradeLevels = { speed:0, coinup:0, scoreup:0, restore:0 };
+let axePower = 0; // from crafting, max 50
+let inventory = {};  // matId -> count
+let level = 1;
+let xp = 0;
+
+// Play stats used for achievement tracking. Declared at top level (not
+// inside the later IIFE) so every script block in the file can read and
+// update it directly.
+const DEFAULT_STATS = {
+  totalChops: 0,
+  totalCoinsEarned: 0,
+  totalScoreEarned: 0,
+  totalDeaths: 0,
+  totalChests: 0,
+  totalCraftAttempts: 0,
+  totalCraftSuccess: 0,
+  totalUpgradesBought: 0,
+  settingsOpened: 0,
+  guideOpened: 0,
+  darkModeUsed: 0,
+  totalRestarts: 0
+};
+let gameStats = JSON.parse(JSON.stringify(DEFAULT_STATS));
+
+MATERIALS.forEach(m => inventory[m.id] = 0);
+
+// ──────────────────────────────────────────────────────────────────
+// COMPUTED
+// ──────────────────────────────────────────────────────────────────
+function xpForLevel(l) { return 50 + (l - 1) * 30; }
+function goldPerChop() { return 10 + (level - 1) * 20 + upgradeLevels.coinup * 10; }
+function getTickMs() { return BASE_TICK_MS * (1 + upgradeLevels.speed * 0.20); }
+function getBonusScore() { return upgradeLevels.scoreup + Math.floor(axePower / 10); }
+function getUpgradeCost(upg, lvl) { return Math.floor(upg.baseCost * Math.pow(upg.costMult, lvl)); }
+
+function getAxeEmoji() {
+  const total = Object.values(upgradeLevels).reduce((a,b)=>a+b,0) + Math.floor(axePower/5);
+  if (total >= 20) return "⚔️";
+  if (total >= 14) return "🗡️";
+  if (total >= 8)  return "🔨";
+  if (total >= 3)  return "🪓";
+  return "🪓";
+}
+
+// ──────────────────────────────────────────────────────────────────
+// CHEST LOOT
+// ──────────────────────────────────────────────────────────────────
+function pickGrade() {
+  const total = Object.values(CHEST_WEIGHTS).reduce((a,b)=>a+b,0);
+  let r = Math.random() * total;
+  for (const [grade, w] of Object.entries(CHEST_WEIGHTS)) {
+    r -= w;
+    if (r <= 0) return grade;
+  }
+  return "일반";
+}
+
+function pickMaterialByGrade(grade) {
+  const pool = MATERIALS.filter(m => m.grade === grade);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+let pendingChest = null;
+
+// Non-blocking: item is granted immediately, a small toast is shown at the
+// top of the screen, and the game keeps running (no pause, no modal).
+function openChestModal(mat) {
+  if (!mat) return;
+  inventory[mat.id] = (inventory[mat.id] || 0) + 1;
+  gameStats.totalChests += 1;
+  showItemToast(mat);
+  renderMaterials();
+  renderCraftSelect();
+  if (typeof checkAchievements === "function") checkAchievements();
+  if (typeof saveState === "function") saveState();
+}
+
+function showItemToast(mat) {
+  const wrap = document.getElementById("item-toast-wrap");
+  if (!wrap) return;
+  const gi = GRADES.find(g => g.name === mat.grade) || { emoji: "", color: "#ffd700" };
+  const el = document.createElement("div");
+  el.className = "item-toast";
+  el.innerHTML = `<span class="it-icon">${mat.icon}</span><span>${mat.name} 획득!</span><span class="it-grade grade-${mat.grade}" style="color:${gi.color}">${gi.emoji} ${mat.grade}</span>`;
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 2300);
+}
+
+// Kept for backward compatibility (no longer used to gate chopping).
+function closeChest() {
+  const el = document.getElementById("chest-modal");
+  if (el) el.style.display = "none";
+}
+
+// ──────────────────────────────────────────────────────────────────
+// TREE GENERATION
+// ──────────────────────────────────────────────────────────────────
+function randomSide() { return Math.random() < 0.5 ? "left" : "right"; }
+
+function generateTree() {
+  return Array.from({ length: TREE_HEIGHT }, () => ({
+    branch: Math.random() < 0.42 ? randomSide() : null,
+    chest: false,
+  }));
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RENDER: TREE
+// ──────────────────────────────────────────────────────────────────
+function renderTree() {
+  const col = document.getElementById("tree-col");
+  col.querySelectorAll(".trunk-block").forEach(el => el.remove());
+  const treetop = document.getElementById("treetop");
+
+  tree.forEach((block, i) => {
+    const div = document.createElement("div");
+    div.className = "trunk-block";
+
+    if (block.branch === "left") {
+      const b = document.createElement("div");
+      // Spider on bottom (danger) block, leaf elsewhere
+      b.className = "branch left";
+      b.textContent = (i === 0) ? "🕷️" : "🌿";
+      div.appendChild(b);
+    }
+    if (block.branch === "right") {
+      const b = document.createElement("div");
+      b.className = "branch right";
+      b.textContent = (i === 0) ? "🕷️" : "🌿";
+      div.appendChild(b);
+    }
+
+    const trunk = document.createElement("div");
+    trunk.className = "trunk" + (i === 0 ? " bottom" : "");
+    const grain = document.createElement("div");
+    grain.className = "grain";
+    trunk.appendChild(grain);
+
+    if (block.chest) {
+      const ch = document.createElement("div");
+      ch.className = "chest-block";
+      ch.textContent = "📦";
+      trunk.appendChild(ch);
+    }
+
+    div.appendChild(trunk);
+    col.insertBefore(div, treetop);
+  });
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RENDER: PLAYER
+// ──────────────────────────────────────────────────────────────────
+function renderPlayer() {
+  const el = document.getElementById("player");
+  const img = document.getElementById("player-img");
+  const emoji = document.getElementById("player-emoji");
+  el.className = "player " + playerSide;
+  if (img) {
+    img.style.filter = phase === "dead" ? "grayscale(1)" : "";
+    img.style.opacity = phase === "dead" ? "0.82" : "1";
+  }
+  if (emoji) {
+    emoji.textContent = phase === "dead" ? "💀" : "🧑‍🌾";
+    emoji.style.display = img && img.style.display !== "none" ? "none" : "flex";
+  }
+  document.getElementById("player-key").textContent = playerSide === "left" ? "← A" : "D →";
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RENDER: HUD
+// ──────────────────────────────────────────────────────────────────
+function renderHUD() {
+  document.getElementById("score-display").textContent = score;
+  document.getElementById("best-display").textContent = best;
+  document.getElementById("coin-display").textContent = coins;
+  document.getElementById("gold-per-chop").textContent = "+" + goldPerChop() + "G";
+
+  // Level + XP
+  const needed = xpForLevel(level);
+  document.getElementById("level-badge").textContent = "Lv." + level;
+  document.getElementById("xp-bar").style.width = Math.min(100, (xp / needed * 100)) + "%";
+  document.getElementById("xp-label").textContent = xp + "/" + needed + " XP";
+}
+
+function renderTimerBar() {
+  const bar = document.getElementById("timer-bar");
+  bar.style.width = (timeLeft * 100) + "%";
+  const color = timeLeft > 0.5 ? "#68d391" : timeLeft > 0.25 ? "#f6ad55" : "#fc8181";
+  bar.style.background = color;
+  bar.style.boxShadow = "0 0 8px " + color;
+}
+
+function renderButtons() {
+  const axe = getAxeEmoji();
+  const axeLeftEl = document.getElementById("axe-left");
+  const axeRightEl = document.getElementById("axe-right");
+  axeLeftEl.textContent = axe;
+  axeRightEl.textContent = axe;
+  const tier = typeof getSlashTier === "function" ? getSlashTier() : 1;
+  const glowClass = tier >= 3 ? "axe-tier-glow-strong" : tier >= 2 ? "axe-tier-glow" : "";
+  axeLeftEl.className = glowClass;
+  axeRightEl.className = glowClass;
+  const bl = document.getElementById("btn-left");
+  const br = document.getElementById("btn-right");
+  bl.className = "chop-btn" + (phase === "playing" && playerSide === "left" ? " active" : "");
+  br.className = "chop-btn" + (phase === "playing" && playerSide === "right" ? " active" : "");
+}
+
+function renderInfo() {
+  const box = document.getElementById("info-box");
+  if (phase === "idle") {
+    box.innerHTML = `<div class="info-msg">A / ← 또는 D / → 로 나무를 베세요. 🌲<small>같은 방향의 가지를 베면 바로 게임 오버입니다.</small></div>`;
+  } else if (phase === "dead") {
+    const isRecord = score > 0 && score === best;
+    box.innerHTML = `
+      <div class="gameover-title">🕷️ 거미에게 잡혔다!</div>
+      <div class="gameover-score">
+        점수: ${score} ${isRecord ? "🏆 최고 기록!" : ""}<br>
+        레벨: ${level} &nbsp;|&nbsp; 보유 골드: ${coins}G
+      </div>
+      <button class="restart-btn" onclick="restartGame()">다시 시작 🪓</button>
+    `;
+  } else {
+    box.innerHTML = "";
+  }
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RENDER: AXE UPGRADES
+// ──────────────────────────────────────────────────────────────────
+// Given a starting level and how many levels we'd like to buy, returns
+// { levels, cost } for how many can actually be bought with current coins
+// (capped by maxLevel and the requested amount).
+function previewBulkBuy(upg, fromLevel, wantLevels) {
+  let lvl = fromLevel;
+  let total = 0;
+  let levels = 0;
+  for (let i = 0; i < wantLevels; i++) {
+    if (lvl >= upg.maxLevel) break;
+    const c = getUpgradeCost(upg, lvl);
+    if (coins < total + c) break;
+    total += c;
+    lvl++;
+    levels++;
+  }
+  return { levels, cost: total };
+}
+
+function renderUpgrades() {
+  const list = document.getElementById("upgrade-list");
+  list.innerHTML = "";
+
+  const mode = window.buyMode || "1";
+
+  AXE_UPGRADES.forEach(upg => {
+    const lvl = upgradeLevels[upg.id];
+    const maxed = lvl >= upg.maxLevel;
+    const nextCost = getUpgradeCost(upg, lvl);
+    const remaining = upg.maxLevel - lvl;
+    const wantLevels = mode === "max" ? remaining : Math.min(remaining, parseInt(mode, 10) || 1);
+    const preview = maxed ? { levels: 0, cost: 0 } : previewBulkBuy(upg, lvl, wantLevels);
+    const canAfford = !maxed && preview.levels > 0;
+
+    let pips = "";
+    for (let i = 0; i < upg.maxLevel; i++) pips += `<div class="pip${i < lvl ? " filled" : ""}"></div>`;
+
+    const item = document.createElement("div");
+    item.className = "upgrade-item" + (maxed ? " is-maxed" : canAfford ? " can-afford" : "");
+
+    let btnLabel;
+    if (maxed) {
+      btnLabel = null;
+    } else if (preview.levels <= 1) {
+      btnLabel = `🪙 ${nextCost}G`;
+    } else {
+      btnLabel = `🪙 ${preview.cost}G <span class="sub">+${preview.levels}단계</span>`;
+    }
+
+    item.innerHTML = `
+      <div class="upgrade-icon">${upg.icon}</div>
+      <div class="upgrade-info">
+        <div class="upgrade-name">${upg.name} <span style="color:#a0b0a0;font-weight:500">(${lvl}/${upg.maxLevel})</span></div>
+        <div class="upgrade-desc">${upg.desc}</div>
+        <div class="pip-row">${pips}</div>
+        ${lvl > 0 ? `<div style="color:#68d391;font-size:10px;margin-top:2px">${upg.effect(lvl)}</div>` : ""}
+      </div>
+      ${maxed
+        ? `<div class="maxed">✅ MAX</div>`
+        : `<button class="upgrade-btn" data-upg="${upg.id}" onclick="buyUpgrade('${upg.id}')" ${!canAfford ? "disabled" : ""}>${btnLabel}</button>`}
+    `;
+    list.appendChild(item);
+  });
+
+  // Axe Power display
+  const pw = document.createElement("div");
+  pw.style.cssText = "text-align:center;margin-top:10px;color:#b794f4;font-size:13px;font-weight:800;";
+  pw.textContent = "⚔️ 도끼 파워: " + axePower + " / 50  (합성으로 올리기)";
+  list.appendChild(pw);
+
+  // Sync toolbar state (mode buttons + "전체 강화" enabled state)
+  document.querySelectorAll(".buy-mode-btn").forEach((b) => {
+    b.classList.toggle("active", b.dataset.mode === mode);
+  });
+  const allBtn = document.getElementById("upgrade-all-btn");
+  if (allBtn) {
+    const anyAffordable = AXE_UPGRADES.some(u => upgradeLevels[u.id] < u.maxLevel && coins >= getUpgradeCost(u, upgradeLevels[u.id]));
+    allBtn.disabled = !anyAffordable;
+  }
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RENDER: MATERIALS
+// ──────────────────────────────────────────────────────────────────
+function renderMaterials() {
+  const grid = document.getElementById("mat-grid");
+  grid.innerHTML = "";
+  MATERIALS.forEach(mat => {
+    const gi = GRADES.find(g => g.name === mat.grade);
+    const card = document.createElement("div");
+    card.className = "mat-card";
+    card.innerHTML = `
+      <div class="mat-icon">${mat.icon}</div>
+      <div class="mat-name">${mat.name}</div>
+      <div class="mat-grade grade-${mat.grade}">${gi.emoji} ${mat.grade}</div>
+      <div class="mat-count">보유: ${inventory[mat.id]}개</div>
+      <div class="mat-rate">성공율 ${mat.rate}%</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RENDER: CRAFT PANEL (card list, one button per material)
+// ──────────────────────────────────────────────────────────────────
+function renderCraftSelect() {
+  renderCraftPanel();
+}
+
+function renderCraftPanel() {
+  const bar = document.getElementById("craft-power-bar");
+  const num = document.getElementById("craft-power-num");
+  if (bar) bar.style.width = Math.min(100, (axePower / 50) * 100) + "%";
+  if (num) num.textContent = axePower + " / 50";
+
+  const bestBtn = document.getElementById("craft-best-btn");
+  const autoBtn = document.getElementById("craft-auto-btn");
+  const maxed = axePower >= 50;
+  const hasAnyMat = MATERIALS.some(m => inventory[m.id] > 0);
+  if (bestBtn) bestBtn.disabled = maxed || !hasAnyMat;
+  if (autoBtn) autoBtn.disabled = maxed || (!hasAnyMat && !window.autoCraftRunning);
+
+  const list = document.getElementById("craft-card-list");
+  if (!list) return;
+  list.innerHTML = "";
+  // Best success rate first so the most useful materials are easy to find.
+  const sorted = [...MATERIALS].sort((a, b) => b.rate - a.rate);
+  sorted.forEach(mat => {
+    const gi = GRADES.find(g => g.name === mat.grade);
+    const owned = inventory[mat.id] || 0;
+    const card = document.createElement("div");
+    card.className = "craft-card" + (owned > 0 ? " has-mat" : " empty");
+    card.innerHTML = `
+      <div class="craft-card-icon">${mat.icon}</div>
+      <div class="craft-card-info">
+        <div class="craft-card-name">${mat.name}</div>
+        <div class="craft-card-meta">
+          <span class="mat-grade grade-${mat.grade}" style="font-size:9px;padding:1px 6px;">${gi.emoji} ${mat.grade}</span>
+          <span class="craft-card-rate">성공률 ${mat.rate}%</span>
+          <span class="craft-card-count">보유 ${owned}개</span>
+        </div>
+      </div>
+      <button class="craft-card-btn" data-mat="${mat.id}" onclick="doCraft('${mat.id}')" ${(owned <= 0 || maxed) ? "disabled" : ""}>합성</button>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// Crafts using a specific material id, or the currently-owned material with
+// the highest success rate when no id is given (used by the quick button).
+function doCraft(matId) {
+  let mat = matId ? MATERIALS.find(m => m.id === matId) : null;
+  if (!mat) {
+    const owned = MATERIALS.filter(m => inventory[m.id] > 0).sort((a, b) => b.rate - a.rate);
+    mat = owned[0];
+  }
+  if (!mat || inventory[mat.id] <= 0) {
+    showCraftResult("❌ 재료가 없습니다!", "#fc8181");
+    return false;
+  }
+  if (axePower >= 50) {
+    showCraftResult("✅ 도끼 파워가 최대입니다!", "#68d391");
+    return false;
+  }
+  inventory[mat.id]--;
+  gameStats.totalCraftAttempts += 1;
+  const prevTier = typeof getSlashTier === "function" ? getSlashTier() : 1;
+  const success = Math.random() * 100 < mat.rate;
+  if (success) {
+    axePower = Math.min(50, axePower + 1);
+    gameStats.totalCraftSuccess += 1;
+    showCraftResult(`✨ 성공! ${mat.name} · 도끼 파워 +1 (현재: ${axePower})`, "#b794f4");
+    const newTier = typeof getSlashTier === "function" ? getSlashTier() : 1;
+    if (newTier > prevTier && typeof showAchievementToast === "function") {
+      showAchievementToast({ icon: "⚔️", name: "도끼가 더 날카로워졌다!", desc: "베기 이펙트가 강화되었습니다." });
+    }
+  } else {
+    showCraftResult(`💨 실패... ${mat.name} (${mat.rate}%)`, "#fc8181");
+  }
+  if (typeof checkAchievements === "function") checkAchievements();
+  renderMaterials();
+  renderCraftPanel();
+  renderUpgrades();
+  renderButtons();
+  if (typeof saveState === "function") saveState();
+
+  const btn = document.querySelector(`.craft-card-btn[data-mat="${mat.id}"]`);
+  if (btn) {
+    btn.classList.remove("flash");
+    void btn.offsetWidth;
+    btn.classList.add("flash");
+  }
+  return success;
+}
+
+// Quick button: always crafts with the best-odds material currently owned.
+function craftBest() {
+  doCraft();
+}
+
+// Auto-craft: repeatedly crafts with the best available material every
+// 350ms until axe power maxes out, materials run out, or the user stops it.
+window.autoCraftRunning = false;
+window.autoCraftTimer = null;
+
+function toggleAutoCraft() {
+  if (window.autoCraftRunning) {
+    stopAutoCraft();
+    return;
+  }
+  window.autoCraftRunning = true;
+  const btn = document.getElementById("craft-auto-btn");
+  if (btn) { btn.classList.add("running"); btn.textContent = "⏹ 자동 합성 중지"; }
+  window.autoCraftTimer = setInterval(() => {
+    const hasAnyMat = MATERIALS.some(m => inventory[m.id] > 0);
+    if (axePower >= 50 || !hasAnyMat) {
+      stopAutoCraft();
+      return;
+    }
+    doCraft();
+  }, 350);
+}
+
+function stopAutoCraft() {
+  window.autoCraftRunning = false;
+  if (window.autoCraftTimer) clearInterval(window.autoCraftTimer);
+  window.autoCraftTimer = null;
+  const btn = document.getElementById("craft-auto-btn");
+  if (btn) { btn.classList.remove("running"); btn.textContent = "🔁 자동 합성"; }
+  renderCraftPanel();
+}
+
+function showCraftResult(msg, color) {
+  const el = document.getElementById("craft-result");
+  el.textContent = msg;
+  el.style.color = color;
+  setTimeout(() => { el.textContent = ""; }, 2500);
+}
+
+// ──────────────────────────────────────────────────────────────────
+// FLOATING TEXT
+// ──────────────────────────────────────────────────────────────────
+function spawnFloat(cls, text) {
+  const area = document.getElementById("game-area");
+  const el = document.createElement("div");
+  el.className = "float-score " + cls;
+  el.textContent = text;
+  area.appendChild(el);
+  setTimeout(() => el.remove(), 750);
+}
+
+// ──────────────────────────────────────────────────────────────────
+// SLASH EFFECT (scales with axe power)
+// axePower 0-9   -> tier 1: single thin slash
+// axePower 10-24 -> tier 2: double slash + spark
+// axePower 25-49 -> tier 3: triple slash + bigger spark burst
+// axePower 50    -> tier 3 + gold glow
+// ──────────────────────────────────────────────────────────────────
+function getSlashTier() {
+  if (axePower >= 25) return 3;
+  if (axePower >= 10) return 2;
+  return 1;
+}
+
+const SLASH_COLORS = ["#e2e8f0", "#90cdf4", "#ffd700"];
+
+function spawnSlashEffect(side) {
+  const col = document.getElementById("tree-col");
+  if (!col) return;
+  const tier = getSlashTier();
+  const color = SLASH_COLORS[tier - 1];
+  const fx = document.createElement("div");
+  fx.className = "slash-fx s" + tier;
+
+  const mirror = side === "right" ? "scaleX(-1)" : "";
+  const paths = [
+    `<path class="slash-path p1" d="M18 12 L72 60" stroke="${color}" stroke-width="6" stroke-dasharray="120" />`,
+    `<path class="slash-path p2" d="M12 45 L78 30" stroke="${color}" stroke-width="5" stroke-dasharray="120" />`,
+    `<path class="slash-path p3" d="M20 70 L68 15" stroke="${color}" stroke-width="4" stroke-dasharray="120" />`,
+  ];
+  const shown = paths.slice(0, tier).join("");
+  fx.innerHTML = `<svg viewBox="0 0 90 90" style="transform:${mirror}">${shown}</svg>`;
+
+  if (tier >= 2) {
+    const spark = document.createElement("div");
+    spark.className = "spark";
+    spark.textContent = tier >= 3 ? "💥" : "✨";
+    spark.style.top = "38%";
+    spark.style.left = "55%";
+    fx.appendChild(spark);
+  }
+  if (tier >= 3) {
+    const spark2 = document.createElement("div");
+    spark2.className = "spark";
+    spark2.textContent = "✨";
+    spark2.style.top = "55%";
+    spark2.style.left = "30%";
+    spark2.style.animationDelay = "0.05s";
+    fx.appendChild(spark2);
+  }
+
+  col.appendChild(fx);
+  setTimeout(() => fx.remove(), 420);
+}
+
+// ──────────────────────────────────────────────────────────────────
+// LEVEL UP
+// ──────────────────────────────────────────────────────────────────
+function addXP(amount) {
+  if (level >= MAX_LEVEL) return;
+  xp += amount;
+  while (level < MAX_LEVEL && xp >= xpForLevel(level)) {
+    xp -= xpForLevel(level);
+    level++;
+    spawnFloat("center", "⬆️ LV." + level + "!");
+  }
+}
+
+// ──────────────────────────────────────────────────────────────────
+// TIMER
+// ──────────────────────────────────────────────────────────────────
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    const elapsed = Date.now() - lastChopTime;
+    const t = Math.max(0, 1 - elapsed / getTickMs());
+    timeLeft = t;
+    renderTimerBar();
+    if (t <= 0) {
+      phase = "dead";
+      clearInterval(timerInterval);
+      renderAll();
+    }
+  }, 50);
+}
+
+// ──────────────────────────────────────────────────────────────────
+// CHOP
+// ──────────────────────────────────────────────────────────────────
+function triggerChop(side) {
+  if (phase === "dead") return;
+  if (phase === "idle") {
+    phase = "playing";
+    lastChopTime = Date.now();
+    startTimer();
+  }
+
+  const bottom = tree[0];
+
+  // Check chest on bottom block
+  if (bottom.chest) {
+    // Collect chest without death
+    bottom.chest = false;
+    const grade = pickGrade();
+    const mat = pickMaterialByGrade(grade);
+    if (mat) openChestModal(mat);
+  }
+
+  if (bottom.branch === side) {
+    phase = "dead";
+    gameStats.totalDeaths += 1;
+    clearInterval(timerInterval);
+    const player = document.getElementById("player");
+    player.style.animation = "shake 0.35s ease";
+    setTimeout(() => { player.style.animation = ""; }, 350);
+    checkAchievements();
+    renderAll();
+    saveState();
+    return;
+  }
+
+  // Valid chop
+  playerSide = side;
+  const gold = goldPerChop();
+  const sg = 1 + getBonusScore();
+  score += sg;
+  coins += gold;
+  gameStats.totalChops += 1;
+  gameStats.totalCoinsEarned += gold;
+  gameStats.totalScoreEarned += sg;
+  if (score > best) best = score;
+  addXP(1);
+
+  spawnFloat(side, "+" + sg);
+  if (gold !== 10) setTimeout(() => spawnFloat(side === "left" ? "right" : "left", "+" + gold + "G"), 80);
+
+  // Timer restore
+  const restore = Math.min(1.0, timeLeft + 0.18 * (1 + upgradeLevels.restore * 0.10));
+  timeLeft = restore;
+  lastChopTime = Date.now() - (getTickMs() * (1 - restore));
+
+  // Chop animation
+  const player = document.getElementById("player");
+  player.style.transform = side === "left" ? "translateX(7px)" : "translateX(-7px)";
+  setTimeout(() => { player.style.transform = ""; }, 110);
+
+  // Axe-power based slash effect on the trunk
+  if (typeof spawnSlashEffect === "function") spawnSlashEffect(side);
+
+  // Grow tree
+  const newBlock = {
+    branch: Math.random() < 0.42 ? randomSide() : null,
+    chest: Math.random() < CHEST_CHANCE,
+  };
+  tree = [...tree.slice(1), newBlock];
+
+  checkAchievements();
+  renderTree();
+  renderPlayer();
+  renderHUD();
+  renderButtons();
+  renderUpgrades();
+  saveState();
+}
+
+// ──────────────────────────────────────────────────────────────────
+// BUY UPGRADE
+// ──────────────────────────────────────────────────────────────────
+function buyUpgrade(id) {
+  const upg = AXE_UPGRADES.find(u => u.id === id);
+  const lvl = upgradeLevels[id];
+  if (lvl >= upg.maxLevel) return;
+  const cost = getUpgradeCost(upg, lvl);
+  if (coins < cost) return;
+  coins -= cost;
+  upgradeLevels[id]++;
+  gameStats.totalUpgradesBought += 1;
+  checkAchievements();
+  renderHUD();
+  renderUpgrades();
+  renderButtons();
+  saveState();
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RESTART
+// ──────────────────────────────────────────────────────────────────
+function restartGame() {
+  tree = generateTree();
+  playerSide = "left";
+  score = 0;
+  timeLeft = 1.0;
+  phase = "idle";
+  lastChopTime = Date.now();
+  gameStats.totalRestarts += 1;
+  if (timerInterval) clearInterval(timerInterval);
+  checkAchievements(true);
+  renderAll();
+  saveState();
+}
+
+// ──────────────────────────────────────────────────────────────────
+// TABS
+// ──────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll(".tab-btn").forEach((b,i) => {
+    const names = ["axe","mat","craft","achieve"];
+    b.className = "tab-btn" + (names[i] === name ? " active" : "");
+  });
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  const panel = document.getElementById("panel-" + name);
+  if (panel) panel.classList.add("active");
+  if (name === "mat") renderMaterials();
+  if (name === "craft") renderCraftSelect();
+  if (name === "achieve" && typeof window.renderAchievements === "function") window.renderAchievements();
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RENDER ALL
+// ──────────────────────────────────────────────────────────────────
+function renderAll() {
+  renderTree();
+  renderPlayer();
+  renderHUD();
+  renderTimerBar();
+  renderButtons();
+  renderInfo();
+  renderUpgrades();
+  if (typeof window.renderAchievements === "function") window.renderAchievements();
+}
+
+// ──────────────────────────────────────────────────────────────────
+// KEYBOARD
+// ──────────────────────────────────────────────────────────────────
+document.addEventListener("keydown", e => {
+  if (e.key === "a" || e.key === "A" || e.key === "ArrowLeft") triggerChop("left");
+  if (e.key === "d" || e.key === "D" || e.key === "ArrowRight") triggerChop("right");
+});
+
+// ──────────────────────────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────────────────────────
+(function initStars() {
+  const c = document.getElementById("stars");
+  for (let i = 0; i < 24; i++) {
+    const s = document.createElement("div");
+    s.className = "star";
+    s.style.top = (Math.random() * 38) + "%";
+    s.style.left = (Math.random() * 100) + "%";
+    s.style.opacity = (0.3 + Math.random() * 0.5).toFixed(2);
+    c.appendChild(s);
+  }
+})();
+
+tree = generateTree();
+renderAll();
+renderCraftSelect();
+</script>
+
+<script>
+(() => {
+  const SAVE_KEY = "lumberjack_save_v2";
+  const THEME_KEY = "lumberjack_theme_v2";
+  let modalPaused = false;
+
+  const clonePlain = (obj) => JSON.parse(JSON.stringify(obj));
+
+  // gameStats and DEFAULT_STATS are declared at the top of the first
+  // script block so they're shared across both script blocks in this file.
+  let achievementState = { unlocked: [] };
+
+  const ACHIEVEMENT_DEFS = [
+    { id:"chop_1", icon:"🪓", name:"첫 베기", desc:"나무를 1번 베기", goal:1, get: s => s.totalChops },
+    { id:"chop_10", icon:"🪓", name:"목재 초보", desc:"나무를 10번 베기", goal:10, get: s => s.totalChops },
+    { id:"chop_50", icon:"🪓", name:"작업반장", desc:"나무를 50번 베기", goal:50, get: s => s.totalChops },
+    { id:"chop_100", icon:"🪓", name:"베기 장인", desc:"나무를 100번 베기", goal:100, get: s => s.totalChops },
+    { id:"chop_500", icon:"🪓", name:"숲의 전설", desc:"나무를 500번 베기", goal:500, get: s => s.totalChops },
+
+    { id:"best_50", icon:"⭐", name:"시작이 좋다", desc:"최고 점수 50 달성", goal:50, get: s => best },
+    { id:"best_200", icon:"⭐", name:"점수 상승", desc:"최고 점수 200 달성", goal:200, get: s => best },
+    { id:"best_500", icon:"⭐", name:"고수", desc:"최고 점수 500 달성", goal:500, get: s => best },
+    { id:"best_1000", icon:"🏅", name:"천 점 돌파", desc:"최고 점수 1000 달성", goal:1000, get: s => best },
+    { id:"best_3000", icon:"👑", name:"왕좌의 나무꾼", desc:"최고 점수 3000 달성", goal:3000, get: s => best },
+
+    { id:"gold_1000", icon:"💰", name:"동전 수집가", desc:"총 획득 골드 1,000G", goal:1000, get: s => s.totalCoinsEarned },
+    { id:"gold_5000", icon:"💰", name:"금빛 손", desc:"총 획득 골드 5,000G", goal:5000, get: s => s.totalCoinsEarned },
+    { id:"gold_20000", icon:"💰", name:"재벌", desc:"총 획득 골드 20,000G", goal:20000, get: s => s.totalCoinsEarned },
+
+    { id:"level_5", icon:"⬆️", name:"레벨업", desc:"레벨 5 달성", goal:5, get: s => level },
+    { id:"level_10", icon:"⬆️", name:"숙련자", desc:"레벨 10 달성", goal:10, get: s => level },
+    { id:"level_20", icon:"⬆️", name:"도끼 전문가", desc:"레벨 20 달성", goal:20, get: s => level },
+    { id:"level_40", icon:"⬆️", name:"전설의 성장", desc:"레벨 40 달성", goal:40, get: s => level },
+
+    { id:"power_10", icon:"⚔️", name:"도끼 파워 10", desc:"도끼 파워 10 달성", goal:10, get: s => axePower },
+    { id:"power_25", icon:"⚔️", name:"강한 도끼", desc:"도끼 파워 25 달성", goal:25, get: s => axePower },
+    { id:"power_50", icon:"⚔️", name:"완전체 도끼", desc:"도끼 파워 50 달성", goal:50, get: s => axePower },
+
+    { id:"chest_1", icon:"📦", name:"상자 발견", desc:"상자 1개 열기", goal:1, get: s => s.totalChests },
+    { id:"chest_10", icon:"📦", name:"상자 수집가", desc:"상자 10개 열기", goal:10, get: s => s.totalChests },
+    { id:"chest_30", icon:"📦", name:"보물 탐험가", desc:"상자 30개 열기", goal:30, get: s => s.totalChests },
+
+    { id:"craft_1", icon:"✨", name:"첫 합성", desc:"합성 1번 시도", goal:1, get: s => s.totalCraftAttempts },
+    { id:"craft_10", icon:"✨", name:"연금술 입문", desc:"합성 10번 시도", goal:10, get: s => s.totalCraftAttempts },
+    { id:"craft_30", icon:"✨", name:"합성 마스터", desc:"합성 30번 시도", goal:30, get: s => s.totalCraftAttempts },
+
+    { id:"craft_ok_1", icon:"🌟", name:"성공의 맛", desc:"합성 성공 1번", goal:1, get: s => s.totalCraftSuccess },
+    { id:"craft_ok_5", icon:"🌟", name:"성공 중독", desc:"합성 성공 5번", goal:5, get: s => s.totalCraftSuccess },
+    { id:"craft_ok_15", icon:"🌟", name:"행운아", desc:"합성 성공 15번", goal:15, get: s => s.totalCraftSuccess },
+
+    { id:"upgrade_1", icon:"🔧", name:"첫 강화", desc:"도끼 강화 1회", goal:1, get: s => s.totalUpgradesBought },
+    { id:"upgrade_5", icon:"🔧", name:"강화 입문", desc:"도끼 강화 5회", goal:5, get: s => s.totalUpgradesBought },
+    { id:"upgrade_15", icon:"🔧", name:"강화 달인", desc:"도끼 강화 15회", goal:15, get: s => s.totalUpgradesBought },
+
+    { id:"death_1", icon:"💀", name:"첫 실패", desc:"처음으로 게임 오버", goal:1, get: s => s.totalDeaths },
+    { id:"death_10", icon:"💀", name:"포기하지 않아", desc:"게임 오버 10번 보기", goal:10, get: s => s.totalDeaths },
+
+    { id:"guide_open", icon:"📘", name:"설명서 확인", desc:"가이드를 한 번 열기", goal:1, get: s => s.guideOpened },
+    { id:"settings_open", icon:"⚙️", name:"설정 탐험", desc:"설정을 한 번 열기", goal:1, get: s => s.settingsOpened },
+    { id:"dark_mode", icon:"🌙", name:"어둠 속 나무꾼", desc:"다크모드를 사용하기", goal:1, get: s => s.darkModeUsed },
+
+    { id:"restart_1", icon:"🔁", name:"다시 시작", desc:"재시작 1회", goal:1, get: s => s.totalRestarts },
+    { id:"restart_10", icon:"🔁", name:"끈질긴 도전자", desc:"재시작 10회", goal:10, get: s => s.totalRestarts }
+  ];
+
+
+  function isOverlayOpen() {
+    return ["opening-overlay", "settings-modal", "guide-modal"].some((id) => {
+      const el = document.getElementById(id);
+      return el && el.style.display === "flex";
+    });
+  }
+
+  function pauseTimerForOverlay() {
+    if (phase === "playing" && timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      modalPaused = true;
+    }
+  }
+
+  function resumeTimerAfterOverlay() {
+    if (modalPaused && phase === "playing" && timeLeft > 0) {
+      lastChopTime = Date.now() - getTickMs() * (1 - timeLeft);
+      startTimer();
+    }
+    modalPaused = false;
+  }
+
+  function syncThemeToggle() {
+    const toggle = document.getElementById("dark-toggle");
+    if (toggle) toggle.checked = !!window.gameSettings.darkMode;
+  }
+
+  function applyTheme() {
+    document.body.classList.toggle("light-mode", !window.gameSettings.darkMode);
+    syncThemeToggle();
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({
+        best,
+        coins,
+        level,
+        xp,
+        upgradeLevels: clonePlain(upgradeLevels),
+        axePower,
+        inventory: clonePlain(inventory),
+        darkMode: !!window.gameSettings.darkMode,
+        gameStats: clonePlain(gameStats),
+        buyMode: window.buyMode || "1",
+        achievementState: {
+          unlocked: Array.isArray(achievementState.unlocked) ? [...achievementState.unlocked] : []
+        }
+      }));
+      localStorage.setItem(THEME_KEY, window.gameSettings.darkMode ? "dark" : "light");
+    } catch (err) {}
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+
+      if (typeof data.best === "number") best = data.best;
+      if (typeof data.coins === "number") coins = data.coins;
+      if (typeof data.level === "number") level = Math.max(1, Math.floor(data.level));
+      if (typeof data.xp === "number") xp = Math.max(0, Math.floor(data.xp));
+      if (typeof data.axePower === "number") axePower = Math.max(0, Math.min(50, Math.floor(data.axePower)));
+
+      if (data.upgradeLevels && typeof data.upgradeLevels === "object") {
+        Object.keys(upgradeLevels).forEach((k) => {
+          if (typeof data.upgradeLevels[k] === "number") {
+            upgradeLevels[k] = Math.max(0, Math.floor(data.upgradeLevels[k]));
+          }
+        });
+      }
+
+      if (data.inventory && typeof data.inventory === "object") {
+        MATERIALS.forEach((mat) => {
+          if (typeof data.inventory[mat.id] === "number") {
+            inventory[mat.id] = Math.max(0, Math.floor(data.inventory[mat.id]));
+          }
+        });
+      }
+
+      if (data.gameStats && typeof data.gameStats === "object") {
+        Object.keys(DEFAULT_STATS).forEach((k) => {
+          if (typeof data.gameStats[k] === "number") {
+            gameStats[k] = Math.max(0, Math.floor(data.gameStats[k]));
+          }
+        });
+      }
+
+      if (data.achievementState && typeof data.achievementState === "object") {
+        const unlocked = Array.isArray(data.achievementState.unlocked) ? data.achievementState.unlocked : [];
+        achievementState.unlocked = unlocked.filter((id) => ACHIEVEMENT_DEFS.some((def) => def.id === id));
+      }
+
+      if (typeof data.darkMode === "boolean") {
+        window.gameSettings.darkMode = data.darkMode;
+      }
+
+      if (typeof data.buyMode === "string" && ["1", "10", "max"].includes(data.buyMode)) {
+        window.buyMode = data.buyMode;
+      }
+    } catch (err) {}
+  }
+
+
+  function getUnlockedSet() {
+    return new Set(Array.isArray(achievementState.unlocked) ? achievementState.unlocked : []);
+  }
+
+  function formatGoalValue(def) {
+    return def.goal;
+  }
+
+  function achievementProgress(def) {
+    const value = Math.max(0, Number(def.get(gameStats)) || 0);
+    return {
+      value,
+      goal: def.goal,
+      ratio: Math.max(0, Math.min(1, value / def.goal))
+    };
+  }
+
+  function showAchievementToast(def) {
+    const toast = document.getElementById("achievement-toast");
+    if (!toast) return;
+    toast.innerHTML = `<div class="toast-title">🏆 업적 달성!</div><div class="toast-sub">${def.icon} ${def.name} · ${def.desc}</div>`;
+    toast.classList.add("show");
+    clearTimeout(showAchievementToast._timer);
+    showAchievementToast._timer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2200);
+  }
+
+  function unlockAchievement(id, silent = false) {
+    const set = getUnlockedSet();
+    if (set.has(id)) return false;
+    set.add(id);
+    achievementState.unlocked = Array.from(set);
+    const def = ACHIEVEMENT_DEFS.find((a) => a.id === id);
+    if (def && !silent) showAchievementToast(def);
+    saveState();
+    return true;
+  }
+
+  function checkAchievements(silent = false) {
+    let changed = false;
+    for (const def of ACHIEVEMENT_DEFS) {
+      const progress = achievementProgress(def);
+      if (progress.value >= def.goal) {
+        changed = unlockAchievement(def.id, silent) || changed;
+      }
+    }
+    if (changed) {
+      renderAchievements();
+    }
+  }
+
+  window.renderAchievements = function renderAchievements() {
+    const list = document.getElementById("achievement-list");
+    const summary = document.getElementById("achievement-summary");
+    if (!list || !summary) return;
+    const unlocked = getUnlockedSet();
+    let unlockedCount = 0;
+    list.innerHTML = "";
+    ACHIEVEMENT_DEFS.forEach((def) => {
+      const progress = achievementProgress(def);
+      const done = unlocked.has(def.id) || progress.value >= def.goal;
+      if (done) unlockedCount++;
+      const pct = Math.max(0, Math.min(100, Math.round(progress.ratio * 100)));
+      const el = document.createElement("div");
+      el.className = "achievement-item" + (done ? " unlocked" : "");
+      el.innerHTML = `
+        <div class="achievement-icon">${def.icon}</div>
+        <div class="achievement-main">
+          <div class="achievement-name">${def.name}</div>
+          <div class="achievement-desc">${def.desc}</div>
+          <div class="achievement-meta">
+            <div class="achievement-progress"><div class="achievement-progress-bar" style="width:${pct}%"></div></div>
+            <div class="achievement-status ${done ? "unlocked" : "locked"}">${done ? "달성" : `${progress.value}/${formatGoalValue(def)}`}</div>
+          </div>
+        </div>
+      `;
+      list.appendChild(el);
+    });
+    summary.textContent = `${unlockedCount} / ${ACHIEVEMENT_DEFS.length} 달성`;
+  };
+
+  window.gameSettings = {
+    darkMode: true
+  };
+
+  // Clearer descriptions
+  const speedUpg = AXE_UPGRADES.find(u => u.id === "speed");
+  const coinUpg = AXE_UPGRADES.find(u => u.id === "coinup");
+  const scoreUpg = AXE_UPGRADES.find(u => u.id === "scoreup");
+  const restoreUpg = AXE_UPGRADES.find(u => u.id === "restore");
+  if (speedUpg) speedUpg.desc = "남은 시간이 더 천천히 줄어듭니다.";
+  if (coinUpg) coinUpg.desc = "한 번 베를 때 얻는 골드가 늘어납니다.";
+  if (scoreUpg) scoreUpg.desc = "한 번 베를 때 점수가 더 올라갑니다.";
+  if (restoreUpg) restoreUpg.desc = "성공할 때 시간 회복량이 커집니다.";
+
+  function updateTopButtons() {
+    const tabs = document.querySelectorAll(".tab-btn");
+    if (tabs[0]) tabs[0].textContent = "⚒️ 강화";
+    if (tabs[1]) tabs[1].textContent = "🎒 재료";
+    if (tabs[2]) tabs[2].textContent = "✨ 합성";
+    if (tabs[3]) tabs[3].textContent = "🏆 업적";
+  }
+
+  function updateStaticCopy() {
+    const subtitle = document.querySelector(".subtitle");
+    if (subtitle) subtitle.textContent = "A / ← 는 왼쪽, D / → 는 오른쪽입니다. 설정과 가이드는 위 버튼에서 열 수 있어요.";
+    const info = document.querySelector("#info-box .info-msg");
+    if (info) info.innerHTML = 'A / ← 또는 D / → 로 나무를 베세요. 🌲<small>같은 방향의 가지를 베면 바로 게임 오버입니다.</small>';
+  }
+
+  window.renderInfo = function renderInfoEnhanced() {
+    const box = document.getElementById("info-box");
+    if (!box) return;
+    if (phase === "idle") {
+      box.innerHTML = `<div class="info-msg">A / ← 또는 D / → 로 나무를 베세요. 🌲<small>같은 방향의 가지를 베면 바로 게임 오버입니다.</small></div>`;
+    } else if (phase === "dead") {
+      const isRecord = score > 0 && score === best;
+      box.innerHTML = `
+        <div class="gameover-title">🕷️ 거미에게 잡혔다!</div>
+        <div class="gameover-score">
+          점수: ${score} ${isRecord ? "🏆 최고 기록!" : ""}<br>
+          레벨: ${level} &nbsp;|&nbsp; 보유 골드: ${coins}G
+        </div>
+        <button class="restart-btn" onclick="restartGame()">다시 시작 🪓</button>
+      `;
+    } else {
+      box.innerHTML = "";
+    }
+  };
+
+  window.openOverlay = function openOverlay(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.style.display === "flex") return;
+    pauseTimerForOverlay();
+    el.style.display = "flex";
+    if (id === "settings-modal") syncThemeToggle();
+  };
+
+  window.closeOverlay = function closeOverlay(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = "none";
+    resumeTimerAfterOverlay();
+    saveState();
+  };
+
+  window.openSettings = function () {
+    gameStats.settingsOpened += 1;
+    openOverlay("settings-modal");
+    checkAchievements(true);
+    saveState();
+  };
+
+  window.openGuide = function () {
+    gameStats.guideOpened += 1;
+    openOverlay("guide-modal");
+    checkAchievements(true);
+    saveState();
+  };
+
+  window.toggleDarkMode = function () {
+    window.gameSettings.darkMode = document.getElementById("dark-toggle")?.checked ?? true;
+    if (window.gameSettings.darkMode) gameStats.darkModeUsed += 1;
+    applyTheme();
+    checkAchievements(true);
+    saveState();
+  };
+
+  // Chests no longer open a blocking modal: the item is granted right away,
+  // a small "(아이템) 획득!" toast pops at the top of the screen, and the
+  // game keeps running without any pause.
+  window.openChestModal = function (mat) {
+    if (!mat) return;
+    inventory[mat.id] = (inventory[mat.id] || 0) + 1;
+    gameStats.totalChests += 1;
+    if (typeof showItemToast === "function") showItemToast(mat);
+    renderMaterials();
+    renderCraftSelect();
+    checkAchievements();
+    saveState();
+  };
+
+  // Kept as a no-op for backward compatibility with any leftover markup/calls.
+  window.closeChest = function () {
+    const modal = document.getElementById("chest-modal");
+    if (modal) modal.style.display = "none";
+  };
+
+  window.pickMaterialByGrade = function (grade) {
+    const pool = MATERIALS.filter(m => m.grade === grade);
+    const list = pool.length ? pool : MATERIALS;
+    return list[Math.floor(Math.random() * list.length)];
+  };
+
+  window.triggerChop = function (side) {
+    if (phase === "dead") return;
+    if (isOverlayOpen()) return;
+
+    if (phase === "idle") {
+      phase = "playing";
+      lastChopTime = Date.now();
+      startTimer();
+    }
+
+    const bottom = tree[0];
+    if (!bottom) return;
+
+    // 가지를 먼저 판정해서, 같은 방향 가지면 즉시 게임 오버
+    if (bottom.branch === side) {
+      phase = "dead";
+      gameStats.totalDeaths += 1;
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+      const player = document.getElementById("player");
+      if (player) {
+        player.style.animation = "shake 0.35s ease";
+        setTimeout(() => { player.style.animation = ""; }, 350);
+      }
+      checkAchievements();
+      renderAll();
+      saveState();
+      return;
+    }
+
+    // 유효한 베기 처리
+    playerSide = side;
+    const gold = goldPerChop();
+    const sg = 1 + getBonusScore();
+    score += sg;
+    coins += gold;
+    gameStats.totalChops += 1;
+    gameStats.totalCoinsEarned += gold;
+    gameStats.totalScoreEarned += sg;
+    if (score > best) best = score;
+    addXP(1);
+
+    spawnFloat(side, "+" + sg);
+    if (gold !== 10) setTimeout(() => spawnFloat(side === "left" ? "right" : "left", "+" + gold + "G"), 80);
+
+    // 시간 회복
+    const restore = Math.min(1.0, timeLeft + 0.18 * (1 + upgradeLevels.restore * 0.10));
+    timeLeft = restore;
+    lastChopTime = Date.now() - (getTickMs() * (1 - restore));
+
+    // 애니메이션
+    const player = document.getElementById("player");
+    player.style.transform = side === "left" ? "translateX(7px)" : "translateX(-7px)";
+    setTimeout(() => { player.style.transform = ""; }, 110);
+
+    // 도끼 파워에 따른 베기 이펙트 (게임을 멈추지 않음)
+    if (typeof spawnSlashEffect === "function") spawnSlashEffect(side);
+
+    // 나무 갱신
+    const chestHere = !!bottom.chest;
+    const newBlock = {
+      branch: Math.random() < 0.42 ? randomSide() : null,
+      chest: Math.random() < CHEST_CHANCE,
+    };
+    tree = [...tree.slice(1), newBlock];
+
+    // 상자를 얻어도 게임은 멈추지 않고, 상단에 "(아이템) 획득!" 토스트만 표시됩니다.
+    if (chestHere) {
+      const grade = pickGrade();
+      const mat = pickMaterialByGrade(grade);
+      if (mat) openChestModal(mat);
+    }
+
+    checkAchievements();
+    renderTree();
+    renderPlayer();
+    renderHUD();
+    renderButtons();
+    renderUpgrades();
+    saveState();
+  };
+
+  // ── Buy mode: x1 / x10 / MAX, for faster & more convenient upgrading ──
+  window.buyMode = "1";
+
+  window.setBuyMode = function (mode) {
+    window.buyMode = String(mode);
+    document.querySelectorAll(".buy-mode-btn").forEach((b) => {
+      b.classList.toggle("active", b.dataset.mode === window.buyMode);
+    });
+    renderUpgrades();
+    saveState();
+  };
+
+  // Buys as many levels of one upgrade as the current buy mode + coins allow.
+  // Returns the number of levels actually purchased.
+  function buyUpgradeLevels(id, wantLevels) {
+    const upg = AXE_UPGRADES.find(u => u.id === id);
+    if (!upg) return 0;
+    let bought = 0;
+    while (bought < wantLevels) {
+      const lvl = upgradeLevels[id];
+      if (lvl >= upg.maxLevel) break;
+      const cost = getUpgradeCost(upg, lvl);
+      if (coins < cost) break;
+      coins -= cost;
+      upgradeLevels[id]++;
+      gameStats.totalUpgradesBought += 1;
+      bought++;
+    }
+    return bought;
+  }
+
+  window.buyUpgrade = function (id) {
+    const upg = AXE_UPGRADES.find(u => u.id === id);
+    if (!upg) return;
+    const wantLevels = window.buyMode === "max" ? upg.maxLevel : parseInt(window.buyMode, 10) || 1;
+    const bought = buyUpgradeLevels(id, wantLevels);
+    if (bought > 0) checkAchievements();
+    renderHUD();
+    renderUpgrades();
+    renderButtons();
+    saveState();
+    // brief flash feedback on the button, applied after the DOM re-render
+    if (bought > 0) {
+      const btn = document.querySelector(`.upgrade-btn[data-upg="${id}"]`);
+      if (btn) {
+        btn.classList.remove("flash");
+        void btn.offsetWidth;
+        btn.classList.add("flash");
+      }
+    }
+  };
+
+  // "전체 강화": buys one level (or bulk, per current mode) of every
+  // upgrade that can currently be afforded, cheapest first — a quick way
+  // to spend leftover gold without tapping each upgrade individually.
+  window.buyAllAffordable = function () {
+    const order = [...AXE_UPGRADES].sort((a, b) => {
+      const ca = upgradeLevels[a.id] < a.maxLevel ? getUpgradeCost(a, upgradeLevels[a.id]) : Infinity;
+      const cb = upgradeLevels[b.id] < b.maxLevel ? getUpgradeCost(b, upgradeLevels[b.id]) : Infinity;
+      return ca - cb;
+    });
+    let totalBought = 0;
+    let keepGoing = true;
+    while (keepGoing) {
+      keepGoing = false;
+      for (const upg of order) {
+        const lvl = upgradeLevels[upg.id];
+        if (lvl >= upg.maxLevel) continue;
+        const cost = getUpgradeCost(upg, lvl);
+        if (coins >= cost) {
+          coins -= cost;
+          upgradeLevels[upg.id]++;
+          gameStats.totalUpgradesBought += 1;
+          totalBought++;
+          keepGoing = true;
+          if (window.buyMode === "1") { keepGoing = false; break; }
+        }
+      }
+      if (window.buyMode === "1") break;
+    }
+    if (totalBought > 0) checkAchievements();
+    renderHUD();
+    renderUpgrades();
+    renderButtons();
+    saveState();
+  };
+
+  // NOTE: doCraft is intentionally NOT overridden here — the card-based
+  // craft system defined earlier (doCraft(matId), craftBest, toggleAutoCraft)
+  // stays in effect for the whole game.
+
+  window.restartGame = function () {
+    if (typeof stopAutoCraft === "function") stopAutoCraft();
+    tree = generateTree();
+    playerSide = "left";
+    score = 0;
+    timeLeft = 1.0;
+    phase = "idle";
+    lastChopTime = Date.now();
+    modalPaused = false;
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
+    ["chest-modal", "settings-modal", "guide-modal"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+    pendingChest = null;
+    renderAll();
+    saveState();
+  };
+
+  window.renderAll = function () {
+    applyTheme();
+    updateTopButtons();
+    updateStaticCopy();
+    renderTree();
+    renderPlayer();
+    renderHUD();
+    renderTimerBar();
+    renderButtons();
+    renderInfo();
+    renderUpgrades();
+  };
+
+  window.switchTab = function (name) {
+    document.querySelectorAll(".tab-btn").forEach((b, i) => {
+      const names = ["axe", "mat", "craft", "achieve"];
+      b.className = "tab-btn" + (names[i] === name ? " active" : "");
+    });
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    const panel = document.getElementById("panel-" + name);
+    if (panel) panel.classList.add("active");
+    if (name === "mat") renderMaterials();
+    if (name === "craft") renderCraftSelect();
+    if (name === "achieve" && typeof window.renderAchievements === "function") window.renderAchievements();
+    saveState();
+  };
+
+  
+  let openingStarted = false;
+
+  function startOpeningSequence() {
+    if (openingStarted) return;
+    openingStarted = true;
+    const overlay = document.getElementById("opening-overlay");
+    if (!overlay) return;
+    overlay.style.display = "flex";
+    overlay.classList.add("show");
+    overlay.classList.remove("hide");
+    setTimeout(() => {
+      overlay.classList.add("hide");
+      overlay.classList.remove("show");
+      setTimeout(() => {
+        overlay.style.display = "none";
+      }, 260);
+    }, 1000);
+  }
+
+// restore saved values and theme
+  loadState();
+  applyTheme();
+  updateTopButtons();
+  updateStaticCopy();
+
+  // Make sure buttons reflect theme choice and saved data
+  renderAll();
+  renderMaterials();
+  renderCraftSelect();
+  renderInfo();
+  renderUpgrades();
+  renderAchievements();
+  checkAchievements(true);
+  saveState();
+
+  setTimeout(startOpeningSequence, 50);
+  window.addEventListener("beforeunload", saveState);
+})();
+</script>
+
+</body>
+</html>
