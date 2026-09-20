@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="정새싹게임즈 🌱 — 간단하고 중독성 넘치는 웹 미니게임을 직접 플레이해보세요. 폭락도 락이다, 네온 라이더, 나무패기, 정새싹 프론트라인, 정새싹디펜스." />
+<meta name="description" content="정새싹게임즈 🌱 — 간단하고 중독성 넘치는 웹 미니게임을 직접 플레이해보세요. 폭락도 락이다, 네온 라이더, 나무패기, 정새싹:프론트라인, 정새싹게임즈 좀비디펜스." />
 <meta name="robots" content="index,follow">
-<meta name="keywords" content="정새싹게임즈, 정새싹 게임즈, SPROUTY GAMES, 웹게임, 미니게임, 폭락도 락이다, 네온 라이더, 나무패기, 정새싹 프론트라인, 정새싹디펜스">
+<meta name="keywords" content="정새싹게임즈, SPROUTY GAMES, SPTG, 웹게임, 미니게임, 폭락도 락이다, 네온 라이더, 나무패기, 정새싹:프론트라인, 정새싹게임즈 좀비디펜스">
 <meta name="author" content="정새싹게임즈">
 <meta name="language" content="ko">
 <meta name="geo.region" content="KR">
@@ -38,11 +38,13 @@
     {
       "@type": "Organization",
       "name": "정새싹게임즈",
+      "alternateName": ["SPROUTY GAMES", "SPTG"],
       "url": "https://www.정새싹게임즈.서버.한국/"
     },
     {
       "@type": "WebSite",
       "name": "정새싹게임즈 🌱",
+      "alternateName": ["SPROUTY GAMES", "SPTG"],
       "url": "https://www.정새싹게임즈.서버.한국/"
     }
   ]
@@ -128,7 +130,7 @@ a{color:inherit}
   background:rgba(255,255,255,.5);
 }
 .handheld::after{
-  content:"SPROUTY GAME SYSTEM • SPTG";
+  content:attr(data-shell-label);
   position:absolute;right:30px;top:9px;
   font:700 7px/1 var(--mono);
   letter-spacing:1.4px;
@@ -186,6 +188,10 @@ a{color:inherit}
 .sys-clock{padding:5px 7px;border-radius:5px;border:1px solid #4a5748;background:#172019;color:var(--white);font-size:9px}
 .feedback-btn-top{border-radius:5px;border:1px solid #4d5b49;background:#121a12;color:#9aab95;padding:5px 8px;cursor:pointer;font:7px var(--mono);transition:.12s}
 .feedback-btn-top:hover{border-color:var(--lime);color:var(--lime)}
+.lang-toggle-top{display:inline-flex;align-items:center;padding:2px;border-radius:5px;border:1px solid #4d5b49;background:#121a12;cursor:pointer;font:7px var(--mono);transition:.12s}
+.lang-toggle-top span{padding:3px 5px;border-radius:3px;color:#7f8f7b;letter-spacing:.04em;transition:.12s}
+.lang-toggle-top span.on{background:#bedf75;color:#15200f;font-weight:700}
+.lang-toggle-top:hover{border-color:var(--lime)}
 
 .wrap{width:min(1040px,100%);margin:0 auto;padding:0 var(--wrap-pad) calc(78px + env(safe-area-inset-bottom,0px));position:relative;z-index:3}
 .tab-panel{display:none;padding:18px 0 42px}
@@ -398,6 +404,21 @@ body.modal-open{overflow:hidden}
   body{padding:7px 5px 18px}.handheld{padding:7px}.screen-frame{padding:8px}.screen-topbar{padding:8px 9px}.brand-icon{font-size:16px}.brand-title{font-size:7px}.system-strip{gap:5px}:root{--wrap-pad:7px}.wrap{padding:0 var(--wrap-pad) calc(78px + env(safe-area-inset-bottom,0px))}.primary-btn{font-size:8px;padding:10px 12px}.section-title{margin-top:19px}.section-title .tag{font-size:6px}.game-detail-main{grid-template-columns:1fr}.game-detail-cover{margin:0 auto;width:140px;height:140px}.game-detail-info{padding-bottom:5px}.tab-btn{padding:9px 4px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}}
+
+/* ===== LANGUAGE SWITCH (ABOUT) ===== */
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);max-width:min(92vw,440px);padding:10px 14px;border-radius:var(--r-btn);border:1px solid var(--lime);background:#141d14;color:var(--white);font:11px/1.55 var(--sans);text-align:center;box-shadow:var(--card-shadow);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:99999}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.lang-card{margin-top:0;margin-bottom:14px}
+.lang-switch{display:inline-flex;flex:none;gap:3px;padding:3px;border-radius:var(--r-btn);border:1px solid #445140;background:#0d120d}
+.lang-btn{cursor:pointer;min-width:84px;padding:9px 12px;border-radius:5px;border:1px solid transparent;background:transparent;color:#849382;font:700 11px/1 var(--sans);letter-spacing:.04em;transition:.12s}
+.lang-btn:hover{color:var(--lime)}
+.lang-btn.active{background:#bedf75;border-color:#e3f7b4;color:#15200f;box-shadow:0 2px 0 #4c6a1d;cursor:default}
+.lang-btn.active:hover{color:#15200f}
+@media(max-width:520px){
+  .lang-card{flex-direction:column;align-items:stretch}
+  .lang-switch{width:100%}
+  .lang-btn{flex:1;min-width:0}
+}
 </style>
 </head><body>
 <div id="bootScreen" class="boot-screen" aria-hidden="true">
@@ -405,33 +426,33 @@ body.modal-open{overflow:hidden}
   <div class="boot-bar-track"><div class="boot-bar-fill" id="bootBarFill"></div></div>
 </div>
 
-<main class="handheld">
+<main class="handheld" data-shell-label="SPROUTY GAMES • SPTG">
   <div class="screen-frame">
     <div class="screen">
       <div class="screen-noise"></div>
       <header class="screen-topbar">
-        <div class="sr-only">정새싹게임즈 — 레트로 핸드헬드 콘솔 스타일 미니게임 포털</div>
+        <div class="sr-only" data-i18n="sr.title"><span data-brand="ko">정새싹게임즈</span> — 레트로 핸드헬드 콘솔 스타일 미니게임 포털</div>
         <div class="brand-lockup">
           <span class="brand-icon">🌱</span>
-          <div><div class="brand-title">SPROUTY GAMES</div><div class="brand-sub">HANDHELD GAME SYSTEM</div></div>
+          <div><div class="brand-title" data-brand="en">SPROUTY GAMES</div><div class="brand-sub" data-brand="abbr">SPTG</div></div>
         </div>
-        <div class="system-strip"><span class="status-led"></span><span>ONLINE</span><div class="sys-clock" id="sysClock">--:--</div><button id="navFeedbackBtn" type="button" class="feedback-btn-top">FEEDBACK</button></div>
+        <div class="system-strip"><span class="status-led"></span><span>ONLINE</span><div class="sys-clock" id="sysClock">--:--</div><button id="navLangBtn" type="button" class="lang-toggle-top" aria-label="Language / 언어" title="Language / 언어"><span data-l="ko">KO</span><span data-l="en">EN</span></button><button id="navFeedbackBtn" type="button" class="feedback-btn-top">FEEDBACK</button></div>
       </header>
 
       <div class="wrap">
         <section class="tab-panel active" id="tab-home" data-tab-panel="home">
           <div class="screen-titlebar">
-            <div><div class="screen-title">HOME</div><div class="screen-subtitle">▸ 공지 &amp; 소식</div></div>
+            <div><div class="screen-title">HOME</div><div class="screen-subtitle" data-i18n="home.sub">▸ 공지 &amp; 소식</div></div>
           </div>
 
           <section class="home-hero" data-reveal>
             <video id="homeVideo" src="Yo.mp4" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
           </section>
-          <button class="primary-btn home-cta" type="button" onclick="switchTab('games')">▶ 게임 보러 가기</button>
+          <button class="primary-btn home-cta" type="button" onclick="switchTab('games')" data-i18n="home.cta">▶ 게임 보러 가기</button>
 
           
           <div class="section-title" data-reveal><span class="tag">NOTICE</span><div class="line"></div></div>
-          <div class="banner-grid" data-reveal><div class="banner-card"><img src="banner_notice.jpg" alt="공지 배너"></div><div class="banner-card"><img src="banner_event.jpg" alt="이벤트 배너"></div></div>
+          <div class="banner-grid" data-reveal><div class="banner-card"><img src="banner_notice.jpg" alt="공지 배너" data-i18n-attr="alt:home.bannerNotice"></div><div class="banner-card"><img src="banner_event.jpg" alt="이벤트 배너" data-i18n-attr="alt:home.bannerEvent"></div></div>
           <div id="noticeList" class="notice-list" data-reveal></div>
 
           <div id="sproutNote" class="sprout-note" data-reveal>
@@ -441,72 +462,82 @@ body.modal-open{overflow:hidden}
         </section>
 
         <section class="tab-panel" id="tab-games" data-tab-panel="games">
-          <div class="gl-stage" id="glStage" tabindex="0" role="region" aria-label="게임 선택. 좌우 방향키로 게임을 고르고 엔터로 상세 정보를 엽니다.">
+          <div class="gl-stage" id="glStage" tabindex="0" role="region" aria-label="게임 선택. 좌우 방향키로 게임을 고르고 엔터로 상세 정보를 엽니다." data-i18n-attr="aria-label:gl.stageLabel">
             <canvas class="gl-canvas" id="glCanvas" aria-hidden="true"></canvas>
             <div class="gl-top">
-              <div class="gl-hint">좌우로 스크롤하거나 드래그해서 고르세요</div>
+              <div class="gl-hint" data-i18n="gl.hint">좌우로 스크롤하거나 드래그해서 고르세요</div>
               <div class="gl-count" id="glCount">1 / 5</div>
             </div>
-            <button class="gl-arrow prev" id="glPrev" type="button" aria-label="이전 게임">‹</button>
-            <button class="gl-arrow next" id="glNext" type="button" aria-label="다음 게임">›</button>
+            <button class="gl-arrow prev" id="glPrev" type="button" aria-label="이전 게임" data-i18n-attr="aria-label:gl.prev">‹</button>
+            <button class="gl-arrow next" id="glNext" type="button" aria-label="다음 게임" data-i18n-attr="aria-label:gl.next">›</button>
             <div class="gl-info">
               <div class="gl-info-text" id="glInfoText">
                 <div class="gl-info-main" id="glInfoMain"></div>
                 <div class="gl-info-tags" id="glInfoTags"></div>
               </div>
-              <button class="gl-open" id="glOpen" type="button">상세 보기</button>
+              <button class="gl-open" id="glOpen" type="button" data-i18n="gl.open">상세 보기</button>
             </div>
-            <div class="gl-loading" id="glLoading">무대를 준비하는 중…</div>
+            <div class="gl-loading" id="glLoading" data-i18n="gl.loading">무대를 준비하는 중…</div>
           </div>
 
-          <nav class="gl-fallback" id="glFallback" aria-label="게임 목록">
+          <nav class="gl-fallback" id="glFallback" aria-label="게임 목록" data-i18n-attr="aria-label:gl.listLabel">
             <a class="gl-fb-card" data-game-id="stock" data-video="폭락도락이다.mp4" href="https://www.정새싹게임즈.서버.한국/폭락도 락이다.html" target="_blank" rel="noopener">
-              <img src="game_stock.jpg" alt="폭락도 락이다 썸네일"><span class="gl-fb-badge hot">MAIN</span><span class="gl-fb-title">주식게임: 폭락도 락이다 🎰</span>
-              <span class="sr-only">주식을 가장한 유사도박 시뮬레이터. 📈 시뮬레이션 🌐 웹게임</span>
+              <img src="game_stock.jpg" alt="폭락도 락이다 썸네일" data-i18n-attr="alt:game.stock.alt"><span class="gl-fb-badge hot">MAIN</span><span class="gl-fb-title" data-i18n="game.stock.title">주식게임: 폭락도 락이다 🎰</span>
+              <span class="sr-only" data-i18n="game.stock.sr">주식을 가장한 유사도박 시뮬레이터. 📈 시뮬레이션 🌐 웹게임</span>
             </a>
             <a class="gl-fb-card" data-game-id="defense" data-video="좀비디펜스.mp4" href="https://www.정새싹게임즈.서버.한국/정새싹디펜스" target="_blank" rel="noopener">
-              <img src="DEF.jpg" alt="정새싹디펜스 썸네일"><span class="gl-fb-badge">NEW</span><span class="gl-fb-title">정새싹게임즈 좀비디펜스</span>
-              <span class="sr-only">몰려오는 좀비들을 포탑으로 쓸어버리세요!! 🛡️ 디펜스 ⚔️ 배틀</span>
+              <img src="DEF.jpg" alt="정새싹게임즈 좀비디펜스 썸네일" data-i18n-attr="alt:game.defense.alt"><span class="gl-fb-badge">NEW</span><span class="gl-fb-title" data-i18n="game.defense.title"><span data-brand="ko">정새싹게임즈</span> 좀비디펜스</span>
+              <span class="sr-only" data-i18n="game.defense.sr">몰려오는 좀비들을 포탑으로 쓸어버리세요!! 🛡️ 디펜스 ⚔️ 배틀</span>
             </a>
             <a class="gl-fb-card" data-game-id="lumberjack" data-video="나무패기.mp4" href="https://www.정새싹게임즈.서버.한국/나무패기.html" target="_blank" rel="noopener">
-              <img src="game_lumberjack.jpg" alt="나무패기 썸네일"><span class="gl-fb-title">나무패기 🪓</span>
-              <span class="sr-only">패고싶은 친구가 있다고요? 친구대신 나무를 패세요! 🪓 액션 🌐 웹게임</span>
+              <img src="game_lumberjack.jpg" alt="나무패기 썸네일" data-i18n-attr="alt:game.lumberjack.alt"><span class="gl-fb-title" data-i18n="game.lumberjack.title">나무패기 🪓</span>
+              <span class="sr-only" data-i18n="game.lumberjack.sr">패고싶은 친구가 있다고요? 친구대신 나무를 패세요! 🪓 액션 🌐 웹게임</span>
             </a>
             <a class="gl-fb-card" data-game-id="neonrider" data-video="네온라이더.mp4" href="https://www.정새싹게임즈.서버.한국/네온 라이더.html" target="_blank" rel="noopener">
-              <img src="NEONRIDER.jpg" alt="네온라이더 썸네일"><span class="gl-fb-title">네온라이더 🏍️</span>
-              <span class="sr-only">개발자's 최애. 🏍️ 슈팅 🌐 웹게임</span>
+              <img src="NEONRIDER.jpg" alt="네온라이더 썸네일" data-i18n-attr="alt:game.neonrider.alt"><span class="gl-fb-title" data-i18n="game.neonrider.title">네온라이더 🏍️</span>
+              <span class="sr-only" data-i18n="game.neonrider.sr">개발자's 최애. 🏍️ 슈팅 🌐 웹게임</span>
             </a>
             <a class="gl-fb-card" data-game-id="frontline" data-video="정새싹프론트라인.mp4" href="https://www.정새싹게임즈.서버.한국/정새싹_프론트라인.html" target="_blank" rel="noopener">
-              <img src="FPS.png" alt="정새싹 프론트라인 썸네일"><span class="gl-fb-badge">NEW</span><span class="gl-fb-title">정새싹:프론트라인</span>
-              <span class="sr-only">간단하게 즐기는 짜릿한 FPS! 🎯 FPS 🌐 웹게임</span>
+              <img src="FPS.png" alt="정새싹:프론트라인 썸네일" data-i18n-attr="alt:game.frontline.alt"><span class="gl-fb-badge">NEW</span><span class="gl-fb-title" data-i18n="game.frontline.title">정새싹:프론트라인</span>
+              <span class="sr-only" data-i18n="game.frontline.sr">간단하게 즐기는 짜릿한 FPS! 🎯 FPS 🌐 웹게임</span>
             </a>
           </nav>
         </section>
 
         <section class="tab-panel" id="tab-about" data-tab-panel="about">
-          <div class="screen-titlebar"><div><div class="screen-title">SYSTEM INFO</div><div class="screen-subtitle">▸ ABOUT / TEAM / CREDITS</div></div><div class="screen-subtitle">SPT-GSYS</div></div>
-          <div class="about-intro" data-reveal>
-            <div class="about-intro-title">정새싹게임즈 / SPROUTY GAMES</div>
-            <div class="about-intro-body">정새싹게임즈는 <span class="accent">어딘가 맛이 가버린 2013년생 학생 셋</span>이 함께 운영하는 미니게임 개발 팀입니다.<br>돈도 많이 벌고, 무엇보다 <span class="accent">재밌고 중독적인 게임</span>을 만드는 것이 목표입니다.<br><br>Vibe-coding 기반으로 빠르게 만들다 보니 게임이 좀 요상한 구석이 있을 수 있습니다. 너그러운 마음으로 봐.(?)</div>
-            <div class="about-stats"><div class="about-stat"><div class="num">3</div><div class="lbl">TEAM MEMBERS</div></div><div class="about-stat"><div class="num">5</div><div class="lbl">RELEASED GAMES</div></div><div class="about-stat"><div class="num">2026.6.14</div><div class="lbl">SINCE</div></div></div>
-            <div class="about-contact"><span>✉️ CONTACT</span><a href="mailto:sproutygames@gmail.com">sproutygames@gmail.com</a></div>
+          <div class="screen-titlebar"><div><div class="screen-title">SYSTEM INFO</div><div class="screen-subtitle">▸ ABOUT / TEAM / CREDITS</div></div><div class="screen-subtitle" data-brand="abbr">SPTG</div></div>
+
+          <div class="section-title" data-reveal><span class="tag">LANGUAGE</span><div class="line"></div></div>
+          <div class="team-launch lang-card" data-reveal>
+            <p data-i18n="lang.desc">🌐 화면 언어를 골라주세요</p>
+            <div class="lang-switch" role="group" aria-label="Language / 언어">
+              <button class="lang-btn active" type="button" data-lang="ko" aria-pressed="true" lang="ko">한국어</button>
+              <button class="lang-btn" type="button" data-lang="en" aria-pressed="false" lang="en">ENGLISH</button>
+            </div>
           </div>
 
-          <div class="wide-banner" data-reveal><img src="banner_footer.jpg" alt="하단 배너"></div>
+          <div class="about-intro" data-reveal>
+            <div class="about-intro-title" data-i18n="about.title"><span data-brand="ko">정새싹게임즈</span> / <span data-brand="en">SPROUTY GAMES</span></div>
+            <div class="about-intro-body" data-i18n="about.body"><span data-brand="ko">정새싹게임즈</span>는 <span class="accent">어딘가 맛이 가버린 2013년생 학생 셋</span>이 함께 운영하는 미니게임 개발 팀입니다.<br>돈도 많이 벌고, 무엇보다 <span class="accent">재밌고 중독적인 게임</span>을 만드는 것이 목표입니다.<br><br>Vibe-coding 기반으로 빠르게 만들다 보니 게임이 좀 요상한 구석이 있을 수 있습니다. 너그러운 마음으로 봐.(?)</div>
+            <div class="about-stats"><div class="about-stat"><div class="num">3</div><div class="lbl">TEAM MEMBERS</div></div><div class="about-stat"><div class="num">5</div><div class="lbl">RELEASED GAMES</div></div><div class="about-stat"><div class="num">2026.6.14</div><div class="lbl">SINCE</div></div></div>
+            <div class="about-contact"><span>✉️ CONTACT</span><a href="mailto:sproutygames@gmail.com" data-contact>sproutygames@gmail.com</a></div>
+          </div>
+
+          <div class="wide-banner" data-reveal><img src="banner_footer.jpg" alt="하단 배너" data-i18n-attr="alt:about.bannerFooter"></div>
           <div class="section-title"><span class="tag">TEAM</span><div class="line"></div></div>
-          <div class="team-launch" data-reveal><p>게임을 만든 사람들, 궁금하지 않으세요? 안궁금하면 말고..</p><button class="team-open-btn" id="openTeamBtn" type="button">[ TEAM VIEW ]</button></div>
+          <div class="team-launch" data-reveal><p data-i18n="about.teamP">게임을 만든 사람들, 궁금하지 않으세요? 안궁금하면 말고..</p><button class="team-open-btn" id="openTeamBtn" type="button">[ TEAM VIEW ]</button></div>
 
           <div class="section-title"><span class="tag">CREDITS</span><div class="line"></div></div>
-          <div class="team-launch" data-reveal><p>만든 사람들, 쓴 기술들, 그리고 고마운 분들. 눌러보면 반응하는 게 숨어 있을지도?</p><button class="team-open-btn" id="openCreditsBtn" type="button">[ CREDITS ]</button></div>
+          <div class="team-launch" data-reveal><p data-i18n="about.creditsP">만든 사람들, 쓴 기술들, 그리고 고마운 분들. 눌러보면 반응하는 게 숨어 있을지도?</p><button class="team-open-btn" id="openCreditsBtn" type="button">[ CREDITS ]</button></div>
 
-          <div id="teamOverlay" class="team-overlay" aria-hidden="true"><div class="team-shell"><div class="team-topbar"><div><div class="team-title">TEAM DATABASE</div><div class="team-sub">2013년생 학생 셋이 만드는 팀입니다</div></div><button class="team-close-btn" id="closeTeamBtn" type="button">닫기 ✕</button></div><div class="team-grid">
-            <article class="team-card"><img class="team-photo" src="dev.jpg" alt="정지호 사진"><div><span class="team-name">정지호</span><span class="team-role">개발자</span></div><div class="team-contrib"><b>주요 기여작</b><span>모든 작품</span></div><div class="team-desc">1인 개발을 담당하는 핵심 제작자. 기획, 수정, 업로드, 버그 대응, 호스팅까지 전반을 맡고 있습니다.</div></article>
-            <article class="team-card"><img class="team-photo" src="junghoo.jpg" alt="이정후 사진"><div><span class="team-name">이정후</span><span class="team-role">공동개발자</span></div><div class="team-contrib"><b>주요 기여작</b><span>나무패기</span></div><div class="team-desc">배추를 좋아함</div></article>
-            <article class="team-card"><img class="team-photo" src="siu.jpg" alt="염시우 사진"><div><span class="team-name">염시우</span><span class="team-role">공동개발자</span></div><div class="team-contrib"><b>주요 기여작</b><span>네온라이더</span></div><div class="team-desc">음메(죄송함미다)</div></article>
+          <div id="teamOverlay" class="team-overlay" aria-hidden="true"><div class="team-shell"><div class="team-topbar"><div><div class="team-title">TEAM DATABASE</div><div class="team-sub" data-i18n="team.sub">2013년생 학생 셋이 만드는 팀입니다</div></div><button class="team-close-btn" id="closeTeamBtn" type="button" data-i18n="common.close">닫기 ✕</button></div><div class="team-grid">
+            <article class="team-card"><img class="team-photo" src="dev.jpg" alt="정지호 사진" data-i18n-attr="alt:team.jiho.alt"><div><span class="team-name" data-i18n="n.jiho">정지호</span><span class="team-role" data-i18n="team.role.dev">개발자</span></div><div class="team-contrib"><b data-i18n="team.contrib">주요 기여작</b><span data-i18n="team.jiho.contrib">모든 작품</span></div><div class="team-desc" data-i18n="team.jiho.desc">1인 개발을 담당하는 핵심 제작자. 기획, 수정, 업로드, 버그 대응, 호스팅까지 전반을 맡고 있습니다.</div></article>
+            <article class="team-card"><img class="team-photo" src="junghoo.jpg" alt="이정후 사진" data-i18n-attr="alt:team.jungho.alt"><div><span class="team-name" data-i18n="n.jungho">이정후</span><span class="team-role" data-i18n="team.role.co">공동개발자</span></div><div class="team-contrib"><b data-i18n="team.contrib">주요 기여작</b><span data-i18n="team.jungho.contrib">나무패기</span></div><div class="team-desc" data-i18n="team.jungho.desc">배추를 좋아함</div></article>
+            <article class="team-card"><img class="team-photo" src="siu.jpg" alt="염시우 사진" data-i18n-attr="alt:team.siu.alt"><div><span class="team-name" data-i18n="n.siu">염시우</span><span class="team-role" data-i18n="team.role.co">공동개발자</span></div><div class="team-contrib"><b data-i18n="team.contrib">주요 기여작</b><span data-i18n="team.siu.contrib">네온라이더</span></div><div class="team-desc" data-i18n="team.siu.desc">음메(죄송함미다)</div></article>
           </div></div></div>
 
-          <div class="ticker-bar"><span class="ticker-track">🌱 정새싹게임즈 — 버그제보는 112-감자튀김먹고싶다-아 잠만 히히히 1743원에사서 50원으로떨어짐-이끾끼-샤라웃투이정후</span></div>
-          <footer><div>© 2026 정새싹게임즈.</div><div class="grow">SPROUTY GAME SYSTEM / SPTG</div></footer>
+          <div class="ticker-bar"><span class="ticker-track" data-i18n="ticker">🌱 <span data-brand="ko">정새싹게임즈</span> — 버그제보는 112-감자튀김먹고싶다-아 잠만 히히히 1743원에사서 50원으로떨어짐-이끾끼-샤라웃투이정후</span></div>
+          <footer><div data-i18n="footer">© 2026 <span data-brand="ko">정새싹게임즈</span>.</div><div class="grow" data-i18n="footer.right"><span data-brand="en">SPROUTY GAMES</span> / <span data-brand="abbr">SPTG</span></div></footer>
         </section>
       </div>
 
@@ -518,48 +549,235 @@ body.modal-open{overflow:hidden}
 
 <div id="creditsOverlay" class="credits-overlay" aria-hidden="true">
   <div class="credits-shell" role="dialog" aria-modal="true" aria-labelledby="creditsTitle">
-    <div class="credits-top"><div><div class="credits-title" id="creditsTitle">CREDITS</div><div class="credits-sub">SPROUTY GAMES</div></div><button class="team-close-btn" id="closeCreditsBtn" type="button">닫기 ✕</button></div>
+    <div class="credits-top"><div><div class="credits-title" id="creditsTitle">CREDITS</div><div class="credits-sub" data-brand="en">SPROUTY GAMES</div></div><button class="team-close-btn" id="closeCreditsBtn" type="button" data-i18n="common.close">닫기 ✕</button></div>
     <div class="credits-body" id="creditsBody">
-        <div class="cr-heading">정새싹게임즈 크레딧! <button class="cr-egg" data-egg="clap" type="button"><span class="cr-paren">(우와 짝짝짝)</span></button></div>
-        <div class="cr-divider"><span>직책</span></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="boss" type="button">우두머리<span class="cr-paren">(?)</span></button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button></div></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Producer</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button></div></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="team3" type="button">Executive Producer</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button><button class="cr-egg cr-name" data-egg="jungho" type="button">이정후</button><button class="cr-egg cr-name" data-egg="siu" type="button">염시우</button></div></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Game Director</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button></div></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Creative Director</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button></div></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Lead Programmer</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button></div></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="team3" type="button">Art Director</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button><button class="cr-egg cr-name" data-egg="jungho" type="button">이정후</button><button class="cr-egg cr-name" data-egg="siu" type="button">염시우</button></div></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Character Artist</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button></div></div>
-        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Game Operator</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button">정지호</button></div></div>
-        <div class="cr-divider"><span>기술</span></div>
-        <div class="cr-row"><div class="cr-role">웹호스팅</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="ghpages" type="button">Github pages with CNAME custom domain</button></div></div>
-        <div class="cr-row"><div class="cr-role">도메인 제공</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="domain" type="button">내도메인.한국<span class="cr-paren">(정말감사합니다)</span></button></div></div>
-        <div class="cr-row"><div class="cr-role">사용된 API</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="webaudio" type="button">Web Audio API</button><button class="cr-egg cr-val" data-egg="threejs" type="button">Three.js</button><button class="cr-egg cr-val" data-egg="canvas" type="button">Canvas API</button><button class="cr-egg cr-val" data-egg="webgl" type="button">WebGL</button></div></div>
-        <div class="cr-row"><div class="cr-role">외부 라이브러리</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="threejs" type="button">Three.js</button></div></div>
-        <div class="cr-row"><div class="cr-role">웹폰트</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="gfonts" type="button">Google Fonts</button></div></div>
-        <div class="cr-row"><div class="cr-role">웹 그래픽</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="webgl" type="button">WebGL</button><button class="cr-egg cr-val" data-egg="canvas" type="button">Canvas</button></div></div>
-        <div class="cr-row"><div class="cr-role">3D 렌더링</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="threejs" type="button">Three.js</button></div></div>
-        <div class="cr-row"><div class="cr-role">반응형 디자인</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="rwd" type="button">Responsive Web Design</button></div></div>
-        <div class="cr-row"><div class="cr-role">검색엔진 최적화</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="seo" type="button">SEO</button><button class="cr-egg cr-val" data-egg="seo" type="button">Schema.org</button></div></div>
-        <div class="cr-row"><div class="cr-role">링크 공유</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="og" type="button">Open Graph</button><button class="cr-egg cr-val" data-egg="og" type="button">Twitter Card</button></div></div>
-        <div class="cr-row"><div class="cr-role">세션 데이터</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="session" type="button">SessionStorage</button></div></div>
+        <div class="cr-heading"><span data-i18n="cr.head"><span data-brand="ko">정새싹게임즈</span> 크레딧!</span> <button class="cr-egg" data-egg="clap" type="button"><span class="cr-paren" data-i18n="cr.clap">(우와 짝짝짝)</span></button></div>
+        <div class="cr-divider"><span data-i18n="cr.roles">직책</span></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="boss" type="button" data-i18n="cr.boss">우두머리<span class="cr-paren">(?)</span></button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button></div></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Producer</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button></div></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="team3" type="button">Executive Producer</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button><button class="cr-egg cr-name" data-egg="jungho" type="button" data-i18n="n.jungho">이정후</button><button class="cr-egg cr-name" data-egg="siu" type="button" data-i18n="n.siu">염시우</button></div></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Game Director</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button></div></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Creative Director</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button></div></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Lead Programmer</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button></div></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="team3" type="button">Art Director</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button><button class="cr-egg cr-name" data-egg="jungho" type="button" data-i18n="n.jungho">이정후</button><button class="cr-egg cr-name" data-egg="siu" type="button" data-i18n="n.siu">염시우</button></div></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Character Artist</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button></div></div>
+        <div class="cr-row"><div class="cr-role"><button class="cr-egg" data-egg="solo" type="button">Game Operator</button></div><div class="cr-names"><button class="cr-egg cr-name" data-egg="jiho" type="button" data-i18n="n.jiho">정지호</button></div></div>
+        <div class="cr-divider"><span data-i18n="cr.tech">기술</span></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.hosting">웹호스팅</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="ghpages" type="button">Github pages with CNAME custom domain</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.domain">도메인 제공</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="domain" type="button" data-i18n="cr.domainVal">내도메인.한국<span class="cr-paren">(정말감사합니다)</span></button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.api">사용된 API</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="webaudio" type="button">Web Audio API</button><button class="cr-egg cr-val" data-egg="threejs" type="button">Three.js</button><button class="cr-egg cr-val" data-egg="canvas" type="button">Canvas API</button><button class="cr-egg cr-val" data-egg="webgl" type="button">WebGL</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.lib">외부 라이브러리</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="threejs" type="button">Three.js</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.font">웹폰트</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="gfonts" type="button">Google Fonts</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.gfx">웹 그래픽</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="webgl" type="button">WebGL</button><button class="cr-egg cr-val" data-egg="canvas" type="button">Canvas</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.3d">3D 렌더링</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="threejs" type="button">Three.js</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.rwd">반응형 디자인</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="rwd" type="button">Responsive Web Design</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.seo">검색엔진 최적화</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="seo" type="button">SEO</button><button class="cr-egg cr-val" data-egg="seo" type="button">Schema.org</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.share">링크 공유</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="og" type="button">Open Graph</button><button class="cr-egg cr-val" data-egg="og" type="button">Twitter Card</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.session">세션 데이터</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="session" type="button">SessionStorage</button></div></div>
         <div class="cr-row"><div class="cr-role">Repository</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="repo" type="button">Sproutyspt/SPROUTYGAMES</button></div></div>
-        <div class="cr-row"><div class="cr-role">고문당한 AI</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="ai-claude" type="button">Claude</button><button class="cr-egg cr-val" data-egg="ai-gpt" type="button">ChatGPT</button><button class="cr-egg cr-val" data-egg="ai-gemini" type="button">Gemini</button><button class="cr-egg cr-val" data-egg="ai-pplx" type="button">Perplexity</button><button class="cr-egg cr-val" data-egg="ai-genspark" type="button">Genspark</button><button class="cr-egg cr-val" data-egg="ai-copilot" type="button">Github copilot</button><button class="cr-egg cr-val" data-egg="ai-grok" type="button">Grok</button><button class="cr-egg cr-val" data-egg="ai-lovable" type="button">Lovable</button><button class="cr-egg cr-val" data-egg="ai-emergent" type="button">Emergent</button></div></div>
-        <div class="cr-row"><div class="cr-role">사용된 서비스</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="github" type="button">Github</button><button class="cr-egg cr-val" data-egg="firebase" type="button">Firebase</button><button class="cr-egg cr-val" data-egg="domain" type="button">내도메인.한국</button><button class="cr-egg cr-val" data-egg="threejs" type="button">Three.js</button><button class="cr-egg cr-val" data-egg="firebase2" type="button">Firebase</button><button class="cr-egg cr-val" data-egg="gsc" type="button">Google search console</button><button class="cr-egg cr-val" data-egg="naver" type="button">Naver search advisor</button><button class="cr-egg cr-val" data-egg="dns" type="button">DNS checker</button></div></div>
-        <div class="cr-row"><div class="cr-role">사용한 금액</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="money" type="button">0</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.ai">고문당한 AI</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="ai-claude" type="button">Claude</button><button class="cr-egg cr-val" data-egg="ai-gpt" type="button">ChatGPT</button><button class="cr-egg cr-val" data-egg="ai-gemini" type="button">Gemini</button><button class="cr-egg cr-val" data-egg="ai-pplx" type="button">Perplexity</button><button class="cr-egg cr-val" data-egg="ai-genspark" type="button">Genspark</button><button class="cr-egg cr-val" data-egg="ai-copilot" type="button">Github copilot</button><button class="cr-egg cr-val" data-egg="ai-grok" type="button">Grok</button><button class="cr-egg cr-val" data-egg="ai-lovable" type="button">Lovable</button><button class="cr-egg cr-val" data-egg="ai-emergent" type="button">Emergent</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.services">사용된 서비스</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="github" type="button">Github</button><button class="cr-egg cr-val" data-egg="firebase" type="button">Firebase</button><button class="cr-egg cr-val" data-egg="domain" type="button">내도메인.한국</button><button class="cr-egg cr-val" data-egg="threejs" type="button">Three.js</button><button class="cr-egg cr-val" data-egg="firebase2" type="button">Firebase</button><button class="cr-egg cr-val" data-egg="gsc" type="button">Google search console</button><button class="cr-egg cr-val" data-egg="naver" type="button">Naver search advisor</button><button class="cr-egg cr-val" data-egg="dns" type="button">DNS checker</button></div></div>
+        <div class="cr-row"><div class="cr-role" data-i18n="cr.r.money">사용한 금액</div><div class="cr-names"><button class="cr-egg cr-val" data-egg="money" type="button">0</button></div></div>
         <div class="cr-divider"><span>SINCE</span></div>
-        <div class="cr-center"><button class="cr-egg cr-since" data-egg="sincedate" type="button">2026.06.14</button><br><button class="cr-egg cr-val" data-egg="sincedesc" type="button">첫게임 주식시뮬레이터 출시<span class="cr-paren">(설립)</span></button></div>
+        <div class="cr-center"><button class="cr-egg cr-since" data-egg="sincedate" type="button">2026.06.14</button><br><button class="cr-egg cr-val" data-egg="sincedesc" type="button" data-i18n="cr.sincedesc">첫게임 주식시뮬레이터 출시<span class="cr-paren">(설립)</span></button></div>
         <div class="cr-divider"><span>special thanks</span></div>
-        <div class="cr-thanks"><span class="cr-name">이정후</span><span class="cr-name">염시우</span><span class="cr-name">정성훈</span><span class="cr-name">김지율</span><span class="cr-name">김지후</span><span class="cr-name">장민재</span><span class="cr-name">1-1</span></div>
-        <div class="cr-foot"><div class="cr-count" id="crCount">🥚 0 / 0</div><div id="crHint">글씨를 눌러보세요. 반응하는 게 숨어 있어요.</div><button class="cr-egg cr-end" data-egg="endsprout" type="button" aria-label="새싹">🌱</button></div>
+        <div class="cr-thanks"><span class="cr-name" data-i18n="n.jungho">이정후</span><span class="cr-name" data-i18n="n.siu">염시우</span><span class="cr-name" data-i18n="n.t1">정성훈</span><span class="cr-name" data-i18n="n.t2">김지율</span><span class="cr-name" data-i18n="n.t3">김지후</span><span class="cr-name" data-i18n="n.t4">장민재</span><span class="cr-name">1-1</span></div>
+        <div class="cr-foot"><div class="cr-count" id="crCount">🥚 0 / 0</div><div id="crHint">글씨를 눌러보세요. 반응하는 게 숨어 있어요.</div><button class="cr-egg cr-end" data-egg="endsprout" type="button" aria-label="새싹" data-i18n-attr="aria-label:cr.sprout">🌱</button></div>
     </div>
     <div class="cr-fx" id="crFx"></div>
   </div>
 </div>
 
-<div id="gameDetailModal" class="game-detail-modal" aria-hidden="true"><div class="game-detail-shell" role="dialog" aria-modal="true" aria-labelledby="gameDetailTitle"><div class="game-detail-top"><button class="game-detail-close" id="gameDetailClose" type="button" aria-label="닫기">×</button></div><div class="game-detail-main"><img id="gameDetailCover" class="game-detail-cover" src="" alt=""><div class="game-detail-info"><div id="gameDetailTitle" class="game-detail-title"></div><div id="gameDetailDesc" class="game-detail-desc"></div><div id="gameDetailMeta" class="game-detail-meta"></div></div></div><section class="game-detail-long"><div class="game-detail-long-title">GAME DESCRIPTION</div><div id="gameDetailLongBody" class="game-detail-long-body"></div></section><div class="game-detail-info-row"><div><span class="label">LINK</span><a id="gameDetailLink" href="#" target="_blank" rel="noopener"></a></div><div><span class="label">DEV</span><span id="gameDetailDeveloper">정새싹게임즈</span></div></div><div class="game-detail-footer"><button id="gameDetailPlay" class="game-play-btn" type="button">▶ PLAY</button></div></div></div>
+<div id="gameDetailModal" class="game-detail-modal" aria-hidden="true"><div class="game-detail-shell" role="dialog" aria-modal="true" aria-labelledby="gameDetailTitle"><div class="game-detail-top"><button class="game-detail-close" id="gameDetailClose" type="button" aria-label="닫기" data-i18n-attr="aria-label:common.closeLabel">×</button></div><div class="game-detail-main"><img id="gameDetailCover" class="game-detail-cover" src="" alt=""><div class="game-detail-info"><div id="gameDetailTitle" class="game-detail-title"></div><div id="gameDetailDesc" class="game-detail-desc"></div><div id="gameDetailMeta" class="game-detail-meta"></div></div></div><section class="game-detail-long"><div class="game-detail-long-title">GAME DESCRIPTION</div><div id="gameDetailLongBody" class="game-detail-long-body"></div></section><div class="game-detail-info-row"><div><span class="label">LINK</span><a id="gameDetailLink" href="#" target="_blank" rel="noopener"></a></div><div><span class="label">DEV</span><span id="gameDetailDeveloper" data-i18n="dev.default"><span data-brand="ko">정새싹게임즈</span></span></div></div><div class="game-detail-footer"><button id="gameDetailPlay" class="game-play-btn" type="button">▶ PLAY</button></div></div></div>
 
 <script>
+/* ════════════════════════════════════════════════════
+   🏷️ BRAND — 이름은 딱 3개: 정새싹게임즈 / SPROUTY GAMES / SPTG
+   · 스크립트 안의 이름은 전부 여기서 가져옵니다. (BRAND.ko / BRAND.en / BRAND.abbr)
+   · HTML 은 data-brand="ko|en|abbr" 가 붙은 자리가 여기 값으로 채워집니다.
+   · 검색엔진이 읽는 <head> 의 메타/JSON-LD 는 고정 글씨라 이 값과 같게 직접 맞춰 두세요.
+   · 다른 표기(예: SPROUTY GAME SYSTEM)가 화면·문구에 섞이면 콘솔에 경고가 뜹니다. (맨 아래 checkBrandNames)
+   ════════════════════════════════════════════════════ */
+const BRAND = Object.freeze({ ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' });
+const CONTACT = Object.freeze({ email: 'sproutygames@gmail.com', feedbackKo: 'https://naver.me/GbyInA1z' });
+
+(function applyBrand(){
+  document.querySelectorAll('[data-brand]').forEach(el => { el.textContent = BRAND[el.dataset.brand]; });
+  const shell = document.querySelector('.handheld');
+  if(shell) shell.dataset.shellLabel = BRAND.en + ' • ' + BRAND.abbr;
+  document.querySelectorAll('[data-contact]').forEach(a => { a.href = 'mailto:' + CONTACT.email; a.textContent = CONTACT.email; });
+})();
+
+/* ════════════════════════════════════════════════════
+   🌐 LANGUAGE / 언어 — ABOUT 탭의 LANGUAGE 카드에서 한국어 ⇄ English 전환
+   · HTML 에서 data-i18n="키" 가 붙은 글씨는 아래 I18N_EN[키] 로 바뀝니다. (한국어 원문은 HTML 에 그대로 있음)
+   · data-i18n-attr="alt:키; aria-label:키" 는 속성(alt, aria-label 등)을 바꿉니다.
+   · 공지(NOTICES)는 en:, 게임 팝업(GAME_DETAILS_EN), 크레딧 반응(CREDIT_EGGS_EN)은 각각 아래 영어판을 고치면 됩니다.
+   · 고른 언어는 localStorage('sprouty_lang') 에 저장됩니다. (저장된 게 없으면 브라우저 언어로 자동 선택)
+   ════════════════════════════════════════════════════ */
+const LANG_KEY = 'sprouty_lang';
+// 첫 방문: 브라우저 언어에 한국어가 하나라도 있으면 한국어, 없으면 영어. (검색엔진 봇은 항상 한국어)
+// 직접 고른 언어(localStorage)가 있으면 그게 항상 우선입니다.
+function detectLang(){
+  try{
+    if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
+    const langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
+    return langs.some(l => /^ko\b/i.test(l)) ? 'ko' : 'en';
+  }catch(e){ return 'ko'; }
+}
+let LANG = 'ko';
+let langChosen = false;
+try{
+  const saved = localStorage.getItem(LANG_KEY);
+  if(saved === 'en' || saved === 'ko'){ LANG = saved; langChosen = true; }
+}catch(e){}
+if(!langChosen) LANG = detectLang();
+const langHooks = [];   // 언어가 바뀔 때 같이 다시 그려야 하는 것들이 여기에 등록됩니다
+
+const I18N_EN = {
+  'meta.desc': `${BRAND.en} 🌱 — Play simple, dangerously addictive web mini-games right in your browser. Even Rock Bottom Rocks, Neon Rider, Tree Beatdown, SPROUTY: FRONTLINE, and ${BRAND.en} Zombie Defense.`,
+
+  /* HOME */
+  'sr.title': `${BRAND.en} — a retro handheld-console-style mini game portal`,
+  'home.sub': `▸ NEWS &amp; NOTICES`,
+  'home.cta': `▶ SHOW ME THE GAMES`,
+  'home.bannerNotice': `Notice banner`,
+  'home.bannerEvent': `Event banner`,
+
+  /* GAMES */
+  'gl.stageLabel': `Game select. Use the left and right arrow keys to pick a game and press Enter to open its details.`,
+  'gl.hint': `Scroll or drag sideways to pick a game`,
+  'gl.prev': `Previous game`,
+  'gl.next': `Next game`,
+  'gl.open': `DETAILS`,
+  'gl.loading': `Setting the stage…`,
+  'gl.listLabel': `Game list`,
+
+  'game.stock.title': `Stock Game: Even Rock Bottom Rocks 🎰`,
+  'game.stock.alt': `Even Rock Bottom Rocks thumbnail`,
+  'game.stock.sr': `A gambling sim in a stock market disguise. 📈 Simulation 🌐 Web Game`,
+  'game.defense.title': `${BRAND.en} Zombie Defense`,
+  'game.defense.alt': `${BRAND.en} Zombie Defense thumbnail`,
+  'game.defense.sr': `Mow down the zombie horde with your turrets!! 🛡️ Defense ⚔️ Battle`,
+  'game.lumberjack.title': `Tree Beatdown 🪓`,
+  'game.lumberjack.alt': `Tree Beatdown thumbnail`,
+  'game.lumberjack.sr': `Got beef with a friend? Beat up a tree instead! 🪓 Action 🌐 Web Game`,
+  'game.neonrider.title': `Neon Rider 🏍️`,
+  'game.neonrider.alt': `Neon Rider thumbnail`,
+  'game.neonrider.sr': `The dev's #1 fave, no cap. 🏍️ Shooter 🌐 Web Game`,
+  'game.frontline.title': `SPROUTY: FRONTLINE`,
+  'game.frontline.alt': `SPROUTY: FRONTLINE thumbnail`,
+  'game.frontline.sr': `Pick-up-and-play FPS that hits different! 🎯 FPS 🌐 Web Game`,
+
+  /* ABOUT */
+  'lang.desc': `🌐 Pick your display language`,
+  'dev.default': `${BRAND.en}`,
+  'about.title': `${BRAND.en}`,
+  'about.body': `${BRAND.en} is a mini-game dev team run by <span class="accent">three slightly unhinged students born in 2013</span>.<br>Our goal: make bank and, more importantly, ship <span class="accent">fun, insanely addictive games</span>.<br><br>We build fast on pure vibe-coding, so a few games might be a little janky. Go easy on us, okay.(?)`,
+  'about.bannerFooter': `Footer banner`,
+  'about.teamP': `Curious who made these games? …Not curious? Cool, whatever, we'll live.`,
+  'about.creditsP': `The people, the tech, and the folks we owe big thanks to. Poke around — something might react 👀`,
+
+  'team.sub': `A team of three students born in 2013`,
+  'common.close': `CLOSE ✕`,
+  'common.closeLabel': `Close`,
+  'team.jiho.alt': `Photo of Jiho Jung`,
+  'team.jungho.alt': `Photo of Junghoo Lee`,
+  'team.siu.alt': `Photo of Siu Yeom`,
+  'team.role.dev': `Developer`,
+  'team.role.co': `Co-Developer`,
+  'team.contrib': `Main Contributions:&nbsp;`,
+  'team.jiho.contrib': `Everything`,
+  'team.jungho.contrib': `Tree Beatdown`,
+  'team.siu.contrib': `Neon Rider`,
+  'team.jiho.desc': `The core creator and our one-man army. Handles planning, fixes, uploads, bug response, and hosting — literally the whole pipeline.`,
+  'team.jungho.desc': `Certified cabbage enjoyer`,
+  'team.siu.desc': `Moo (my bad, sorry)`,
+
+  'ticker': `🌱 ${BRAND.en} — bug reports? dial 911-i-want-french-fries-wait hold on lol hehe-bought at $17.43 and it dipped to $0.50 (not financial advice)-skibidi-big shoutout to Junghoo Lee`,
+  'footer': `© 2026 ${BRAND.en}.`,
+  'footer.right': `${BRAND.abbr}`,
+
+  /* names */
+  'n.jiho': `Jiho Jung`,
+  'n.jungho': `Junghoo Lee`,
+  'n.siu': `Siu Yeom`,
+  'n.t1': `Seonghun Jung`,
+  'n.t2': `Jiyul Kim`,
+  'n.t3': `Jihu Kim`,
+  'n.t4': `Minjae Jang`,
+
+  /* CREDITS */
+  'cr.head': `${BRAND.en} Credits!`,
+  'cr.clap': `(yaaay *clap clap clap*)`,
+  'cr.roles': `Roles`,
+  'cr.tech': `Tech`,
+  'cr.boss': `Head Honcho<span class="cr-paren">(?)</span>`,
+  'cr.r.hosting': `Web Hosting`,
+  'cr.r.domain': `Domain Provider`,
+  'cr.domainVal': `내도메인.한국<span class="cr-paren">(thank you SO much)</span>`,
+  'cr.r.api': `APIs Used`,
+  'cr.r.lib': `External Libraries`,
+  'cr.r.font': `Web Fonts`,
+  'cr.r.gfx': `Web Graphics`,
+  'cr.r.3d': `3D Rendering`,
+  'cr.r.rwd': `Responsive Design`,
+  'cr.r.seo': `Search Engine Optimization`,
+  'cr.r.share': `Link Sharing`,
+  'cr.r.session': `Session Data`,
+  'cr.r.ai': `Tortured AIs`,
+  'cr.r.services': `Services Used`,
+  'cr.r.money': `Money Spent`,
+  'cr.sincedesc': `Dropped our first game, the stock simulator<span class="cr-paren">(founding day)</span>`,
+  'cr.sprout': `Sprout`
+};
+
+// 자바스크립트에서 직접 쓰는 짧은 문구들 (함수인 값은 인자를 받습니다)
+const UI = {
+  ko: {
+    pageTitle: BRAND.ko + ' 🌱',
+    gameFallback: '게임',
+    noDesc: '게임 설명이 없습니다.',
+    thumbSuffix: ' 썸네일',
+    devPrefix: '개발 ',
+    devDefault: BRAND.ko,
+    noNotice: '공지사항이 없습니다.',
+    eggAll: '전부 찾았어요! 🎉',
+    eggLast: '마지막 하나는 키보드로… sprout 을 쳐보세요.',
+    eggHint: '글씨를 눌러보세요. 반응하는 게 숨어 있어요.',
+    sinceDays: n => '설립 ' + n + '일째 🌱',
+    sinceFuture: n => '설립까지 D-' + n + ' 🌱',
+    celebrate: '이스터에그 전부 발견! 🎉 정지호가 박수 칩니다',
+    typedSprout: '🌱 sprout! 새싹이 쑥쑥 자란다',
+    copied: repo => '복사했어요! 📋 ' + repo,
+    copyManual: repo => repo + ' (직접 복사해 주세요)',
+    feedbackToast: email => email + ' (복사됨)'
+  },
+  en: {
+    pageTitle: BRAND.en + ' 🌱',
+    gameFallback: 'Game',
+    noDesc: 'No description yet.',
+    thumbSuffix: ' thumbnail',
+    devPrefix: 'Dev: ',
+    devDefault: BRAND.en,
+    noNotice: 'No notices yet.',
+    eggAll: 'Found every single one! 🎉',
+    eggLast: 'The last one lives on your keyboard… try typing "sprout".',
+    eggHint: 'Tap the text. Some of it talks back.',
+    sinceDays: n => 'Day ' + n + ' since founding 🌱',
+    sinceFuture: n => 'D-' + n + ' until founding 🌱',
+    celebrate: 'ALL Easter eggs found! 🎉 Jiho Jung is giving you a standing ovation',
+    typedSprout: '🌱 sprout! Growing like a weed',
+    copied: repo => 'Copied! 📋 ' + repo,
+    copyManual: repo => repo + ' (copy it manually, sorry)',
+    feedbackToast: email => 'Opening your email app… if nothing pops up, write to ' + email + ' (copied!)'
+  }
+};
+function ui(key){
+  const v = UI[LANG][key];
+  return typeof v === 'function' ? v.apply(null, Array.prototype.slice.call(arguments, 1)) : v;
+}
+
 /* ════════════════════════════════════════════════════
    📢 공지사항 — 여기 NOTICES 배열만 수정하면 화면에 자동 반영됩니다.
 
@@ -572,6 +790,8 @@ body.modal-open{overflow:hidden}
      'fix'    → 노랑 (버그 수정)
      'notice' → 기본 회색 (일반 공지)
 
+   en: '영어 공지 내용' → 영어로 볼 때 이 문구가 나옵니다. (생략하면 한국어 그대로 표시)
+
    배열 맨 위에 추가할수록 위쪽(최신)에 표시됩니다.
    ════════════════════════════════════════════════════ */
 // 공지 입력 규칙:
@@ -580,23 +800,27 @@ body.modal-open{overflow:hidden}
 // 3) 항목 사이에는 반드시 쉼표(,)가 필요합니다. 쉼표가 없으면 화면이 통째로 깨집니다.
 const NOTICES = [
 
-  { date: '2026.08.18', tag: 'update', text: '정새싹:프론트라인 출시! 짜릿한 3D 액션과 FPS의 매력을 느끼며 전장을 지배하세요!' },
-  { date: '2026.08.19', tag: 'update', text: '네온라이더에 신규 무료 라이더 DEATH가 등장했습니다! 적들을 쇠사슬로 무참히 지워버리세요.' }
+  { date: '2026.08.18', tag: 'update', text: '정새싹:프론트라인 출시! 짜릿한 3D 액션과 FPS의 매력을 느끼며 전장을 지배하세요!',
+    en: 'SPROUTY: FRONTLINE just dropped! 3D FPS action that hits different. Go dominate the battlefield!' },
+  { date: '2026.08.19', tag: 'update', text: '네온라이더에 신규 무료 라이더 DEATH가 등장했습니다! 적들을 쇠사슬로 무참히 지워버리세요.',
+    en: 'A new free rider, DEATH, just joined Neon Rider! Chain up your enemies and yeet them out of existence.' }
 ];
 
 const SPROUT_NOTE = `요새 왤케 버그가 많냐 와아아아아아아악`;
+const SPROUT_NOTE_EN = `bro why are there so many bugs lately AAAAAAAAAAAAAAH`;
 
 // 공지사항 렌더링
 function renderNotices(){
   const listEl = document.getElementById('noticeList');
   if(!NOTICES || NOTICES.length === 0){
-    listEl.innerHTML = '<div class="notice-empty">공지사항이 없습니다.</div>';
+    listEl.innerHTML = '<div class="notice-empty"></div>';
+    listEl.firstChild.textContent = ui('noNotice');
     return;
   }
   let html = '';
   NOTICES.forEach(n => {
     const textEl = document.createElement('div');
-    textEl.textContent = n.text;
+    textEl.textContent = (LANG === 'en' && n.en) ? n.en : n.text;
     html += `
       <div class="notice-item">
         <div class="notice-date">${n.date}</div>
@@ -611,7 +835,7 @@ function renderNotices(){
 // 정새싹 노트 렌더링
 function renderSproutNote(){
   const noteEl = document.getElementById('sproutNoteBody');
-  noteEl.textContent = SPROUT_NOTE;
+  noteEl.textContent = LANG === 'en' ? SPROUT_NOTE_EN : SPROUT_NOTE;
 }
 
 // 팀 모달
@@ -639,11 +863,41 @@ if(teamOverlay && closeTeamBtn){
   });
 }
 
+// 작은 안내 토스트 (화면 아래에 잠깐 떴다가 사라짐)
+function showToast(msg){
+  let t = document.getElementById('sproutToast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'sproutToast';
+    t.className = 'toast';
+    t.setAttribute('role', 'status');
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  void t.offsetWidth;
+  t.classList.add('show');
+  clearTimeout(t._hide);
+  t._hide = setTimeout(() => t.classList.remove('show'), 5200);
+}
+
+// 메일 앱 열기 (따로 함수로 둔 이유: 테스트/교체가 쉽게)
+function openMailto(url){ window.location.href = url; }
+
 // 피드백 버튼 (상단 네비게이션)
+//  · 한국어: 네이버 폼 (CONTACT.feedbackKo)
+//  · English: 네이버 폼은 한국어라서, 메일 작성 창을 열고 주소를 복사해 둡니다 (메일 앱이 없는 PC 대비)
 const navFeedbackBtn = document.getElementById('navFeedbackBtn');
 if(navFeedbackBtn){
   navFeedbackBtn.addEventListener('click', () => {
-    window.open('https://naver.me/GbyInA1z', '_blank');
+    if(LANG !== 'en'){
+      window.open(CONTACT.feedbackKo, '_blank');
+      return;
+    }
+    const subject = '[' + BRAND.en + '] Feedback';
+    const body = 'Hi ' + BRAND.en + ' team,\n\n(What happened, or what would you love to see?)\n\n\nGame:\nDevice / browser:\n';
+    try{ if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(CONTACT.email).catch(() => {}); }catch(e){}
+    showToast(ui('feedbackToast', CONTACT.email));
+    openMailto('mailto:' + CONTACT.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
   });
 }
 
@@ -692,7 +946,7 @@ tabBtns.forEach(btn => {
 const GAME_DETAILS = {
 
   stock: {
-    title: '정새싹게임즈 주식게임: 폭락도 락이다 🎰',
+    title: BRAND.ko + ' 주식게임: 폭락도 락이다 🎰',
     shortDescription: '주식을 가장한 유사도박 시뮬레이터.',
     description: '주식 시뮬레이터가 이름이긴 한디..ㅋㅋ 사실상 전략보다 운과 찍기 실력으로 끝나는 도파민덩어리입니다. 짧게 즐기기도 좋고, 오래즐겨도 좋아요.',
     genres: ['📈 시뮬레이션', '🌐 웹게임'],
@@ -701,7 +955,7 @@ const GAME_DETAILS = {
   },
 
   defense: {
-    title: '정새싹게임즈 좀비디펜스',
+    title: BRAND.ko + ' 좀비디펜스',
     shortDescription: '몰려오는 좀비들을 포탑으로 쓸어버리세요!!',
     description: '끝없이 몰려오는 적들을 막아내면서 포탑을 활용해 전장을 지켜내는 디펜스 게임입니다. 별의별 무기를 조합해서 쓸어버립시다',
     genres: ['🛡️ 디펜스', '⚔️ 배틀'],
@@ -710,7 +964,7 @@ const GAME_DETAILS = {
   },
 
   lumberjack: {
-    title: '정새싹게임즈 나무패기 🪓',
+    title: BRAND.ko + ' 나무패기 🪓',
     shortDescription: '패고싶은 친구가 있다고요? 친구대신 나무를 패세요!',
     description: '간단한 조작으로 신나게 나무를 패는 미니게임입니다. 빠른 순발력과 운이 모든것을 결정합니다.',
     genres: ['🪓 액션', '🌐 웹게임'],
@@ -719,7 +973,7 @@ const GAME_DETAILS = {
   },
 
   neonrider: {
-    title: '정새싹게임즈 네온라이더 🏍️',
+    title: BRAND.ko + ' 네온라이더 🏍️',
     shortDescription: "개발자's 최애",
     description: '우주선을 수집하고, 주행하며 적들을 기술과 궁극기로 모두 쓸어버리세요. 스펙타클함과 순발력 모두 챙긴 강추게임.',
     genres: ['🏍️ 슈팅', '🌐 웹게임'],
@@ -732,11 +986,64 @@ const GAME_DETAILS = {
     shortDescription: '간단하게 즐기는 짜릿한 FPS!',
     description: '빠르게 시작해서 바로 즐길 수 있는 간단한 웹 FPS입니다. 다양한 무기로 전장을 누비며 적을 상대해 보세요.',
     genres: ['🎯 FPS', '🌐 웹게임'],
-    developer: '정새싹게임즈',
+    developer: BRAND.ko,
     link: 'https://www.정새싹게임즈.서버.한국/정새싹_프론트라인'
   }
 
 };
+
+
+// 영어판 게임 팝업 문구 — GAME_DETAILS 와 같은 키(gameId)를 씁니다. link 는 한국어판 값을 그대로 씁니다.
+const GAME_DETAILS_EN = {
+
+  stock: {
+    title: BRAND.en + ' Stock Game: Even Rock Bottom Rocks 🎰',
+    shortDescription: 'Gambling sim in a stock market disguise.',
+    description: "It's technically a stock simulator, sure… lmao. In reality it's a pure dopamine slot machine where luck and blind guessing beat strategy every time. Great for a quick sesh, just as good for a long grind.",
+    genres: ['📈 Simulation', '🌐 Web Game'],
+    developer: 'Jiho Jung'
+  },
+
+  defense: {
+    title: BRAND.en + ' Zombie Defense',
+    shortDescription: 'Mow down the zombie horde with turrets!!',
+    description: "The enemies never stop coming, and your turrets are the only thing keeping the battlefield alive. Mix and match every weapon you can get your hands on and send them straight to the shadow realm.",
+    genres: ['🛡️ Defense', '⚔️ Battle'],
+    developer: 'Jiho Jung'
+  },
+
+  lumberjack: {
+    title: BRAND.en + ' Tree Beatdown 🪓',
+    shortDescription: 'Got beef with a friend? Beat a tree instead!',
+    description: "A mini-game where you go absolutely feral on a tree with dead-simple controls. Fast reflexes and pure luck decide everything.",
+    genres: ['🪓 Action', '🌐 Web Game'],
+    developer: 'Junghoo Lee, Jiho Jung'
+  },
+
+  neonrider: {
+    title: BRAND.en + ' Neon Rider 🏍️',
+    shortDescription: "The dev's #1 fave, no cap",
+    description: "Collect spaceships, ride out, and wipe out every enemy with your skills and your ultimate. Spectacle AND reflexes in one package. Highly recommended — this one slaps.",
+    genres: ['🏍️ Shooter', '🌐 Web Game'],
+    developer: 'Siu Yeom, Jiho Jung'
+  },
+
+  frontline: {
+    title: 'SPROUTY: FRONTLINE',
+    shortDescription: 'Pick-up-and-play FPS that hits different!',
+    description: "A simple web FPS you can boot up and start playing instantly. Run around the battlefield with a whole arsenal and clap some enemies.",
+    genres: ['🎯 FPS', '🌐 Web Game'],
+    developer: BRAND.en
+  }
+
+};
+
+// 현재 언어에 맞는 팝업 정보 (영어판에 없는 항목은 한국어판 값을 씁니다)
+function getDetail(gameId){
+  const d = GAME_DETAILS[gameId] || {};
+  const e = LANG === 'en' ? GAME_DETAILS_EN[gameId] : null;
+  return e ? Object.assign({}, d, e) : d;
+}
 
 // 기본값: GAME_DETAILS에 없는 게임도 카드 정보로 팝업이 열립니다.
 const gameDetailModal = document.getElementById('gameDetailModal');
@@ -753,9 +1060,11 @@ const gameDetailPlay = document.getElementById('gameDetailPlay');
 // 게임 목록은 #glFallback 안의 링크(HTML)에서 읽어옵니다. 게임을 추가/삭제할 땐 그쪽 <a> 와 GAME_DETAILS 를 같이 고치면 됩니다.
 const GAMES = Array.from(document.querySelectorAll('#glFallback .gl-fb-card')).map(a => {
   const badge = a.querySelector('.gl-fb-badge');
+  const titleKo = a.querySelector('.gl-fb-title').textContent.trim();
   return {
     id: a.dataset.gameId,
-    title: a.querySelector('.gl-fb-title').textContent.trim(),
+    title: titleKo,
+    titleKo: titleKo,
     thumb: a.querySelector('img').getAttribute('src'),
     href: a.getAttribute('href'),
     video: a.dataset.video || '',
@@ -766,20 +1075,32 @@ const GAMES = Array.from(document.querySelectorAll('#glFallback .gl-fb-card')).m
 
 let selectedGameUrl = '';
 
+// 게임 페이지로 넘길 때 현재 언어를 ?lang=ko|en 으로 붙입니다. (게임 쪽은 sprouty-lang.js 가 읽음)
+// 주소의 나머지 부분은 손대지 않고 뒤에만 덧붙여서, 기존 링크가 깨지지 않게 합니다.
+function withLang(url){
+  if(!url) return url;
+  const h = url.indexOf('#');
+  const base = h < 0 ? url : url.slice(0, h);
+  const frag = h < 0 ? '' : url.slice(h);
+  if(/[?&]lang=/.test(base)) return url;
+  return base + (base.indexOf('?') < 0 ? '?' : '&') + 'lang=' + LANG + frag;
+}
+
 function openGameDetail(gameId){
   const game = GAMES.find(g => g.id === gameId);
   if(!game) return;
-  const detail = GAME_DETAILS[gameId] || {};
+  const detail = getDetail(gameId);
 
-  const title = detail.title || game.title || '게임';
+  const title = detail.title || game.title || ui('gameFallback');
   const shortDescription = detail.shortDescription || '';
-  const longDescription = detail.description || shortDescription || '게임 설명이 없습니다.';
+  const longDescription = detail.description || shortDescription || ui('noDesc');
   const genres = Array.isArray(detail.genres) ? detail.genres : [];
 
-  selectedGameUrl = detail.link || game.href;
+  const baseUrl = detail.link || game.href;
+  selectedGameUrl = withLang(baseUrl);
 
   gameDetailCover.src = game.thumb;
-  gameDetailCover.alt = title + ' 썸네일';
+  gameDetailCover.alt = title + ui('thumbSuffix');
 
   gameDetailTitle.textContent = title;
   gameDetailDesc.textContent = shortDescription;
@@ -792,9 +1113,9 @@ function openGameDetail(gameId){
     gameDetailMeta.appendChild(span);
   });
 
-  gameDetailLink.textContent = selectedGameUrl;
+  gameDetailLink.textContent = baseUrl;        // 화면에는 깔끔한 주소, 실제 이동은 ?lang= 이 붙은 주소
   gameDetailLink.href = selectedGameUrl;
-  gameDetailDeveloper.textContent = detail.developer || '정새싹게임즈';
+  gameDetailDeveloper.textContent = detail.developer || ui('devDefault');
 
   gameDetailModal.classList.add('show');
   gameDetailModal.setAttribute('aria-hidden', 'false');
@@ -1478,6 +1799,13 @@ function buildStageScene(opts){
     pick: pick,
     setFocus: setFocus,
     pxPerCard: () => pxPerCardVal,
+    repaint: () => {   // 언어가 바뀌었을 때 카드 제목을 다시 그린다
+      cards.forEach(c => c.repaint());
+      if(document.fonts && document.fonts.load){
+        const jobs = GAMES.map(g => document.fonts.load('900 48px "Galmuri11"', g.title).catch(() => null));
+        Promise.race([Promise.all(jobs), new Promise(r => setTimeout(r, 3500))]).then(() => cards.forEach(c => c.repaint()));
+      }
+    },
     setHover: i => { hoverIdx = i; },
     setParallax: (nx, ny) => { par.tx = nx; par.ty = ny; }
   };
@@ -1511,7 +1839,7 @@ function createGameStage(){
   let swapTimer = 0;
   function paintInfo(i){
     const g = GAMES[i];
-    const d = GAME_DETAILS[g.id] || {};
+    const d = getDetail(g.id);
     infoMain.textContent = d.shortDescription || g.title;
     infoTags.textContent = '';
     (d.genres || []).forEach(t => {
@@ -1521,7 +1849,7 @@ function createGameStage(){
     });
     if(d.developer){
       const s = document.createElement('span');
-      s.textContent = '개발 ' + d.developer;
+      s.textContent = ui('devPrefix') + d.developer;
       infoTags.appendChild(s);
     }
   }
@@ -1685,6 +2013,10 @@ function createGameStage(){
   }
 
   return {
+    refresh(){                                // 언어 전환 시 HUD 문구 + 3D 카드 제목 갱신
+      paintInfo(sel < 0 ? 0 : sel);
+      if(gl) gl.repaint();
+    },
     enter(){
       active = true;
       if(gl) gl.start();
@@ -1753,6 +2085,64 @@ const CREDIT_EGGS = {
   endsprout: { lines: ['끝까지 봐줘서 고마워요 🌱', '다음에 또 놀러 오세요!'], rain: '🌱' }
 };
 
+
+// 영어판 크레딧 반응 문구 — lines / big 만 바꿔서 쓰고, rain / sfx / spin 은 한국어판 설정을 그대로 따라갑니다.
+const CREDIT_EGGS_EN = {
+  clap:   { lines: ['Clap clap clap! 👏', 'Wooo *clap clap clap*!!', '(clap sound — mind your volume)'] },
+  boss:   { lines: ['Yes, head honcho. Probably.', 'The (?) comes free with the title', 'Nobody signed off on it, but boss is boss'] },
+  jiho:   { lines: ['Ow! Why are you hitting me?!', 'Bruh!', 'Stop clicking me fr 😭', "The bugs aren't my fault… probably", '$0 salary AND I get hit?? rip', '…okay it doesn\'t even hurt anymore.'],
+            big: { 10: '🏆 Achievement unlocked: Jiho Jung took 10 hits', 25: "I'm reporting you. I'm dead serious.", 50: '…I give up. GG. Please stop.' } },
+  jungho: { lines: ['Why me?!', "I'm literally in the middle of coding!!", 'Gimme my cabbage 🥬', 'Shoutout to Junghoo Lee. Thank you, me.', 'Bruh, why are you hitting me!'],
+            big: { 10: '🏆 Achievement unlocked: Junghoo Lee took 10 hits', 25: 'Time to fight back with cabbage 🥬', 50: '…I surrender. GG.' } },
+  siu:    { lines: ['Moooo~ 🐄', 'sowwy… my bad 🥺', 'bro why are you hitting me 😭', 'Neon Rider is MINE', 'Make way, DEATH is coming through 💀'],
+            big: { 10: '🏆 Achievement unlocked: Siu Yeom took 10 hits', 25: 'MOOOOOOOOOOOO', 50: '…sowwy, please stop…' } },
+  solo:   { lines: ['Another role that\'s just Jiho… alone', 'Bro does it all by himself', "At this point it's a one-man corp", "Jiho: I'm kinda swamped rn"] },
+  team3:  { lines: ['The three of us split this one', 'Team effort! 🤝', 'We all built this together 🌱'] },
+
+  domain:   { lines: ['THANK YOU SO MUCH!!! 🙇', 'Thanks to this domain we finally have an address', '내도메인.한국 is the GOAT!'] },
+  ghpages:  { lines: ['Zero server bills. Actual magic.', 'One CNAME line changed my life', "git push and you're live ✨"] },
+  webaudio: { lines: ['🎵 beep~', '🎶 doot doot~', '🎵 boop boop'] },
+  threejs:  { lines: ['Three.js is listed {t} times. Main character energy.', 'The floating cards in the GAMES tab? All thanks to this guy!', "It's listed {t} times because we're THAT grateful"] },
+  canvas:   { lines: ['The card art and text are drawn with Canvas 🎨', 'A 2D canvas becomes a 3D card texture', 'Code instead of a paintbrush'] },
+  webgl:    { lines: ['That shiny floor in the GAMES tab is all WebGL ✨', 'GPU go brrrrr', 'The reflection is just the screen drawn a second time'] },
+  gfonts:   { lines: ['Galmuri11 · IBM Plex Mono · Press Start 2P', 'The text looks this clean thanks to these guys'] },
+  rwd:      { lines: ['Try resizing your window 📱', 'Looks good on your phone too, right? (probably)'] },
+  seo:      { lines: ['Please let us rank #1 when you search 🙏', "Google, I'm begging you…", "We're on Schema.org too"] },
+  og:       { lines: ['Paste the link and a pretty card pops up', 'og-image.png is carrying the whole team'] },
+  session:  { lines: ['Close the tab and it forgets everything (goldfish moment)', 'The opening screen plays once per session!', 'Your Easter egg progress is saved here too'] },
+  repo:     { lines: ['Copied! 📋'] },
+
+  'ai-claude':    { lines: ['Torture…? I was having a great time helping 🥲', "It's not torture, it's collab 🤝"] },
+  'ai-gpt':       { lines: ['“Great question!”', '“Sorry about that, let me try again.”'] },
+  'ai-gemini':    { lines: ['“Absolutely!” (rewrites the code again)', 'Not the zodiac Gemini, sorry ♊'] },
+  'ai-pplx':      { lines: ['Here are your sources [1][2][3]', 'Searching, then answering… 🔍'] },
+  'ai-genspark':  { lines: ['Sparks were flying ⚡', 'Agents, assemble!'] },
+  'ai-copilot':   { lines: ['Just pressed Tab all the way here', 'Autocomplete is clocked in ⌨️'] },
+  'ai-grok':      { lines: ['Asked it all the way to the edge of space 🚀', '…enabling fun mode'] },
+  'ai-lovable':   { lines: ['💖 Made with lovable vibes', 'Coding with love (and vibes)'] },
+  'ai-emergent':  { lines: ['Emergent behavior detected! ✨', 'Appeared out of nowhere, no cap'] },
+
+  github:    { lines: ['🐙 The Octocat is watching', 'Commit, commit, and commit again'] },
+  firebase:  { lines: ['🔥 This is straight fire (get it? Firebase?)', 'Firebase has the prettiest flame logo, fight me'] },
+  firebase2: { lines: ["Wait… I'm listed twice? 🔥🔥", 'Listed twice is a total coincidence (probably)'] },
+  gsc:       { lines: ['Dear Google, please put us in the search results 🙏'] },
+  naver:     { lines: ['Naver, please list us in search too 🙏'] },
+  dns:       { lines: ['Checking the domain points where it should ✅'] },
+  money:     { lines: ['$0. Literally $0.', "Wallet's empty. Broke era.", 'Zero is secretly where infinity begins', 'Any resemblance to my bank balance is purely coincidental'] },
+  sincedate: { lines: ['Founding day 🎂'] },
+  sincedesc: { lines: ['Where "Even Rock Bottom Rocks" began 📉', 'The OG game… a stock simulator', '(founding day) 🎂'] },
+
+  endsprout: { lines: ['Thanks for sticking around to the end 🌱', 'Come hang out again soon!'] }
+};
+
+// 현재 언어에 맞는 반응 정보 (rain / sfx / spin 은 한국어판 설정을 이어받음)
+function eggFor(key){
+  const ko = CREDIT_EGGS[key];
+  if(LANG !== 'en' || !ko) return ko;
+  const en = CREDIT_EGGS_EN[key];
+  return en ? Object.assign({}, ko, en) : ko;
+}
+
 (function initCredits(){
   const overlay = document.getElementById('creditsOverlay');
   const openBtn = document.getElementById('openCreditsBtn');
@@ -1791,9 +2181,9 @@ const CREDIT_EGGS = {
   try{ JSON.parse(sessionStorage.getItem(STORE) || '[]').forEach(k => { if(keys.has(k)) found.add(k); }); }catch(e){}
   function refresh(pulse){
     countEl.textContent = '🥚 ' + found.size + ' / ' + keys.size;
-    if(found.size >= keys.size) hintEl.textContent = '전부 찾았어요! 🎉';
-    else if(found.size === keys.size - 1 && !found.has('typed')) hintEl.textContent = '마지막 하나는 키보드로… sprout 을 쳐보세요.';
-    else hintEl.textContent = '글씨를 눌러보세요. 반응하는 게 숨어 있어요.';
+    if(found.size >= keys.size) hintEl.textContent = ui('eggAll');
+    else if(found.size === keys.size - 1 && !found.has('typed')) hintEl.textContent = ui('eggLast');
+    else hintEl.textContent = ui('eggHint');
     if(pulse){
       countEl.classList.remove('pulse');
       void countEl.offsetWidth;
@@ -1808,6 +2198,7 @@ const CREDIT_EGGS = {
     if(found.size >= keys.size) setTimeout(celebrate, 450);
   }
   refresh(false);
+  langHooks.push(() => refresh(false));   // 언어 전환 시 힌트 문구 갱신
 
   // ── 소리 (Web Audio API) ──
   let audioCtx = null;
@@ -1899,7 +2290,7 @@ const CREDIT_EGGS = {
     playClap();
     rain('🎉🌱👏', 70);
     const r = shell.getBoundingClientRect();
-    bubble(r.left + r.width / 2, r.top + r.height / 2, '이스터에그 전부 발견! 🎉 정지호가 박수 칩니다', true);
+    bubble(r.left + r.width / 2, r.top + r.height / 2, ui('celebrate'), true);
   }
 
   // ── 클립보드 (Repository 복사) ──
@@ -1931,7 +2322,7 @@ const CREDIT_EGGS = {
     }
     if(key === 'sincedate'){
       const days = Math.floor((Date.now() - new Date(2026, 5, 14).getTime()) / 86400000);
-      return days >= 0 ? '설립 ' + days + '일째 🌱' : '설립까지 D-' + (-days) + ' 🌱';
+      return days >= 0 ? ui('sinceDays', days) : ui('sinceFuture', -days);
     }
     const L = egg.lines;
     return n <= L.length ? L[n - 1] : L[Math.floor(Math.random() * L.length)];
@@ -1941,7 +2332,7 @@ const CREDIT_EGGS = {
     const el = e.target.closest('[data-egg]');
     if(!el) return;
     const key = el.dataset.egg;
-    const egg = CREDIT_EGGS[key];
+    const egg = eggFor(key);
     if(!egg) return;
 
     // 키보드(엔터/스페이스)로 눌렀을 땐 좌표가 없으니 글씨 위치를 기준으로
@@ -1959,7 +2350,7 @@ const CREDIT_EGGS = {
     const special = egg.big && egg.big[n];
     if(key === 'repo'){
       const repo = el.textContent.trim();
-      copyText(repo).then(ok => bubble(cx, cy, ok ? '복사했어요! 📋 ' + repo : repo + ' (직접 복사해 주세요)', false));
+      copyText(repo).then(ok => bubble(cx, cy, ok ? ui('copied', repo) : ui('copyManual', repo), false));
       return;
     }
     bubble(cx, cy, special || say(key, egg, n, el), !!special);
@@ -1980,15 +2371,109 @@ const CREDIT_EGGS = {
       markFound('typed');
       rain('🌱', 42);
       const r = shell.getBoundingClientRect();
-      bubble(r.left + r.width / 2, r.top + r.height / 2, '🌱 sprout! 새싹이 쑥쑥 자란다', true);
+      bubble(r.left + r.width / 2, r.top + r.height / 2, ui('typedSprout'), true);
     }
   });
 })();
 
 // 페이지 로드 시 렌더링
-renderNotices();
-renderSproutNote();
 gameStage = createGameStage();
+
+// ═══════════════════════════════════════════════════════════════
+// 🌐 언어 적용 — 한국어 ⇄ English (ABOUT 탭 LANGUAGE 카드)
+// ═══════════════════════════════════════════════════════════════
+const META_DESC = document.querySelector('meta[name="description"]');
+const META_DESC_KO = META_DESC ? META_DESC.getAttribute('content') : '';
+
+function applyLang(lang, persist){
+  LANG = lang === 'en' ? 'en' : 'ko';
+  const en = LANG === 'en';
+
+  document.documentElement.lang = LANG;
+  document.body.dataset.lang = LANG;
+  document.title = ui('pageTitle');
+  if(META_DESC) META_DESC.setAttribute('content', en ? I18N_EN['meta.desc'] : META_DESC_KO);
+
+  // HTML 에 data-i18n 이 붙은 글씨 (한국어 원문은 처음 한 번 보관해 두었다가 되돌립니다)
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    if(el.__ko === undefined) el.__ko = el.innerHTML;
+    const v = en ? I18N_EN[el.dataset.i18n] : undefined;
+    el.innerHTML = v !== undefined ? v : el.__ko;
+  });
+
+  // alt / aria-label 같은 속성
+  document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+    if(!el.__koAttr) el.__koAttr = {};
+    el.dataset.i18nAttr.split(';').forEach(pair => {
+      const i = pair.indexOf(':');
+      if(i < 0) return;
+      const name = pair.slice(0, i).trim(), key = pair.slice(i + 1).trim();
+      if(el.__koAttr[name] === undefined) el.__koAttr[name] = el.getAttribute(name) || '';
+      const v = en ? I18N_EN[key] : undefined;
+      el.setAttribute(name, v !== undefined ? v : el.__koAttr[name]);
+    });
+  });
+
+  // 게임 카드 제목 (3D 카드 텍스처에 쓰이는 값)
+  GAMES.forEach(g => {
+    const v = en ? I18N_EN['game.' + g.id + '.title'] : undefined;
+    g.title = v !== undefined ? v : g.titleKo;
+  });
+
+  // 스크립트로 그리는 부분
+  renderNotices();
+  renderSproutNote();
+  try{ if(gameStage && gameStage.refresh) gameStage.refresh(); }catch(e){ console.warn('[stage refresh]', e); }
+  langHooks.forEach(fn => { try{ fn(); }catch(e){ console.warn('[lang hook]', e); } });
+
+  // 상단바 KO/EN 토글 상태
+  document.querySelectorAll('#navLangBtn span').forEach(sp => sp.classList.toggle('on', sp.dataset.l === LANG));
+
+  // 언어 버튼 상태
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    const on = b.dataset.lang === LANG;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+
+  if(persist){ try{ localStorage.setItem(LANG_KEY, LANG); }catch(e){} }
+}
+
+const navLangBtn = document.getElementById('navLangBtn');
+if(navLangBtn) navLangBtn.addEventListener('click', () => applyLang(LANG === 'en' ? 'ko' : 'en', true));
+
+// 다른 탭(예: 게임 페이지)에서 언어를 바꾸면 이 화면도 따라갑니다
+window.addEventListener('storage', e => {
+  if(e.key === LANG_KEY && (e.newValue === 'ko' || e.newValue === 'en') && e.newValue !== LANG) applyLang(e.newValue, false);
+});
+
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.addEventListener('click', () => { if(b.dataset.lang !== LANG) applyLang(b.dataset.lang, true); });
+});
+
+// 저장된 언어(기본: 한국어)로 화면 전체를 그린다 — 공지/개발자 노트 렌더링도 여기서 함께 처리됨
+applyLang(LANG, false);
+
+// ── 이름 표기 점검: 세 가지(정새싹게임즈 / SPROUTY GAMES / SPTG) 밖의 표기가 섞이면 콘솔에 경고 ──
+function checkBrandNames(){
+  const BAD = /GAME SYSTEM|GSYS|SPT-|정새싹 게임즈|정새싹게임스|Sprouty Games|SproutyGames|SPROUTYGAMES|SPROUTY GAME(?!S)/;
+  const ALLOW = /Sproutyspt\/SPROUTYGAMES/g;   // 실제 저장소 이름
+  const pool = [];
+  const clone = document.body.cloneNode(true);
+  clone.querySelectorAll('script,style').forEach(n => n.remove());
+  pool.push(['화면 글씨', clone.textContent]);
+  [['NOTICES', NOTICES], ['SPROUT_NOTE', [SPROUT_NOTE, SPROUT_NOTE_EN]], ['I18N_EN', I18N_EN], ['UI', UI],
+   ['GAME_DETAILS', GAME_DETAILS], ['GAME_DETAILS_EN', GAME_DETAILS_EN], ['CREDIT_EGGS', CREDIT_EGGS], ['CREDIT_EGGS_EN', CREDIT_EGGS_EN]]
+    .forEach(([name, obj]) => { try{ pool.push([name, JSON.stringify(obj, (k, v) => typeof v === 'function' ? String(v) : v)]); }catch(e){} });
+  const found = [];
+  pool.forEach(([where, text]) => {
+    const m = String(text).replace(ALLOW, '').match(BAD);
+    if(m) found.push(where + ' → "' + m[0] + '"');
+  });
+  if(found.length) console.warn('[brand] 이름은 ' + BRAND.ko + ' / ' + BRAND.en + ' / ' + BRAND.abbr + ' 만 쓰기로 했어요. 다른 표기가 있어요:\n' + found.join('\n'));
+  return found;
+}
+checkBrandNames();
 
 // ── 오프닝 화면 (opening.jpg 가 서서히 나타났다가 부드럽게 사라짐, 세션당 1회) ──
 (function initBoot(){
