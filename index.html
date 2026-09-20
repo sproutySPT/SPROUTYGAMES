@@ -932,9 +932,9 @@ function isImageClean(img){
   }
 }
 
-// 카드 캔버스(720x960) 안에서 썸네일이 들어가는 정사각형(1:1) 자리.
-// 셰이더 CARD_FS 의 szPhoto/loPhoto 값과 같아야 합니다.
-// (영상이 재생될 땐 셰이더 안에서 같은 가로 중심을 유지한 채 3:4 비율(가로 483)로 좁아집니다.)
+// 카드 캔버스(720x960) 안에서 썸네일이 들어가는 자리.
+// 영상 미리보기가 재생되면 카드 내부를 거의 전부 영상으로 채우고,
+// 하단의 게임 제목 영역만 원래 카드 텍스처를 유지합니다.
 const CARD_SLOT = { x: 38, y: 116, s: 644, r: 28 };
 
 function paintCard(cv, game, img){
@@ -1034,27 +1034,32 @@ void main(){
   vec4 t = texture2D(uMap, vUv);
   vec3 tex = t.rgb;
 
-  // 썸네일 슬롯: 평소엔 정사각형(1:1, paintCard 의 CARD_SLOT과 동일 좌표),
-  // 영상이 페이드인 될수록 카드 자체 비율과 같은 세로 3:4 슬롯으로 폭이 좁아진다.
+  // 영상 미리보기: 카드 안을 꽉 채우는 느낌으로 사용하고,
+  // 하단 게임 제목 영역만 원래 카드 텍스처를 남긴다.
   if(uVidMix > 0.002){
     vec2 px = vUv * vec2(720.0, 960.0);
-    vec2 szPhoto = vec2(644.0, 644.0);   // 1:1
-    vec2 szVideo = vec2(483.0, 644.0);   // 3:4 (644 * 3/4)
-    vec2 loPhoto = vec2(38.0, 116.0);
-    vec2 loVideo = vec2(118.5, 116.0);   // szPhoto와 같은 가로 중심(x=360)을 유지한 채 폭만 좁힘
-    vec2 sz = mix(szPhoto, szVideo, uVidMix);
-    vec2 lo = mix(loPhoto, loVideo, uVidMix);
-    vec2 q = abs(px - (lo + sz * 0.5)) - (sz * 0.5 - 28.0);
-    float sd = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - 28.0;
-    float inner = 1.0 - smoothstep(-2.5, -0.5, sd);
-    vec2 iuv = (px - lo) / sz;
+    vec2 iuv = vUv;
+
+    // 카드 전체와 같은 3:4 비율로 영상을 cover 처리한다.
     vec2 vuv = iuv;
-    float containerAspect = sz.x / sz.y;      // 슬롯 자체의 가로/세로 비율(1:1 → 3:4로 변함)
-    float relAspect = uVidAspect / containerAspect; // 슬롯 대비 영상의 상대 비율로 커버 크롭
+    float containerAspect = 720.0 / 960.0;
+    float relAspect = uVidAspect / containerAspect;
     if(relAspect > 1.0) vuv.x = (iuv.x - 0.5) / relAspect + 0.5;
     else vuv.y = (iuv.y - 0.5) * relAspect + 0.5;
+
     vec3 vid = texture2D(uVid, clamp(vuv, 0.0, 1.0)).rgb;
-    tex = mix(tex, vid, uVidMix * inner);
+
+    // 하단 약 17%는 게임 제목을 보이게 원본 카드 텍스처를 유지한다.
+    // 경계는 살짝 부드럽게 연결해 영상이 카드 전체를 덮는 느낌을 준다.
+    float titleKeep = smoothstep(0.795, 0.855, iuv.y);
+    float videoMask = 1.0 - titleKeep;
+
+    // 카드 바깥의 둥근 투명 모서리는 uMap 알파를 그대로 사용한다.
+    float edgeX = smoothstep(0.0, 0.035, min(iuv.x, 1.0 - iuv.x));
+    float edgeY = smoothstep(0.0, 0.035, min(iuv.y, 1.0 - iuv.y));
+    float inner = edgeX * edgeY;
+
+    tex = mix(tex, vid, uVidMix * videoMask * inner);
   }
 
   vec3 c = tex * (0.52 + 0.48 * uFocus + 0.10 * uHover);
