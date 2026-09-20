@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - SPROUTY GAMES</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      color: #111;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      width: min(90%, 600px);
+      text-align: center;
+      padding: 40px 20px;
+      animation: appear 0.6s ease;
+    }
+
+    .error-code {
+      font-size: clamp(90px, 24vw, 180px);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -10px;
+      margin-bottom: 25px;
+      transform: rotate(-2deg);
+    }
+
+    h1 {
+      font-size: clamp(26px, 6vw, 40px);
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+
+    .eng {
+      font-size: clamp(16px, 4vw, 22px);
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .desc {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .desc-eng {
+      font-size: 15px;
+      line-height: 1.6;
+      opacity: 0.7;
+      margin-bottom: 28px;
+    }
+
+    .hehe {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 26px;
+    }
+
+    .home-btn {
+      display: inline-block;
+      padding: 15px 28px;
+      background: #111;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 800;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .home-btn:hover {
+      transform: translateY(-4px) rotate(-1deg);
+      background: #333;
+    }
+
+    .brand {
+      margin-top: 45px;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+
+    .doodle {
+      position: fixed;
+      font-size: 28px;
+      user-select: none;
+      pointer-events: none;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .doodle.one {
+      top: 12%;
+      left: 10%;
+      transform: rotate(-15deg);
+    }
+
+    .doodle.two {
+      top: 20%;
+      right: 12%;
+      transform: rotate(15deg);
+      animation-delay: 0.8s;
+    }
+
+    .doodle.three {
+      bottom: 15%;
+      left: 14%;
+      transform: rotate(10deg);
+      animation-delay: 1.2s;
+    }
+
+    .doodle.four {
+      bottom: 12%;
+      right: 10%;
+      transform: rotate(-12deg);
+      animation-delay: 0.5s;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        translate: 0 0;
+      }
+      50% {
+        translate: 0 -10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="doodle one">✦</div>
+  <div class="doodle two">?</div>
+  <div class="doodle three">★</div>
+  <div class="doodle four">!</div>
+
+  <main class="container">
+    <div class="error-code">404</div>
+
+    <h1>앗! 없는 페이지입니다..!</h1>
+    <div class="eng">Oops! This page doesn't exist..!</div>
+
+    <p class="desc">
+      SPROUTY GAMES의 게임을 플레이하고싶으신가요?
+    </p>
+
+    <p class="desc-eng">
+      Wanna play games by SPROUTY GAMES?
+    </p>
+
+    <p class="hehe">
+      에헤헷 감사합니당<br>
+      Hehe, thank you!
+    </p>
+
+    <a href="https://www.정새싹게임즈.서버.한국" class="home-btn">
+      홈으로 돌아가기 · Back to Home
+    </a>
+
+    <div class="brand">
+      SPTG!
+    </div>
+  </main>
+
+</body>
+</html>
