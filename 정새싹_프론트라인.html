@@ -2,6 +2,192 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script>
+/* ════════════════════════════════════════════════════════════════
+   SPROUTY GAMES — language layer (정새싹게임즈 / SPROUTY GAMES / SPTG)
+   · 언어 정하기: ?lang=ko|en → localStorage 'sprouty_lang' → 브라우저 언어 (한국어가 있으면 ko, 아니면 en)
+   · 한국어일 때는 아무것도 바꾸지 않습니다. (원본 그대로)
+   · English 일 때: 화면의 글씨(DOM), 캔버스 글씨, alert/confirm 을 아래 사전으로 바꿔 보여 줍니다.
+   · 게임 코드에서: SPROUTY.lang / SPROUTY.t({ko:'..',en:'..'}) / SPROUTY.onChange(fn) / SPROUTY.set('en')
+   · 번역이 빠진 글씨 확인: 콘솔에서 SPROUTY.missing()
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var KEY = 'sprouty_lang';
+  var BRAND = { ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' };
+  var DICT = {"정새싹:프론트라인": "SPROUTY: FRONTLINE", "정새싹 // TACTICAL FPS": "SPROUTY // TACTICAL FPS", "기관총": "Machine Gun", "수류탄 준비됨": "Grenade ready", "전장을 선택하고 장비를 준비하세요": "Pick your battlefield and gear up", "무기고 열기": "OPEN ARMORY", "설정": "SETTINGS", "웨이브": "WAVE", "적이 몰려오는 동안 생존하세요. 웨이브가 높아질수록 보상과 난도가 상승합니다.": "Survive while the enemies swarm in. The higher the wave, the bigger the rewards and the tougher the fight.", "추격전": "CHASE", "좁은 폐쇄 통로에서 도주자를 추격합니다. 짧고 빠른 전투를 즐겨보세요.": "Hunt down a runner in a tight, enclosed corridor. Short, fast fights.", "AI전": "VS AI", "엄폐·이동·무기교체를 사용하는 고지능 AI와 1 대 1 대결. 이지부터 익스트림까지 난이도를 선택할 수 있습니다.": "1v1 against a smart AI that uses cover, movement, and weapon swaps. Choose a difficulty from Easy to Extreme.", "엄폐물을 활용하세요": "Use cover", "AI의 시야를 끊으면 총격 압박을 줄일 수 있습니다. 무기를 바꿔 교전 거리를 조절하세요.": "Break the AI's line of sight to ease the gunfire pressure. Swap weapons to control engagement range.", "이동": "Move", "마우스": "Mouse", "시점": "Look", "좌클릭": "Left Click", "발사": "Fire", "재장전": "Reload", "수류탄": "Grenade", "달리기": "Sprint", "앉기": "Crouch", "1-6/휠": "1-6/Wheel", "무기교체": "Swap Weapon", "우클릭": "Right Click", "조준(저격)": "Aim (Sniper)", "왼쪽 스틱: 이동": "Left stick: Move", "화면 드래그: 시점": "Drag screen: Look", "오른쪽 버튼: 발사": "Right button: Fire", "재장전 버튼": "Reload button", "수류탄 버튼": "Grenade button", "웅크리기": "Crouch", "점프": "Jump", "모드 선택 시 전체화면 전환 · BUILD 2026.08.18": "Selecting a mode switches to fullscreen · BUILD 2026.08.18", "난이도 선택": "SELECT DIFFICULTY", "고지능 AI의 반응 속도, 명중률, 체력, 이동 압박이 난이도에 따라 달라집니다.": "The smart AI's reaction speed, accuracy, HP, and movement pressure scale with difficulty.", "이지": "EASY", "느린 압박 · 낮은 명중률 · AI 체력 감소": "Slow pressure · Low accuracy · Reduced AI HP", "노멀": "NORMAL", "균형 잡힌 기본 전투 설정": "Balanced default combat settings", "하드": "HARD", "높은 명중률 · 빠른 압박 · 더 강한 AI": "High accuracy · Fast pressure · Stronger AI", "익스트림": "EXTREME", "극한 명중률 · 공격 속도 증가 · 최강 AI": "Cracked accuracy · Faster attacks · Sweatiest AI", "취소": "CANCEL", "소리": "SOUND", "총성과 효과음을 켜거나 끕니다.": "Turn gunshots and sound effects on or off.", "켜짐": "ON", "UI 숨기기": "HIDE UI", "모바일에서 인게임 조작 버튼을 숨깁니다. PC에서는 조작 버튼이 자동으로 표시되지 않습니다.": "Hides on-screen control buttons on mobile. On PC, control buttons are never shown automatically.", "꺼짐": "OFF", "게임 플레이 중에도 설정을 다시 열어 변경할 수 있습니다.": "You can reopen Settings and change them during gameplay.", "탭/클릭해서 다시 시작": "Tap/click to restart", "무기고": "ARMORY", "보유 골드": "Gold", "잠금 해제한 무기는 즉시 장착할 수 있습니다. 구매 버튼은 터치/마우스 모두 지원합니다.": "Unlocked weapons can be equipped instantly. Purchase buttons support both touch and mouse.", "AI 전투": "AI BATTLE", "고지능 AI": "Smart AI", "샷건": "Shotgun", "저격": "Sniper", "권총": "Pistol", "레이저": "Laser", "활": "Bow", "게임 나가기": "Exit game", "전체 무기 해금": "Unlock all weapons", "3D 엔진을 불러오지 못했습니다.": "Failed to load the 3D engine.", "인터넷 연결을 확인한 뒤 파일을 다시 열어 주세요.": "Check your internet connection and reopen the file.", "//  처치": "//  KILL", "연속 처치": "Kill Streak", "적 처치": "Enemy Down", "헤드샷": "Headshot", "장거리 처치": "Long-Range Kill", "공중 처치": "Airborne Kill", "수류탄 처치": "Grenade Kill", "근접 처치": "Melee Kill", "노스코프": "No-Scope", "보너스": "Bonus", "연속 스타일": "Streak Style", "AI전 승리": "VS AI VICTORY", "AI 처치 완료": "AI eliminated", "AI전 승리 · 점수": "VS AI victory · Score", "처치": "Kills", "획득 골드 +": "Gold earned +", "추격전 승리": "CHASE VICTORY", "추격전 승리 · 도주자 처치 · 획득 골드 +": "Chase victory · Runner taken down · Gold earned +", "처치 보상": "Kill reward", "수류탄 재충전": "Grenade recharge", "더블배럴 샷건": "Double-Barrel Shotgun", "저격소총": "Sniper Rifle", "레이저 총": "Laser Gun", "빠른 연사와 안정적인 근거리 무기.": "Fast fire rate and a reliable close-range weapon.", "정밀한 연속 레이저. 반동이 거의 없다.": "Precise continuous laser. Almost no recoil.", "당긴 시간에 따라 위력이 올라가는 고탄력 장거리 무기.": "A high-tension long-range weapon: the longer you draw, the harder it hits.", "PC 자동": "PC Auto", "골드가 부족합니다": "Not enough gold", "구매 완료 ·": "Purchased ·", "G 남음": "G left", "보유 중": "Owned", "구매": "BUY", "G 부족": "G short", "AI전 ·": "VS AI ·", "적 무기: 기관총": "Enemy weapon: Machine Gun", "클리어": "CLEAR", "AI전 · 적 무기:": "VS AI · Enemy weapon:", "추격전 · 점수": "Chase · Score", "골드 +": "Gold +", "AI전 · 점수": "VS AI · Score", "점수": "Score", "상점에서 구매하세요": "Buy it at the shop", "게임을 시작하지 못했습니다.": "Failed to start the game.", "아래 오류 내용을 캡처해서 보여주세요.": "Please screenshot the error below and send it over."};
+  var PATS = [];
+  var HANGUL = /[가-힣]/;
+  var handlers = [];
+
+  function valid(v){ return v === 'ko' || v === 'en'; }
+  function detect(){
+    try{
+      if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
+      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
+      for(var i = 0; i < langs.length; i++){ if(/^ko\b/i.test(langs[i])) return 'ko'; }
+      return 'en';
+    }catch(e){ return 'ko'; }
+  }
+  function read(){
+    try{ var q = new URLSearchParams(location.search).get('lang'); if(valid(q)) return q; }catch(e){}
+    try{ var s = localStorage.getItem(KEY); if(valid(s)) return s; }catch(e){}
+    return detect();
+  }
+  var lang = read();
+
+  // ── dictionary → matchers ──
+  function esc(s){ return s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'); }
+  var NORM = {}, longKeys = [], shortKeys = [];
+  Object.keys(DICT).forEach(function(k){
+    NORM[k.replace(/\s+/g, ' ').trim()] = DICT[k];
+    var n = (k.match(/[가-힣]/g) || []).length;
+    (n <= 2 ? shortKeys : longKeys).push(k);
+  });
+  function byLen(a, b){ return b.length - a.length; }
+  longKeys.sort(byLen); shortKeys.sort(byLen);
+  var LONG_RE = longKeys.length ? new RegExp(longKeys.map(esc).join('|'), 'g') : null;
+  var SHORT_RE = shortKeys.length ? new RegExp('(^|[^가-힣])(' + shortKeys.map(esc).join('|') + ')(?![가-힣])', 'g') : null;
+  var PAT = PATS.map(function(p){ return [new RegExp(p[0], p[1] || 'g'), p[2]]; });
+  var SING = { turns:'turn', shares:'share', seconds:'second', matches:'match', titles:'title', levels:'level', coins:'coin', kills:'kill' };
+  var POST = /(^|[^\d.,])1 (turns|shares|seconds|matches|titles|levels|coins|kills)\b/g;
+
+  var CACHE = new Map(), MISSING = {};
+  function tr(s){
+    if(typeof s !== 'string' || !HANGUL.test(s)) return s;
+    var c = CACHE.get(s);
+    if(c !== undefined) return c;
+    var out = s, t = s.replace(/\s+/g, ' ').trim();
+    if(Object.prototype.hasOwnProperty.call(NORM, t)){
+      var m = s.match(/^(\s*)[\s\S]*?(\s*)$/);
+      out = m[1] + NORM[t] + m[2];
+    }else{
+      for(var i = 0; i < PAT.length; i++) out = out.replace(PAT[i][0], PAT[i][1]);
+      if(LONG_RE) out = out.replace(LONG_RE, function(x){ return DICT[x]; });
+      if(SHORT_RE && HANGUL.test(out)) out = out.replace(SHORT_RE, function(x, p, k){ return p + DICT[k]; });
+    }
+    out = out.replace(POST, function(x, p, w){ return p + '1 ' + SING[w]; });
+    if(CACHE.size > 4000) CACHE.clear();
+    CACHE.set(s, out);
+    if(HANGUL.test(out)) MISSING[out] = 1;
+    return out;
+  }
+
+  // ── DOM ──
+  var ATTRS = ['title', 'placeholder', 'aria-label', 'alt'];
+  var TXT = new WeakMap(), ATT = new WeakMap();
+  function skipNode(n){
+    var p = n.parentNode;
+    return !p || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.nodeName);
+  }
+  function doText(n){
+    if(lang !== 'en' || skipNode(n)) return;
+    var v = n.nodeValue;
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){ TXT.set(n, { ko: v, en: t }); n.nodeValue = t; }
+  }
+  function doAttr(el, name){
+    if(lang !== 'en') return;
+    var v = el.getAttribute(name);
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){
+      var o = ATT.get(el) || {}; o[name] = { ko: v, en: t }; ATT.set(el, o);
+      el.setAttribute(name, t);
+    }
+  }
+  function walk(root){
+    if(root.nodeType === 3){ doText(root); return; }
+    if(root.nodeType !== 1 && root.nodeType !== 9) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())) doText(n);
+    var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label],[alt]') : [];
+    for(var i = 0; i < els.length; i++) ATTRS.forEach(function(a){ if(els[i].hasAttribute(a)) doAttr(els[i], a); });
+    if(root.nodeType === 1) ATTRS.forEach(function(a){ if(root.hasAttribute(a)) doAttr(root, a); });
+  }
+  function restore(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())){
+      var o = TXT.get(n);
+      if(o && n.nodeValue === o.en){ n.nodeValue = o.ko; }
+      TXT.delete(n);
+    }
+    var els = root.querySelectorAll('[title],[placeholder],[aria-label],[alt]');
+    for(var i = 0; i < els.length; i++){
+      var oa = ATT.get(els[i]);
+      if(!oa) continue;
+      Object.keys(oa).forEach(function(a){ if(els[i].getAttribute(a) === oa[a].en) els[i].setAttribute(a, oa[a].ko); });
+      ATT.delete(els[i]);
+    }
+  }
+  var mo = new MutationObserver(function(recs){
+    if(lang !== 'en') return;
+    for(var i = 0; i < recs.length; i++){
+      var r = recs[i];
+      if(r.type === 'characterData') doText(r.target);
+      else if(r.type === 'attributes') doAttr(r.target, r.attributeName);
+      else{
+        for(var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
+      }
+    }
+  });
+  mo.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+
+  // ── canvas text / dialogs ──
+  [window.CanvasRenderingContext2D, window.OffscreenCanvasRenderingContext2D].forEach(function(C){
+    if(!C || !C.prototype) return;
+    ['fillText', 'strokeText', 'measureText'].forEach(function(fn){
+      var orig = C.prototype[fn];
+      if(!orig) return;
+      C.prototype[fn] = function(text){
+        if(lang === 'en' && typeof text === 'string' && HANGUL.test(text)) arguments[0] = tr(text);
+        return orig.apply(this, arguments);
+      };
+    });
+  });
+  ['alert', 'confirm', 'prompt'].forEach(function(fn){
+    var orig = window[fn];
+    if(!orig) return;
+    window[fn] = function(msg){
+      if(lang === 'en' && typeof msg === 'string') arguments[0] = tr(msg);
+      return orig.apply(window, arguments);
+    };
+  });
+
+  // ── public api ──
+  function apply(l){
+    lang = l;
+    api.lang = l;
+    document.documentElement.lang = l;
+    CACHE.clear();
+    if(document.body){ if(l === 'en') walk(document); else restore(document); }
+    for(var i = 0; i < handlers.length; i++){ try{ handlers[i](l); }catch(e){} }
+  }
+  var api = {
+    BRAND: BRAND,
+    lang: lang,
+    tr: tr,
+    t: function(m){ if(m == null) return ''; var v = m[api.lang]; return v != null ? v : (m.ko != null ? m.ko : m.en); },
+    onChange: function(fn){ if(typeof fn === 'function') handlers.push(fn); },
+    set: function(l){
+      if(!valid(l) || l === api.lang) return;
+      try{ localStorage.setItem(KEY, l); }catch(e){}
+      apply(l);
+    },
+    missing: function(){ return Object.keys(MISSING); }
+  };
+  window.SPROUTY = api;
+  if(lang === 'en') document.documentElement.lang = 'en';
+  function start(){ if(lang === 'en') walk(document); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  window.addEventListener('storage', function(e){
+    if(e.key === KEY && valid(e.newValue) && e.newValue !== api.lang) apply(e.newValue);
+  });
+})();
+
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>정새싹:프론트라인</title>
 <style>

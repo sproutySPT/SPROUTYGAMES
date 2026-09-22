@@ -2,6 +2,194 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script>
+/* ════════════════════════════════════════════════════════════════
+   SPROUTY GAMES — language layer (정새싹게임즈 / SPROUTY GAMES / SPTG)
+   · 언어 정하기: ?lang=ko|en → localStorage 'sprouty_lang' → 브라우저 언어 (한국어가 있으면 ko, 아니면 en)
+   · 한국어일 때는 아무것도 바꾸지 않습니다. (원본 그대로)
+   · English 일 때: 화면의 글씨(DOM), 캔버스 글씨, alert/confirm 을 아래 사전으로 바꿔 보여 줍니다.
+   · 게임 코드에서: SPROUTY.lang / SPROUTY.t({ko:'..',en:'..'}) / SPROUTY.onChange(fn) / SPROUTY.set('en')
+   · 번역이 빠진 글씨 확인: 콘솔에서 SPROUTY.missing()
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var KEY = 'sprouty_lang';
+  var BRAND = { ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' };
+  var DICT = {"정새싹디펜스-포탑디펜스": "SPROUTY DEFENSE - Turret Defense", "장착중": "EQUIPPED", "적 침입 경보": "ENEMY INCURSION ALERT", "⚠ 위협 등급 최상 ⚠": "⚠ MAXIMUM THREAT LEVEL ⚠", "웨이브": "WAVE", "점수": "SCORE", "보급 자원": "SUPPLIES", "전장 지도": "BATTLE MAP", "슬롯1": "SLOT 1", "슬롯2": "SLOT 2", "근접": "MELEE", "강화": "UPGRADE", "제작": "CRAFT", "포탑 강화 시스템": "TURRET UPGRADE SYSTEM", "무기 제작소": "WEAPON WORKSHOP", "근접 방어 시스템": "MELEE DEFENSE SYSTEM", "일시 정지": "PAUSED", "계속하기": "RESUME", "처음부터 다시 시작": "RESTART FROM SCRATCH", "타이틀로 나가기": "BACK TO TITLE", "정새싹": "SPROUTY", "디펜스": "DEFENSE", "최후의 정새싹포탑을 사수하라": "Defend the last SPROUTY turret", "made by 정새싹게임즈's 정지호": "made by SPROUTY GAMES's Jiho Jung", "목표": "GOAL", "생존": "SURVIVE", "적": "ENEMIES", "360° 전방위": "360° ALL-AROUND", "무기": "WEAPONS", "특수무기 10종": "10 SPECIALS", "최고 점수": "BEST SCORE", "방어 시작": "START DEFENSE", "🏆 내 기록": "🏆 MY RECORDS", "⚙ 설정": "⚙ SETTINGS", "내 기록": "MY RECORDS", "최고 웨이브": "BEST WAVE", "총 킬수": "TOTAL KILLS", "최고 콤보": "BEST COMBO", "플레이 횟수": "GAMES PLAYED", "닫기": "CLOSE", "설정": "SETTINGS", "효과음 / 음악": "SFX / MUSIC", "켜짐": "ON", "재채기하기": "Do a sneeze", "포탑 파괴됨": "TURRET DESTROYED", "게임오버": "GAME OVER", "★ 신기록 달성 ★": "★ NEW HIGH SCORE ★", "최종 점수": "FINAL SCORE", "도달 웨이브": "WAVE REACHED", "처치 좀비": "ZOMBIES SLAIN", "획득 골드": "GOLD EARNED", "재가동": "REBOOT", "공격력": "Damage", "+4 데미지": "+4 Damage", "사거리": "Range", "+16 사거리": "+16 Range", "연사속도": "Fire Rate", "+5% 연사": "+5% Fire Rate", "크리티컬": "Crit", "+3% 확률": "+3% Chance", "내구도": "Durability", "+18 최대HP": "+18 Max HP", "골드 획득": "Gold Gain", "+8% 골드": "+8% Gold", "무기 쿨감소": "Weapon Cooldown", "+4% 재사용속도": "+4% Recharge Speed", "요격 방어막": "Intercept Shield", "+6% 투사체 요격": "+6% Projectile Intercept", "미사일": "Missile", "폭발 범위 데미지": "Explosive area damage", "레이저": "Laser", "관통 즉시 히트빔": "Piercing instant beam", "화염방사기": "Flamethrower", "전방 부채꼴 도트뎀": "Frontal cone burn (DoT)", "전기탄": "Shock Shot", "연쇄 감전 데미지": "Chain lightning damage", "케찹": "Ketchup", "슬로우 장판 생성": "Creates slowing puddles", "허니머스타드": "Honey Mustard", "끈적 함정, 이동불가": "Sticky trap, immobilizes", "돈덩어리": "Money Bag", "적중시 추가 골드 획득": "Bonus gold on hit", "폭탄": "Bomb", "대형 광역 폭발": "Massive area blast", "똥": "Poop", "악취 구역, 도트+슬로우": "Stink zone, DoT + slow", "배추": "Cabbage", "강력한 넉백 타격": "Heavy knockback smack", "끓는 케찹": "Boiling Ketchup", "슬로우 적에게 화염 데미지 +30%": "+30% fire damage to slowed enemies", "고정 폭격": "Sitting Ducks", "스턴 적에게 미사일 데미지 +30%": "+30% missile damage to stunned enemies", "스턴 적에게 폭탄 데미지 +30%": "+30% bomb damage to stunned enemies", "감전 관통": "Shock Pierce", "감전 적에게 레이저 데미지 +25%": "+25% laser damage to shocked enemies", "회전 블레이드": "Spinning Blade", "근접 적 자동 감지, 빠른 연속 참격": "Auto-detects nearby enemies, rapid slashes", "전기 지직": "Zap Zap", "근접 적 감전 + 짧은 마비": "Shocks nearby enemies + brief paralysis", "가시 방벽": "Thorn Barrier", "근접 적 강타 + 강력 넉백": "Smashes nearby enemies + heavy knockback", "♥ 전체회복": "♥ FULL HEAL", "브루트": "Brute", "스웜로드": "Swarmlord", "⚠ 원거리 습격 다수 ⚠": "⚠ MULTIPLE RANGED RAIDERS ⚠", "경고": "WARNING", "x 콤보!": "x COMBO!", "요격!": "INTERCEPTED!", "꺼짐": "OFF", "% 감소": "% reduction", "현재": "Current", "최대": "MAX", "◆ 보유 골드": "◆ Gold owned", "해제": "UNEQUIP", "장착": "EQUIP", "미제작": "Not crafted"};
+  var PATS = [];
+  var HANGUL = /[가-힣]/;
+  var handlers = [];
+
+  function valid(v){ return v === 'ko' || v === 'en'; }
+  function detect(){
+    try{
+      if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
+      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
+      for(var i = 0; i < langs.length; i++){ if(/^ko\b/i.test(langs[i])) return 'ko'; }
+      return 'en';
+    }catch(e){ return 'ko'; }
+  }
+  function read(){
+    try{ var q = new URLSearchParams(location.search).get('lang'); if(valid(q)) return q; }catch(e){}
+    try{ var s = localStorage.getItem(KEY); if(valid(s)) return s; }catch(e){}
+    return detect();
+  }
+  var lang = read();
+
+  // ── dictionary → matchers ──
+  function esc(s){ return s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'); }
+  var NORM = {}, longKeys = [], shortKeys = [];
+  Object.keys(DICT).forEach(function(k){
+    NORM[k.replace(/\s+/g, ' ').trim()] = DICT[k];
+    var n = (k.match(/[가-힣]/g) || []).length;
+    (n <= 2 ? shortKeys : longKeys).push(k);
+  });
+  function byLen(a, b){ return b.length - a.length; }
+  longKeys.sort(byLen); shortKeys.sort(byLen);
+  var LONG_RE = longKeys.length ? new RegExp(longKeys.map(esc).join('|'), 'g') : null;
+  var SHORT_RE = shortKeys.length ? new RegExp('(^|[^가-힣])(' + shortKeys.map(esc).join('|') + ')(?![가-힣])', 'g') : null;
+  var PAT = PATS.map(function(p){ return [new RegExp(p[0], p[1] || 'g'), p[2]]; });
+  var SING = { turns:'turn', shares:'share', seconds:'second', matches:'match', titles:'title', levels:'level', coins:'coin', kills:'kill' };
+  var POST = /(^|[^\d.,])1 (turns|shares|seconds|matches|titles|levels|coins|kills)\b/g;
+
+  var CACHE = new Map(), MISSING = {};
+  function tr(s){
+    if(typeof s !== 'string' || !HANGUL.test(s)) return s;
+    var c = CACHE.get(s);
+    if(c !== undefined) return c;
+    var out = s, t = s.replace(/\s+/g, ' ').trim();
+    if(Object.prototype.hasOwnProperty.call(NORM, t)){
+      var m = s.match(/^(\s*)[\s\S]*?(\s*)$/);
+      out = m[1] + NORM[t] + m[2];
+    }else{
+      for(var i = 0; i < PAT.length; i++) out = out.replace(PAT[i][0], PAT[i][1]);
+      if(LONG_RE) out = out.replace(LONG_RE, function(x){ return DICT[x]; });
+      if(SHORT_RE && HANGUL.test(out)) out = out.replace(SHORT_RE, function(x, p, k){ return p + DICT[k]; });
+    }
+    out = out.replace(POST, function(x, p, w){ return p + '1 ' + SING[w]; });
+    if(CACHE.size > 4000) CACHE.clear();
+    CACHE.set(s, out);
+    if(HANGUL.test(out)) MISSING[out] = 1;
+    return out;
+  }
+
+  // ── DOM ──
+  var ATTRS = ['title', 'placeholder', 'aria-label', 'alt'];
+  var TXT = new WeakMap(), ATT = new WeakMap();
+  function skipNode(n){
+    var p = n.parentNode;
+    return !p || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.nodeName);
+  }
+  function doText(n){
+    if(lang !== 'en' || skipNode(n)) return;
+    var v = n.nodeValue;
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){ TXT.set(n, { ko: v, en: t }); n.nodeValue = t; }
+  }
+  function doAttr(el, name){
+    if(lang !== 'en') return;
+    var v = el.getAttribute(name);
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){
+      var o = ATT.get(el) || {}; o[name] = { ko: v, en: t }; ATT.set(el, o);
+      el.setAttribute(name, t);
+    }
+  }
+  function walk(root){
+    if(root.nodeType === 3){ doText(root); return; }
+    if(root.nodeType !== 1 && root.nodeType !== 9) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())) doText(n);
+    var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label],[alt]') : [];
+    for(var i = 0; i < els.length; i++) ATTRS.forEach(function(a){ if(els[i].hasAttribute(a)) doAttr(els[i], a); });
+    if(root.nodeType === 1) ATTRS.forEach(function(a){ if(root.hasAttribute(a)) doAttr(root, a); });
+  }
+  function restore(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())){
+      var o = TXT.get(n);
+      if(o && n.nodeValue === o.en){ n.nodeValue = o.ko; }
+      TXT.delete(n);
+    }
+    var els = root.querySelectorAll('[title],[placeholder],[aria-label],[alt]');
+    for(var i = 0; i < els.length; i++){
+      var oa = ATT.get(els[i]);
+      if(!oa) continue;
+      Object.keys(oa).forEach(function(a){ if(els[i].getAttribute(a) === oa[a].en) els[i].setAttribute(a, oa[a].ko); });
+      ATT.delete(els[i]);
+    }
+  }
+  var mo = new MutationObserver(function(recs){
+    if(lang !== 'en') return;
+    for(var i = 0; i < recs.length; i++){
+      var r = recs[i];
+      if(r.type === 'characterData') doText(r.target);
+      else if(r.type === 'attributes') doAttr(r.target, r.attributeName);
+      else{
+        for(var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
+      }
+    }
+  });
+  mo.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+
+  // ── canvas text / dialogs ──
+  [window.CanvasRenderingContext2D, window.OffscreenCanvasRenderingContext2D].forEach(function(C){
+    if(!C || !C.prototype) return;
+    ['fillText', 'strokeText', 'measureText'].forEach(function(fn){
+      var orig = C.prototype[fn];
+      if(!orig) return;
+      C.prototype[fn] = function(text){
+        if(lang === 'en' && typeof text === 'string' && HANGUL.test(text)) arguments[0] = tr(text);
+        return orig.apply(this, arguments);
+      };
+    });
+  });
+  ['alert', 'confirm', 'prompt'].forEach(function(fn){
+    var orig = window[fn];
+    if(!orig) return;
+    window[fn] = function(msg){
+      if(lang === 'en' && typeof msg === 'string') arguments[0] = tr(msg);
+      return orig.apply(window, arguments);
+    };
+  });
+
+  // ── public api ──
+  function apply(l){
+    lang = l;
+    api.lang = l;
+    document.documentElement.lang = l;
+    CACHE.clear();
+    if(document.body){ if(l === 'en') walk(document); else restore(document); }
+    for(var i = 0; i < handlers.length; i++){ try{ handlers[i](l); }catch(e){} }
+  }
+  var api = {
+    BRAND: BRAND,
+    lang: lang,
+    tr: tr,
+    t: function(m){ if(m == null) return ''; var v = m[api.lang]; return v != null ? v : (m.ko != null ? m.ko : m.en); },
+    onChange: function(fn){ if(typeof fn === 'function') handlers.push(fn); },
+    set: function(l){
+      if(!valid(l) || l === api.lang) return;
+      try{ localStorage.setItem(KEY, l); }catch(e){}
+      apply(l);
+    },
+    missing: function(){ return Object.keys(MISSING); }
+  };
+  window.SPROUTY = api;
+  if(lang === 'en') document.documentElement.lang = 'en';
+  function start(){ if(lang === 'en') walk(document); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  window.addEventListener('storage', function(e){
+    if(e.key === KEY && valid(e.newValue) && e.newValue !== api.lang) apply(e.newValue);
+  });
+})();
+
+</script>
+<style id="sprouty-i18n-css">html[lang="en"] .weapon-card.equipped::before{content:'EQUIPPED'}
+</style>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.4, maximum-scale=3.0, user-scalable=yes, viewport-fit=cover">
 <title>정새싹디펜스-포탑디펜스</title>
 <style>
@@ -588,7 +776,7 @@ canvas{ position:absolute; top:0; left:0; display:block; touch-action:none; back
       <div class="blip" style="left:63%; top:58%; animation-delay:1.1s;"></div>
       <div class="blip" style="left:57%; top:33%; animation-delay:1.8s;"></div>
     </div>
-    <div class="title-eyebrow">SPROUTY G@MES</div>
+    <div class="title-eyebrow">SPROUTY GAMES</div>
     <h1>정새싹<br><span>디펜스</span></h1>
     <div class="title-sub">최후의 정새싹포탑을 사수하라</div>
     <div class="studio-tag">made by 정새싹게임즈's 정지호</div>
