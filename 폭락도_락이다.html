@@ -2,192 +2,6 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>
-/* ════════════════════════════════════════════════════════════════
-   SPROUTY GAMES — language layer (정새싹게임즈 / SPROUTY GAMES / SPTG)
-   · 언어 정하기: ?lang=ko|en → localStorage 'sprouty_lang' → 브라우저 언어 (한국어가 있으면 ko, 아니면 en)
-   · 한국어일 때는 아무것도 바꾸지 않습니다. (원본 그대로)
-   · English 일 때: 화면의 글씨(DOM), 캔버스 글씨, alert/confirm 을 아래 사전으로 바꿔 보여 줍니다.
-   · 게임 코드에서: SPROUTY.lang / SPROUTY.t({ko:'..',en:'..'}) / SPROUTY.onChange(fn) / SPROUTY.set('en')
-   · 번역이 빠진 글씨 확인: 콘솔에서 SPROUTY.missing()
-   ════════════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  var KEY = 'sprouty_lang';
-  var BRAND = { ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' };
-  var DICT = {"폭락도락이다 🎰 | 폭락도 락이다. 주식시뮬레이터 드루와": "Even Rock Bottom Rocks 🎰 | Stock Simulator — Come at Me", "폭락도 락이다. 주식시뮬레이터 드루와": "Even Rock Bottom Rocks. Stock simulator — come at me", "폭락도락이다,폭락도 락이다,주식,시뮬레이터,도박게임,주식시뮬레이터": "Even Rock Bottom Rocks,stocks,simulator,gambling game,stock simulator", "폭락도락이다 🎰": "Even Rock Bottom Rocks 🎰", "📈 폭락도락이다": "📈 Even Rock Bottom Rocks", "예수금": "Cash", "⚠️ 이 게임은 실제 주식이나 도박이 아닌 게임입니다.": "⚠️ This is a game — not real stocks or real gambling.", "평가자산": "Stock Value", "총 손익": "Total P/L", "수익률": "Return", "현재 내 자산 상태": "My current asset status", "보합 →→ ₩0": "Flat →→ ₩0", "📊 시장": "📊 Market", "🔍 상세": "🔍 Detail", "💼 내 주식": "💼 My Stocks", "📡 시장 개장 중... 🎰 폭락도락이다에 오신 것을 환영합니다! ⚠️ 이 게임은 실제 주식이나 도박이 아닌 게임입니다.": "📡 Market open... 🎰 Welcome to Even Rock Bottom Rocks! ⚠️ This is a game — not real stocks or real gambling.", "⏱ 다음 턴까지:": "⏱ Next turn in:", "초": "s", "📰 뉴스": "📰 News", "파산했습니다": "You went bankrupt", "주식은 아무나 하는 게 아닙니다.": "The stock market ain't for everyone.", "made by 정지호": "made by Jiho Jung", "✕ 닫기": "✕ Close", "📖 폭락도락이다 가이드": "📖 Even Rock Bottom Rocks Guide", "가이드 안에서 기능별로 골라 볼 수 있어요.": "Pick a topic below to browse by feature.", "시작": "Start", "시장": "Market", "매매": "Trading", "암시장": "Black Market", "칭호": "Titles", "설정": "Settings", "🎮 게임 규칙": "🎮 Game Rules", "으로 시작합니다.": " is your starting cash.", "주가는": "Prices tick", "설정한 초마다": "every set number of seconds,", "1턴씩": "one turn at a time,", "자동으로 업데이트됩니다.": "all automatically.", "주식을 사고 팔아서 최대한 많은 돈을 버세요!": "Buy and sell stocks to make as much money as you can!", "자산이": "If your assets drop close to", "에 근접하면 게임오버입니다.": ", it's game over.", "💡 초보자 팁": "💡 Beginner Tips", "처음엔": "Start with", "정새싹": "SPROUTY", "또는": "or", "아하기싫다": "Nah", "로 시작하세요.": ".", "뉴스 팝업이 뜨면 주가가 크게 움직이니 주목!": "When a news popup shows up, prices move big — pay attention!", "한 종목에 몰빵하지 말고 여러 곳에 나눠 투자하세요.": "Don't go all-in on one stock — spread your money across several.", "💣 히히히그룹은 초보자에겐 추천 안 합니다… 하지만 재밌습니다.": "💣 Hehehe Group is not recommended for beginners… but it sure is fun.", "📈 주식이란?": "📈 What is a stock?", "주식은 회사의 \"조각\"입니다. 주식을 사면 그 회사의 일부 주인이 됩니다.": "A stock is a “piece” of a company. Buy one and you become a part-owner.", "회사가 잘 나가면 주가(주식 가격)가 올라": "When a company does well, its stock price goes up and you earn a", "이익": "profit", "을 얻고,": ",", "회사가 망하면 주가가 내려": "and when it flops, the price drops and you take a", "손실": "loss", "을 봅니다.": ".", "🏢 종목 소개 & 위험도": "🏢 Companies & Risk Levels", "정새싹 컴퍼니": "SPROUTY Company", "안정적 대형주 · 완만한 상승": "Stable blue chip · Gentle climb", "낮음": "LOW", "아하기싫다 그룹": "Nah Group", "초안정주 · 꾸준한 우상향": "Ultra-stable · Steady uptrend", "패턴형 · 규칙적 후 급변": "Pattern-based · Calm, then sudden swings", "중간": "MEDIUM", "분@무": "SPR@Y", "롤러코스터 · 급등락 반복": "Roller coaster · Repeated spikes and crashes", "높음": "HIGH", "칵퉤컴퍼니": "Ptooey Co.", "고가 변동주 · 큰 폭 움직임": "High-priced volatile stock · Big swings", "히히히그룹": "Hehehe Group", "폭탄주 · 더 크게 흔들림": "Bomb stock · Shakes even harder", "극위험": "EXTREME RISK", "청룡그룹": "Blue Dragon Group", "김지후가 해달래서... 곡선형 상승 후 직선 추락": "Jihu Kim asked for it... A smooth curve up, then a straight-line plunge", "🛒 어떻게 사고팔아요?": "🛒 How do I buy and sell?", "매수": "Buy", "= 주식 사기. 돈을 내고 주식을 받습니다.": "= purchasing stock. You pay money and receive shares.", "매도": "Sell", "= 주식 팔기. 주식을 돌려주고 돈을 받습니다.": "= selling stock. You hand the shares back and get money.", "쌀 때 사서 비쌀 때 파는 게 핵심!": "Buy low, sell high — that's the whole trick!", "종목을 클릭하면 상세 화면에서 사고팔 수 있어요.": "Click a stock to buy and sell on its detail screen.", "💰 손익이 뭔가요?": "💰 What's P/L?", "내가 산 가격(평균단가)보다 현재 가격이 높으면": "If the current price is higher than what you paid (average cost), you have a", "이익(+)": "profit (+)", "낮으면": "and if it's lower, you have a", "손실(-)": "loss (-)", "입니다.": ".", "상세 화면 → 매도 탭에서": "On the Detail screen → Sell tab, you can see", "내 매입가 vs 현재가 비교": "your buy price vs. the current price", "를 볼 수 있어요!": " at a glance!", "🎴 암시장 도박": "🎴 Black Market Gambling", "상단 🎴 버튼으로 진입합니다.": "Enter via the 🎴 button at the top.", "베팅 금액을 입력하고": "Enter your bet and press", "게임 시작": "Start Game", "을 누르세요.": ".", "4장의 카드 중 1장을 선택해서 확정합니다.": "Pick 1 of 4 cards and lock it in.", "맞히면": "Guess right and you get", "베팅액의 2배": "2x your bet", "를 받고, 틀리면": ", but guess wrong and you", "전부 잃습니다.": "lose it all.", "💣 전부걸기": "💣 All In", "로 가진 돈을 전부 베팅할 수 있습니다.": " lets you bet all the cash you have.", "⚠️ 이 기능은 게임 내 가상 도박입니다.": "⚠️ This feature is virtual, in-game gambling.", "🎟️ 로또": "🎟️ Lotto", "암시장 안의": "In the Black Market, go to the", "탭으로 들어갑니다.": " tab.", "1~20 중 겹치지 않게 숫자 4개를 고르고 베팅 금액을 입력합니다.": "Pick 4 different numbers from 1~20 and enter your bet.", "추첨 번호 4개가 하나씩 천천히 공개된 뒤 결과가 나옵니다.": "The 4 winning numbers are revealed one by one, slowly, then you get the result.", "4개 일치": "4 matches", "3개 일치": "3 matches", "2개 일치": "2 matches", "1개 이하 일치는": "With 1 or fewer matches,", "베팅액 전부를 잃습니다.": "you lose your entire bet.", "🎖️ 칭호 시스템": "🎖️ Title System", "칭호는 특정 조건을 달성하면 자동으로 열립니다.": "Titles unlock automatically when you hit certain conditions.", "상단 🎖️ 버튼을 누르면 칭호 목록과 진행도가 보입니다.": "Tap the 🎖️ button at the top to see the title list and your progress.", "획득한 칭호는 장착해서 이름표처럼 달 수 있어요.": "Equip an unlocked title to wear it like a name tag.", "상위 칭호일수록 조건이 거의 벽돌 산입니다.": "Top-tier titles have requirements that are basically a wall of bricks.", "📈 어려운 칭호 예시": "📈 Hard Title Examples", "순자산": "Net worth", "1조": "₩1T", "10조": "₩10T", "100조": "₩100T", "1경": "₩10 quadrillion", "10경": "₩100 quadrillion", "100경": "₩1 quintillion", "누적 수익": "Total profit in the", "조 단위": "trillions", ", 현금 보유": ", cash on hand in the", "⚙️ 설정": "⚙️ Settings", "파산, 가진거다팔기, 처음부터다시하기를 한 번에 관리할 수 있어요.": "Manage bankruptcy, sell-everything, and start-over all in one place.", "일시정지로 잠깐 멈춘 뒤 다시 이어서 할 수 있습니다.": "Pause to freeze the market briefly, then pick up where you left off.", "설정에서 일부 진행 요소를 정리하는 것도 가능합니다.": "You can also clear out some progress items in Settings.", "🧠 플레이 팁": "🧠 Play Tips", "처음엔 시장 탭에서 흐름을 익히고, 상세 탭에서 매수/매도를 연습한 다음, 그 뒤에 상점이나 칭호를 건드리면 훨씬 덜 헷갈립니다.": "Learn the flow in the Market tab first, practice buying/selling in the Detail tab, and only then touch the shop and titles — way less confusing.", "🎴 암시장": "🎴 Black Market", "4장 중 1장이 당첨. 맞히면 2배. 틀리면 전부 잃는다.": "1 of 4 cards wins. Guess right for 2x. Guess wrong and lose it all.", "🃏 카드 도박": "🃏 Card Gambling", "베팅 금액": "Bet Amount", "🃏 게임 시작": "🃏 Start Game", "1~20 중": "Choose", "4개": "4 numbers", "선택": "from 1~20", "/4 선택됨": "/4 selected", "4개 일치 →": "4 matches →", "3개 일치 →": "3 matches →", "2개 일치 →": "2 matches →", "1개 이하 → 베팅액 전액 손실": "1 or fewer → lose your entire bet", "🎟️ 추첨하기": "🎟️ Draw", "🎖️ 칭호": "🎖️ Titles", "현재 칭호:": "Current title:", "전체": "All", "획득": "Unlocked", "미획득": "Locked", "돌아가기": "Back", "가진 걸 정리하거나, 완전히 끝내거나, 처음부터 다시 시작할 수 있어요.": "Clean up what you own, end it all, or start fresh from scratch.", "☠️ 파산": "☠️ Go Bankrupt", "즉시 파산 상태로 넘어갑니다.": "Instantly go bankrupt.", "💸 가진거다팔기": "💸 Sell Everything", "모든 종목을 현재가로 한 번에 매도합니다.": "Sell every stock at the current price in one go.", "🔄 처음부터다시": "🔄 Start Over", "초기 자금으로 새 게임을 시작합니다.": "Start a new game with the starting cash.", "⏱️ 턴 설정": "⏱️ Turn Speed", "1턴당 시간(초) — 숫자가 낮을수록 빠른 시장": "Seconds per turn — the lower the number, the faster the market", "적용": "Apply", "🔐 개발자 인증": "🔐 Dev Verification", "영문/숫자 PIN을 입력하면 치트창이 열립니다.": "Enter the letters/numbers PIN to open the cheat panel.", "🎬 크레딧": "🎬 Credits", "이 게임을 만드는 데 함께한 이름들을 모아봤어요.": "A collection of the names who helped make this game.", "폭락도락이다": "Even Rock Bottom Rocks", "제작자": "Creator", "정지호": "Jiho Jung", "사용한 AI": "AI Used", "앱 개발 · 호스팅 도움": "App development · hosting help", "코드에 관하여": "About the Code", "setTimeout 재귀 + Date.now() 기반 drift 보정": "setTimeout recursion + Date.now()-based drift correction", "160개 선언 (고유 128개)": "160 declarations (128 unique)", "≈ 450개 선택자": "≈ 450 selectors", "onclick 핸들러 75개 지점": "75 onclick handler sites", "종목 7종 · 독립 가격 히스토리 트래킹": "7 stocks · independent price-history tracking", "내부 저장소 파일": "Internal storage files", "호스팅": "Hosting", "Supabase [구버전에 한하여]": "Supabase [old version only]", "제작 시작일": "Started", "김지후": "Jihu Kim", "김지율": "Jiyul Kim", "정성훈": "Seonghun Jung", "이정후": "Junghoo Lee", "이석준": "Seokjun Lee", "장민재": "Minjae Jang", "임시훈": "Sihun Lim", "함께해줘서 고마워요": "Thanks for being there", "인증": "Verify", "PIN을 입력하면 치트창이 열립니다.": "Enter the PIN to open the cheat panel.", "💰 현금 +100만": "💰 Cash +₩1M", "주머니가 묵직해집니다.": "Your pockets feel heavier.", "🏦 현금 +1억": "🏦 Cash +₩100M", "돈다발이 화면을 한 번 스쳐 갑니다.": "A stack of cash swipes across the screen.", "🎖️ 칭호 전부 해금": "🎖️ Unlock All Titles", "조, 경 단위 칭호까지 한꺼번에 열립니다.": "Even the trillion and quadrillion-tier titles open all at once.", "📈 통계 MAX": "📈 Stats MAX", "턴, 거래, 수익 기록을 치트급으로 끌어올립니다.": "Pumps your turns, trades, and profit records to cheat-level.", "⏱️ 1턴 = 1초": "⏱️ 1 turn = 1 sec", "시장을 번개처럼 빠르게 돌립니다.": "Runs the market at lightning speed.", "🛡️ 구제권 +5": "🛡️ Lifeline +5", "파산 직전용 방패를 더 얹습니다.": "Stacks more of the near-bankruptcy shield.", "🧯 파산 복구": "🧯 Bankruptcy Recovery", "게임 오버를 걷어내고 다시 달릴 수 있게 합니다.": "Removes the game over so you can keep running.", "도박 실패": "Gambling Failed", "괜히 손댔다가 혼쭐이 났습니다.": "You messed around and found out.", "📞 도박중독치료는 1336": "📞 Gambling addiction help (KR): 1336", "이 팝업은 게임 오버가 아니라 도박 실패 경고입니다.": "This popup is a gambling-failure warning, not a game over.", "일시정지": "Pause", "가이드": "Guide", "뉴스 팝업 닫기": "Close news popup", "예: 50000": "e.g. 50000", "크레딧 닫기": "Close credits", "개발자 인증 닫기": "Close dev verification", "PIN 입력": "Enter PIN", "도박 조롱 팝업 닫기": "Close gambling roast popup", "대기업 전자제품": "Big-corp electronics", "분무기 제조업체": "Spray bottle maker", "힙합 레이블": "Hip-hop label", "독일계 면도기 기업": "German razor company", "정새싹 라이벌. 고가 변동주": "SPROUTY's rival. High-priced volatile stock", "순수 도박주 🎰": "Pure gambling stock 🎰", "완만한 곡선 뒤 직선 추락": "Gentle curve, then a straight-line plunge", "정새싹, 신형 갤럭시 출시 성공": "SPROUTY's new Galaxy launch is a hit", "역대 최대 사전예약 달성": "Record-breaking pre-orders", "정새싹 영업이익 사상 최대": "SPROUTY operating profit hits all-time high", "해외 수출 45% 급증": "Overseas exports surge 45%", "정새싹 공장 화재 발생": "Fire breaks out at SPROUTY factory", "생산 차질 우려로 주가 하락": "Production disruption fears push the stock down", "정새싹 대규모 리콜 공지": "SPROUTY announces massive recall", "배터리 결함 230만 대": "Battery defect in 2.3 million units", "정새싹, 미국 빅테크와 반도체 협약": "SPROUTY signs semiconductor deal with U.S. Big Tech", "5조원 규모 공급 계약": "₩5T supply contract", "분@무, 농업용 드론 시장 진출": "SPR@Y enters the agricultural drone market", "분무기의 진화... 주가 급등": "The sprayer evolves... stock skyrockets", "분@무 CEO \"회사 망하면 어때요\"": "SPR@Y CEO: “So what if the company fails?”", "황당 인터뷰에 투자자 패닉": "Absurd interview sends investors into a panic", "분@무 신제품 틱톡 바이럴": "SPR@Y's new product goes viral on TikTok", "#분무 챌린지 3억뷰 돌파": "#SprayChallenge hits 300M views", "분@무 제품 안전검사 불합격": "SPR@Y product fails safety inspection", "리콜 대신 \"그냥 쓰세요\" 발언": "Says “just use it” instead of recalling", "분@무, K-뷰티 OEM 계약 체결": "SPR@Y signs K-beauty OEM deal", "미용 분야 확장 기대감": "Hopes for expansion into beauty", "분@무 창고 침수... 재고 전멸": "SPR@Y warehouse flooded... inventory wiped out", "장마에 직격탄": "Hit hard by the monsoon", "The Copycats 신보 빌보드 1위": "The Copycats' new album hits #1 on Billboard", "글로벌 스트리밍 신기록": "New global streaming record", "The Copycats, 표절 소송 당해": "The Copycats sued for plagiarism", "원곡자 측 \"100% 카피\"": "Original artist: “100% copy”", "TCC 소속 아티스트 그래미 수상": "TCC artist wins a Grammy", "국내 힙합 역사 새로 쓰다": "Rewrites Korean hip-hop history", "TCC 간판 프로듀서 탈퇴 선언": "TCC's star producer announces exit", "계약 노예\" 폭로글 확산": "“Contract slavery” exposé spreads", "TCC × 나이키 콜라보 발표": "TCC × Nike collab announced", "한정판 스니커즈 1분 매진": "Limited-edition sneakers sell out in 1 minute", "아하기싫다, 유럽 품질인증 획득": "Nah gets European quality certification", "독일 DIN 기준 최고점": "Top score under the German DIN standard", "아하기싫다, 독일 본사 노조 파업": "Nah's German HQ union goes on strike", "3일간 생산 중단": "Production halted for 3 days", "아하기싫다, 아시아 시장 점유율 1위": "Nah takes #1 market share in Asia", "5년 연속 성장세 지속": "5 straight years of growth", "아하기싫다, 원자재값 상승 타격": "Nah hit by rising raw-material prices", "영업이익률 1.2%p 하락 예상": "Operating margin expected to fall 1.2pp", "아하기싫다 \"30년 무결함 기록 달성\"": "Nah: “30 years of zero defects achieved”", "소비자 만족도 업계 1위": "#1 in the industry for customer satisfaction", "칵퉤, 반도체 자체 설계 성공": "Ptooey successfully designs its own semiconductor", "정새싹 특허 우회 기술 발표": "Announces tech that works around SPROUTY's patents", "칵퉤 CFO 횡령 혐의 검찰 소환": "Ptooey CFO summoned by prosecutors over embezzlement", "내부 감사 결과 유출": "Internal audit results leaked", "칵퉤 × 테슬라 전장부품 납품 계약": "Ptooey signs Tesla automotive-parts supply deal", "10조원 규모 5년 계약": "₩10T, 5-year contract", "칵퉤 신제품 발표회 현장 폭발사고": "Explosion at Ptooey's product launch event", "시연 중 기기 과열 폭발": "Device overheats and explodes during the demo", "칵퉤 AI 칩 성능 세계 1위 인증": "Ptooey AI chip certified #1 in the world", "주가 수직 상승": "Stock goes vertical", "칵퉤 중국 공장 전면 폐쇄": "Ptooey shuts down its China factory entirely", "미·중 무역분쟁 직격탄": "Hit hard by the U.S.–China trade war", "히히히 \"우리가 이겼다\"... 뭘?": "Hehehe: “We won”... won what?", "공시 내용 없음. 주가 급등": "No disclosures filed. Stock skyrockets", "히히히 대표 잠적": "Hehehe CEO goes missing", "어제 사옥서 마지막 목격": "Last seen at HQ yesterday", "히히히, 코인 발행 예고": "Hehehe announces coin launch", "히히히코인\" 백서 공개": "“HeheheCoin” whitepaper released", "히히히코인 스캠 판정": "HeheheCoin ruled a scam", "금감원 \"사기로 봄\"": "Financial regulator: “We call it fraud”", "히히히 신사업: 운석 채굴": "Hehehe's new business: asteroid mining", "우주에서 한 방\"": "“Going big from outer space”", "히히히 운석 채굴선 발사 실패": "Hehehe's asteroid-mining ship launch fails", "폭발 영상 SNS 확산": "Explosion video spreads on social media", "히히히 정부 구제금융 검토": "Government weighs bailout for Hehehe", "망하면 나라 흔들린다\"": "“If it goes under, the whole country shakes”", "청룡그룹, 완만한 우상향 뉴스": "Blue Dragon Group: gentle uptrend news", "곡선이 예쁘게 휘어갑니다": "The curve bends up beautifully", "청룡그룹 신규 계약 체결": "Blue Dragon Group signs a new contract", "시장은 아직 미소를 짓는 중": "The market is still smiling", "청룡그룹 경영진 급변": "Blue Dragon Group management shake-up", "곡선이 꺾이기 시작했습니다": "The curve has started to bend down", "청룡그룹 대형 프로젝트 중단": "Blue Dragon Group halts a major project", "직선 추락의 전조가 포착됩니다": "Signs of a straight-line plunge detected", "주식보다 돈 세는 게 더 빨랐을걸요.": "Honestly, counting your cash would've been faster than trading stocks.", "거스름돈도 틀리는 분이시군요.": "You're the type to miscount the change, too.", "축하합니다! 전 재산을 증발시켰어요.": "Congrats! You made your entire fortune evaporate.", "재능이 있으십니다.": "You've got real talent.", "여기에 잠들다:": "Here lies:", "사랑받았고, 무참히 날렸음.": "Was loved. Got absolutely wiped out.", "엄마한테 용돈 달라고 해야 할 것 같은데요.": "Might be time to ask Mom for allowance.", "이 성과로는 어렵겠지만.": "Not that you'll get it with these results.", "나 주식 좀 해\"라고 말할 수 있는": "You had the guts to say “I do a bit of stock trading,”", "용기만큼은 칭찬합니다.": "and I'll give you credit for that much.", "히히히그룹에 전 재산 넣은 거": "Putting your entire fortune into Hehehe Group —", "본인도 알고 있었죠?": "you knew that was a bad idea, right?", "₩1,000,000을 날리는 데": "Blowing ₩1,000,000 —", "이렇게 재능이 있는 분은 처음 봐요.": "I've never seen anyone this talented at it.", "차트가 울고 있어요.": "The chart is crying.", "아마 당신도 울고 있겠죠.": "And you probably are too.", "안전 쿠션": "Safety Cushion", "전체 장세의 출렁임을 조금 눌러줍니다.": "Dampens the overall market swings a little.", "변동성 -6% · 12턴": "Volatility -6% · 12 turns", "덜 흔들리는 시장": "A calmer market", "뉴스 방패": "News Shield", "호재와 악재의 충격을 무디게 합니다.": "Blunts the impact of good and bad news.", "뉴스 충격 -12% · 9턴": "News impact -12% · 9 turns", "급뉴스 완충": "Breaking-news buffer", "흔들림 브레이크": "Shake Brake", "급락성 파동이 튀는 걸 더 잘 막아줍니다.": "Better at stopping sudden crash-style spikes.", "급변 완화 · 7턴": "Swing easing · 7 turns", "망가질 때 덜 크게 망함": "Crash less hard when things go south", "구제권": "Lifeline", "파산 직전에 한 번 자동으로 구해줍니다.": "Automatically saves you once right before bankruptcy.", "파산 방지 1회 · 5턴": "Bankruptcy shield x1 · 5 turns", "완전 폭망 방지": "Prevents a total wipeout", "안전벨트": "Seatbelt", "가진 종목이 다음 3턴 동안 쉽게 내려앉지 않습니다.": "Your holdings won't easily sink for the next 3 turns.", "보유주 하락 방지 · 3턴": "Holdings drop protection · 3 turns", "안전장치": "Safety net", "드가자ㅏㅏㅏㅏ": "LET'S GOOOOOO", "다음 6턴 동안 모든 주식을 반값에 살 수 있고, 색종이가 쏟아집니다.": "For the next 6 turns, buy every stock at half price — and confetti rains down.", "매수 반값 · 6턴": "Buys 50% off · 6 turns", "피버타임": "Fever Time", "⏸ 일시정지": "⏸ Paused", "⏱ 진행 중": "⏱ Running", "주 획득!": " shares acquired!", "📈 보유 종목 상승": "📈 Your holdings are up", "턴": " turns", "턴 활성화": " turns active", "💸 상점 아이템 살 돈이 부족합니다": "💸 Not enough money to buy shop items", "활성": "Active", "턴 남음": " turns left", "비활성": "Inactive", "구매하기": "Buy", "아이템": "Item", "⏸ 시장을 멈췄습니다": "⏸ Market paused", "▶ 시장을 다시 움직입니다": "▶ Market is moving again", "🧯 구제권이 발동했습니다": "🧯 Lifeline activated", "최종 자산: ₩": "Final assets: ₩", "턴 만에 파산": " turns to bankruptcy", "🫥 팔 주식이 없습니다": "🫥 You have no stocks to sell", "💸 모든 종목 매도! +₩": "💸 Sold every stock! +₩", "💸 잔고가 부족합니다": "💸 Insufficient balance", "주 매수 완료!": " shares bought!", "📦 보유 수량이 부족합니다": "📦 Not enough shares owned", "매도 완료 (": "Sold (", "🟢 수익": "🟢 Profit", "🔴 손실": "🔴 Loss", "📦 팔 주식이 없습니다": "📦 You have no stock to sell", "▲ 수익 중  +₩": "▲ In profit  +₩", "▼ 손실 중  -₩": "▼ At a loss  -₩", "→ 보합  ±₩0": "→ Flat  ±₩0", "보유": "Owned", "주": " shares", "▲ 올랐어요  +": "▲ Went up  +", "▼ 떨어졌어요": "▼ Went down", "→ 변동 없음  0%": "→ No change  0%", "🤑 이득! +₩": "🤑 Profit! +₩", "😢 손해... -₩": "😢 Loss... -₩", "주 팔면 얼마 손익?": " shares — P/L if you sell?", "내가 산 가격": "Your buy price", "지금 가격": "Current price", "평균단가": "Avg cost", "평가손익": "Unrealized P/L", "가격 히스토리 (최근": "Price history (last", "턴)": " turns)", "수량": "Qty", "1주": "1 share", "5주": "5 shares", "10주": "10 shares", "최대": "Max", "💰 매수 (사기)": "💰 Buy", "📤 매도 (팔기)": "📤 Sell", "🧺 모두팔기": "🧺 Sell All", "매수 = 주식 사기 · 매도 = 주식 팔기 · 모두팔기 = 전량 정리": "Buy = purchase shares · Sell = sell shares · Sell All = liquidate everything", "💼 보유 종목 없음": "💼 No holdings", "시장 탭에서 종목을 매수(사기)하세요": "Buy a stock from the Market tab", "주 · 평균": " shares · avg", "→ 현재": "→ now", "📈 호재 뉴스!": "📈 Good news!", "📉 악재 뉴스!": "📉 Bad news!", "▲ 호재": "▲ Good", "▼ 악재": "▼ Bad", "브론즈": "Bronze", "실버": "Silver", "골드": "Gold", "플래티넘": "Platinum", "다이아": "Diamond", "주린이": "Stonks Noob", "처음으로 주식을 매수했다.": "Bought stock for the first time.", "주식 1주 이상 매수": "Buy 1+ share", "손실의 맛": "Taste of Loss", "손실 매도를 경험해봤다.": "Sold at a loss.", "손실 매도 1회": "1 loss sale", "시장 탈출자": "Market Escapee", "일시정지 기능을 써봤다.": "Tried the pause feature.", "일시정지 1회 이상": "Pause 1+ times", "카드쟁이": "Card Shark", "암시장 도박을 한 번 해봤다.": "Gambled on the black market once.", "도박 1회 참가 (승패 무관)": "Join 1 gamble (win or lose)", "30턴 생존자": "30-Turn Survivor", "30턴을 버텨냈다.": "Survived 30 turns.", "생존 턴 수 30+": "Turns survived 30+", "수익의 맛": "Taste of Profit", "수익 매도를 성공시켰다.": "Made a profitable sale.", "수익 매도 1회": "1 profitable sale", "분산투자자": "Diversifier", "동시에 3종목 이상을 보유했다.": "Held 3+ stocks at once.", "동시 보유 3개사 이상": "Hold 3+ companies at once", "거래 중독": "Trade Addict", "총 거래 횟수 10회를 넘겼다.": "Passed 10 total trades.", "매수+매도 합계 10회+": "Buys + sells 10+", "100턴 생존자": "100-Turn Survivor", "100턴을 넘기며 살아남았다.": "Made it past 100 turns alive.", "생존 턴 수 100+": "Turns survived 100+", "3백만 주주": "₩3M Shareholder", "순자산 300만 원을 돌파했다.": "Broke ₩3M net worth.", "총 순자산 ₩3,000,000+": "Total net worth ₩3,000,000+", "포트폴리오 마스터": "Portfolio Master", "동시에 5종목 이상을 굴렸다.": "Juggled 5+ stocks at once.", "동시 보유 5개사 이상": "Hold 5+ companies at once", "거래소 상주": "Exchange Resident", "50번 넘게 매매했다.": "Traded over 50 times.", "매수+매도 합계 50회+": "Buys + sells 50+", "히히히 주주": "Hehehe Shareholder", "히히히그룹 주식을 50주 이상 보유한 적 있다.": "Once held 50+ shares of Hehehe Group.", "히히히그룹 최대 보유량 50주+": "Hehehe Group max holdings 50+ shares", "현금왕": "Cash King", "현금만 200만 원 이상 보유했다.": "Held ₩2M+ in cash alone.", "보유 현금 ₩2,000,000+": "Cash on hand ₩2,000,000+", "300턴의 사나이": "Man of 300 Turns", "300턴을 버텨냈다. 이건 진심이다.": "Survived 300 turns. This is serious.", "생존 턴 수 300+": "Turns survived 300+", "1천만 자산가": "₩10M Asset Holder", "순자산 1,000만 원을 달성했다.": "Reached ₩10M net worth.", "총 순자산 ₩10,000,000+": "Total net worth ₩10,000,000+", "트레이더": "Trader", "200번 이상 매매하며 시장을 누볐다.": "Traded 200+ times, roaming the market.", "매수+매도 합계 200회+": "Buys + sells 200+", "청룡 탑승자": "Blue Dragon Rider", "청룡그룹 주가 추락을 미리 피했다. (매도 후 50% 이상 하락 확인)": "Dodged the Blue Dragon Group crash in advance. (50%+ drop confirmed after selling)", "청룡그룹 고점 매도 후 추락 감지": "Sold Blue Dragon Group at the peak, crash detected", "1.5천만 투자왕": "₩15M Investment King", "순자산 1,500만 원. 이 게임 진심으로 한다.": "Net worth ₩15M. You really take this game seriously.", "총 순자산 ₩15,000,000+": "Total net worth ₩15,000,000+", "500턴 전설": "500-Turn Legend", "500턴. 당신은 이 게임과 결혼했습니까?": "500 turns. Are you married to this game?", "생존 턴 수 500+": "Turns survived 500+", "전종목 보유": "Own Them All", "7개 종목 전부를 동시에 보유했다.": "Held all 7 stocks at once.", "전 종목 동시 보유": "Hold all stocks at once", "히히히 생존자": "Hehehe Survivor", "히히히그룹을 보유하다 추락 후 0원 없이 살아남았다.": "Held Hehehe Group through a crash and survived without hitting ₩0.", "히히히 보유 중 폭락 생존": "Survived a crash while holding Hehehe", "폭락도락 황제": "Emperor of Rock Bottom", "순자산 5,000만 원. 이건 그냥 신화다.": "Net worth ₩50M. This is straight-up legend.", "총 순자산 ₩50,000,000+": "Total net worth ₩50,000,000+", "영원한 시장": "Eternal Market", "1000턴 돌파. 당신은 인간이 아닙니다.": "1000 turns. You are not human.", "생존 턴 수 1000+": "Turns survived 1000+", "도박왕": "Gambling King", "암시장에서만 총 500만 원 이상 땄다.": "Won ₩5M+ from the black market alone.", "도박 누적 수익 ₩5,000,000+": "Gambling total profit ₩5,000,000+", "1억 돌파자": "₩100M Club", "순자산 1억 원을 넘겼다.": "Passed ₩100M net worth.", "총 순자산 ₩100,000,000+": "Total net worth ₩100,000,000+", "10억 대부호": "₩1B Tycoon", "순자산 10억 원을 넘겼다.": "Passed ₩1B net worth.", "총 순자산 ₩1,000,000,000+": "Total net worth ₩1,000,000,000+", "100억 거인": "₩10B Giant", "순자산 100억 원을 넘겼다.": "Passed ₩10B net worth.", "총 순자산 ₩10,000,000,000+": "Total net worth ₩10,000,000,000+", "1조 부자": "₩1T Rich", "순자산 1조 원을 넘겼다.": "Passed ₩1T net worth.", "총 순자산 ₩1,000,000,000,000+": "Total net worth ₩1,000,000,000,000+", "10조 제국": "₩10T Empire", "순자산 10조 원을 넘겼다.": "Passed ₩10T net worth.", "총 순자산 ₩10,000,000,000,000+": "Total net worth ₩10,000,000,000,000+", "100조 패왕": "₩100T Overlord", "순자산 100조 원을 넘겼다.": "Passed ₩100T net worth.", "총 순자산 ₩100,000,000,000,000+": "Total net worth ₩100,000,000,000,000+", "1경의 벽": "The ₩10 Quadrillion Wall", "순자산 1경 원을 넘겼다.": "Passed ₩10 quadrillion net worth.", "총 순자산 ₩10,000,000,000,000,000+": "Total net worth ₩10,000,000,000,000,000+", "10경의 신화": "Myth of ₩100 Quadrillion", "순자산 10경 원을 넘겼다.": "Passed ₩100 quadrillion net worth.", "총 순자산 ₩100,000,000,000,000,000+": "Total net worth ₩100,000,000,000,000,000+", "100경 우주왕": "Cosmic King of ₩1 Quintillion", "순자산 100경 원을 넘겼다.": "Passed ₩1 quintillion net worth.", "총 순자산 ₩1,000,000,000,000,000,000+": "Total net worth ₩1,000,000,000,000,000,000+", "조 단위 현금왕": "Trillion-Tier Cash King", "현금 보유액이 조 단위를 넘겼다.": "Cash on hand passed the trillions.", "보유 현금 ₩1,000,000,000,000+": "Cash on hand ₩1,000,000,000,000+", "조 단위 수익자": "Trillion-Tier Earner", "누적 수익이 조 단위를 넘겼다.": "Total profit passed the trillions.", "누적 수익 ₩1,000,000,000,000+": "Total profit ₩1,000,000,000,000+", "천 번의 거래자": "Thousand-Trade Trader", "매수/매도를 1,000번 넘게 했다.": "Bought/sold over 1,000 times.", "매수+매도 합계 1000회+": "Buys + sells 1000+", "무한 생존자": "Infinite Survivor", "2,000턴을 넘겼다. 기계도 지친다.": "Passed 2,000 turns. Even machines get tired.", "생존 턴 수 2000+": "Turns survived 2000+", "없음": "None", "칭호 획득": "titles unlocked", "✅ 장착중": "✅ Equipped", "장착": "Equip", "💰 해금 보상 +₩": "💰 Unlock reward +₩", "🎖️ 칭호를 해제했습니다": "🎖️ Title removed", "] 칭호를 장착했습니다!": "] title equipped!", "🎖️ 칭호 해금": "🎖️ Unlocked", "개!": " titles!", "포함 +₩": "included · reward +₩", "✅ 개발자 인증 완료. 치트창이 열렸습니다.": "✅ Dev verification complete. Cheat panel unlocked.", "🔓 개발자 인증됨": "🔓 Dev verified", "치트창이 열려 있어요.": "The cheat panel is open.", "PIN을 입력하면 비밀 기능이 열립니다.": "Enter the PIN to unlock secret features.", "🔐 PIN을 입력하세요": "🔐 Enter the PIN", "✨ 개발자 인증 완료, 치트창 오픈!": "✨ Dev verification complete, cheat panel open!", "❌ PIN이 틀렸습니다": "❌ Wrong PIN", "🔐 개발자 인증이 필요합니다": "🔐 Dev verification required", "치트": "Cheat", "🎖️ 모든 칭호 해금! +₩": "🎖️ All titles unlocked! +₩", "📈 스탯 MAX": "📈 Stats MAX", "현금": "Cash", "🧹 파산 상태 정리": "🧹 Bankruptcy state cleared", "⏱ 1턴 =": "⏱ 1 turn =", "초로 설정": " sec (set)", "1~20 중 4개를 골라라. 4개 일치 ×4, 3개 ×2, 2개 ×1.5, 1개 이하는 전부 잃는다.": "Pick 4 from 1~20. 4 matches ×4, 3 matches ×2, 2 matches ×1.5, 1 or fewer loses everything.", "번 카드 선택! 확정 버튼을 누르세요.": " selected! Hit the confirm button.", "💸 베팅 금액을 입력하세요": "💸 Enter your bet amount", "💸 돈이 부족합니다": "💸 Not enough money", "✅ 카드 선택 후 확정": "✅ Pick a card, then confirm", "🃏 카드 한 장을 선택하세요!": "🃏 Pick a card!", "👆 카드를 먼저 선택해주세요": "👆 Pick a card first", "🎉 당첨!": "🎉 Winner!", "⭐ 당첨": "⭐ Winner", "💸 꽝!": "💸 Bust!", "꽝": "Bust", "🎉 당첨! +₩": "🎉 Win! +₩", "획득! (베팅 ₩": "earned! (bet ₩", "💸 꽝... -₩": "💸 Bust... -₩", "손실. 당첨은": "lost. Winning card:", "번이었어요.": "", "🔄 다시 하기": "🔄 Play Again", "공개 중...": "Revealing...", "💸 예약매수 실패:": "💸 Limit buy failed:", "돈이 부족합니다": "not enough money", "📥 예약매수 체결:": "📥 Limit buy filled:", "예약매수": "Limit Buy", "📤 예약매도 실패:": "📤 Limit sell failed:", "보유 수량 부족": "not enough shares", "📤 예약매도 체결:": "📤 Limit sell filled:", "예약매도": "Limit Sell", "🔎 먼저 종목을 선택하세요": "🔎 Select a stock first", "🎯 목표 가격을 입력하세요": "🎯 Enter a target price", "등록:": "Placed:", "주 @ ₩": " shares @ ₩", "🧾 예약을 취소했습니다": "🧾 Order canceled", "예약 주문이 없습니다.": "No pending orders.", "주 · 목표가 ₩": " shares · target ₩", "등록": "Place", "취소": "Cancel", "목표가 ₩": "Target ₩", "💣 전부": "💣 All", "💰 매수": "💰 Buy", "📤 매도": "📤 Sell", "🧷 예약 주문": "🧷 Limit Orders", "목표가 도달 시 자동 체결": "Auto-fills when the target price is hit", "📥 예약매수": "📥 Limit Buy", "이하로 내리면 자동매수": "Auto-buys when it drops to or below", "📤 예약매도": "📤 Limit Sell", "이상으로 오르면 자동매도": "Auto-sells when it rises to or above", "초 후에 게임이 다시 시작됩니다": " seconds until the game restarts", "🔄 재시작 중...": "🔄 Restarting...", "⏱ 파산 대기 시간이 끝나야 다시 시작할 수 있습니다": "⏱ You have to wait out the bankruptcy timer before restarting", "이번 판은 못 버텼습니다.": "You didn't survive this round.", "도박중독은 1336": "Gambling addiction help: 1336 (KR)", "베팅 손실: ₩": "Bet lost: ₩", "당첨 번호는": "winning card:", "번이었습니다.": "", "🎟️ 이미 4개를 골랐어요": "🎟️ You already picked 4", "🎟️ 숫자 4개를 먼저 골라주세요": "🎟️ Pick 4 numbers first", "추첨 중...": "Drawing...", "🎟️ 추첨을 시작합니다!": "🎟️ Starting the draw!", "🎯 4개 전부 일치!! 최고 배당!": "🎯 All 4 match!! Top payout!", "😱 3개 일치! 딱 1개 차이로 최고배당은 놓쳤지만 ×2 적중!": "😱 3 matches! Missed the top payout by just 1, but ×2 hit!", "🙂 2개 일치! ×1.5 적중!": "🙂 2 matches! ×1.5 hit!", "개 일치": " matches", "개 일치! +₩": " matches! +₩", "손실. 당첨 번호:": "Loss. Winning numbers:", "한 끗 차이": "So close", "4개 중 1개 일치 · 베팅 손실: ₩": "1 of 4 matched · Bet lost: ₩", "목표가": "Target price", "폭락도 락이다": "Even Rock Bottom Rocks"};
-  var PATS = [["(\\d+)번 카드 선택! 확정 버튼을 누르세요\\.", "g", "Card $1 selected! Hit the confirm button."]];
-  var HANGUL = /[가-힣]/;
-  var handlers = [];
-
-  function valid(v){ return v === 'ko' || v === 'en'; }
-  function detect(){
-    try{
-      if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
-      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
-      for(var i = 0; i < langs.length; i++){ if(/^ko\b/i.test(langs[i])) return 'ko'; }
-      return 'en';
-    }catch(e){ return 'ko'; }
-  }
-  function read(){
-    try{ var q = new URLSearchParams(location.search).get('lang'); if(valid(q)) return q; }catch(e){}
-    try{ var s = localStorage.getItem(KEY); if(valid(s)) return s; }catch(e){}
-    return detect();
-  }
-  var lang = read();
-
-  // ── dictionary → matchers ──
-  function esc(s){ return s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'); }
-  var NORM = {}, longKeys = [], shortKeys = [];
-  Object.keys(DICT).forEach(function(k){
-    NORM[k.replace(/\s+/g, ' ').trim()] = DICT[k];
-    var n = (k.match(/[가-힣]/g) || []).length;
-    (n <= 2 ? shortKeys : longKeys).push(k);
-  });
-  function byLen(a, b){ return b.length - a.length; }
-  longKeys.sort(byLen); shortKeys.sort(byLen);
-  var LONG_RE = longKeys.length ? new RegExp(longKeys.map(esc).join('|'), 'g') : null;
-  var SHORT_RE = shortKeys.length ? new RegExp('(^|[^가-힣])(' + shortKeys.map(esc).join('|') + ')(?![가-힣])', 'g') : null;
-  var PAT = PATS.map(function(p){ return [new RegExp(p[0], p[1] || 'g'), p[2]]; });
-  var SING = { turns:'turn', shares:'share', seconds:'second', matches:'match', titles:'title', levels:'level', coins:'coin', kills:'kill' };
-  var POST = /(^|[^\d.,])1 (turns|shares|seconds|matches|titles|levels|coins|kills)\b/g;
-
-  var CACHE = new Map(), MISSING = {};
-  function tr(s){
-    if(typeof s !== 'string' || !HANGUL.test(s)) return s;
-    var c = CACHE.get(s);
-    if(c !== undefined) return c;
-    var out = s, t = s.replace(/\s+/g, ' ').trim();
-    if(Object.prototype.hasOwnProperty.call(NORM, t)){
-      var m = s.match(/^(\s*)[\s\S]*?(\s*)$/);
-      out = m[1] + NORM[t] + m[2];
-    }else{
-      for(var i = 0; i < PAT.length; i++) out = out.replace(PAT[i][0], PAT[i][1]);
-      if(LONG_RE) out = out.replace(LONG_RE, function(x){ return DICT[x]; });
-      if(SHORT_RE && HANGUL.test(out)) out = out.replace(SHORT_RE, function(x, p, k){ return p + DICT[k]; });
-    }
-    out = out.replace(POST, function(x, p, w){ return p + '1 ' + SING[w]; });
-    if(CACHE.size > 4000) CACHE.clear();
-    CACHE.set(s, out);
-    if(HANGUL.test(out)) MISSING[out] = 1;
-    return out;
-  }
-
-  // ── DOM ──
-  var ATTRS = ['title', 'placeholder', 'aria-label', 'alt'];
-  var TXT = new WeakMap(), ATT = new WeakMap();
-  function skipNode(n){
-    var p = n.parentNode;
-    return !p || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.nodeName);
-  }
-  function doText(n){
-    if(lang !== 'en' || skipNode(n)) return;
-    var v = n.nodeValue;
-    if(!v || !HANGUL.test(v)) return;
-    var t = tr(v);
-    if(t !== v){ TXT.set(n, { ko: v, en: t }); n.nodeValue = t; }
-  }
-  function doAttr(el, name){
-    if(lang !== 'en') return;
-    var v = el.getAttribute(name);
-    if(!v || !HANGUL.test(v)) return;
-    var t = tr(v);
-    if(t !== v){
-      var o = ATT.get(el) || {}; o[name] = { ko: v, en: t }; ATT.set(el, o);
-      el.setAttribute(name, t);
-    }
-  }
-  function walk(root){
-    if(root.nodeType === 3){ doText(root); return; }
-    if(root.nodeType !== 1 && root.nodeType !== 9) return;
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
-    while((n = w.nextNode())) doText(n);
-    var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label],[alt]') : [];
-    for(var i = 0; i < els.length; i++) ATTRS.forEach(function(a){ if(els[i].hasAttribute(a)) doAttr(els[i], a); });
-    if(root.nodeType === 1) ATTRS.forEach(function(a){ if(root.hasAttribute(a)) doAttr(root, a); });
-  }
-  function restore(root){
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
-    while((n = w.nextNode())){
-      var o = TXT.get(n);
-      if(o && n.nodeValue === o.en){ n.nodeValue = o.ko; }
-      TXT.delete(n);
-    }
-    var els = root.querySelectorAll('[title],[placeholder],[aria-label],[alt]');
-    for(var i = 0; i < els.length; i++){
-      var oa = ATT.get(els[i]);
-      if(!oa) continue;
-      Object.keys(oa).forEach(function(a){ if(els[i].getAttribute(a) === oa[a].en) els[i].setAttribute(a, oa[a].ko); });
-      ATT.delete(els[i]);
-    }
-  }
-  var mo = new MutationObserver(function(recs){
-    if(lang !== 'en') return;
-    for(var i = 0; i < recs.length; i++){
-      var r = recs[i];
-      if(r.type === 'characterData') doText(r.target);
-      else if(r.type === 'attributes') doAttr(r.target, r.attributeName);
-      else{
-        for(var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
-      }
-    }
-  });
-  mo.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
-
-  // ── canvas text / dialogs ──
-  [window.CanvasRenderingContext2D, window.OffscreenCanvasRenderingContext2D].forEach(function(C){
-    if(!C || !C.prototype) return;
-    ['fillText', 'strokeText', 'measureText'].forEach(function(fn){
-      var orig = C.prototype[fn];
-      if(!orig) return;
-      C.prototype[fn] = function(text){
-        if(lang === 'en' && typeof text === 'string' && HANGUL.test(text)) arguments[0] = tr(text);
-        return orig.apply(this, arguments);
-      };
-    });
-  });
-  ['alert', 'confirm', 'prompt'].forEach(function(fn){
-    var orig = window[fn];
-    if(!orig) return;
-    window[fn] = function(msg){
-      if(lang === 'en' && typeof msg === 'string') arguments[0] = tr(msg);
-      return orig.apply(window, arguments);
-    };
-  });
-
-  // ── public api ──
-  function apply(l){
-    lang = l;
-    api.lang = l;
-    document.documentElement.lang = l;
-    CACHE.clear();
-    if(document.body){ if(l === 'en') walk(document); else restore(document); }
-    for(var i = 0; i < handlers.length; i++){ try{ handlers[i](l); }catch(e){} }
-  }
-  var api = {
-    BRAND: BRAND,
-    lang: lang,
-    tr: tr,
-    t: function(m){ if(m == null) return ''; var v = m[api.lang]; return v != null ? v : (m.ko != null ? m.ko : m.en); },
-    onChange: function(fn){ if(typeof fn === 'function') handlers.push(fn); },
-    set: function(l){
-      if(!valid(l) || l === api.lang) return;
-      try{ localStorage.setItem(KEY, l); }catch(e){}
-      apply(l);
-    },
-    missing: function(){ return Object.keys(MISSING); }
-  };
-  window.SPROUTY = api;
-  if(lang === 'en') document.documentElement.lang = 'en';
-  function start(){ if(lang === 'en') walk(document); }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
-  window.addEventListener('storage', function(e){
-    if(e.key === KEY && valid(e.newValue) && e.newValue !== api.lang) apply(e.newValue);
-  });
-})();
-
-</script>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="폭락도 락이다. 주식시뮬레이터 드루와">
 <meta name="keywords" content="폭락도락이다,폭락도 락이다,주식,시뮬레이터,도박게임,주식시뮬레이터">
@@ -2011,6 +1825,191 @@ canvas#mainChart { width: 100%; display: block; }
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+</script>
+<script>
+/* ════════════════════════════════════════════════════════════════
+   SPROUTY GAMES — language layer (정새싹게임즈 / SPROUTY GAMES / SPTG)
+   · 언어 정하기: ?lang=ko|en → localStorage 'sprouty_lang' → 브라우저 언어 (한국어가 있으면 ko, 아니면 en)
+   · 한국어일 때는 아무것도 바꾸지 않습니다. (원본 그대로)
+   · English 일 때: 화면의 글씨(DOM), 캔버스 글씨, alert/confirm 을 아래 사전으로 바꿔 보여 줍니다.
+   · 게임 코드에서: SPROUTY.lang / SPROUTY.t({ko:'..',en:'..'}) / SPROUTY.onChange(fn) / SPROUTY.set('en')
+   · 번역이 빠진 글씨 확인: 콘솔에서 SPROUTY.missing()
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var KEY = 'sprouty_lang';
+  var BRAND = { ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' };
+  var DICT = {"폭락도락이다 🎰 | 폭락도 락이다. 주식시뮬레이터 드루와": "Even Rock Bottom Rocks 🎰 | Stock Simulator — Come at Me", "폭락도 락이다. 주식시뮬레이터 드루와": "Even Rock Bottom Rocks. Stock simulator — come at me", "폭락도락이다,폭락도 락이다,주식,시뮬레이터,도박게임,주식시뮬레이터": "Even Rock Bottom Rocks,stocks,simulator,gambling game,stock simulator", "폭락도락이다 🎰": "Even Rock Bottom Rocks 🎰", "📈 폭락도락이다": "📈 Even Rock Bottom Rocks", "예수금": "Cash", "⚠️ 이 게임은 실제 주식이나 도박이 아닌 게임입니다.": "⚠️ This is a game — not real stocks or real gambling.", "평가자산": "Stock Value", "총 손익": "Total P/L", "수익률": "Return", "현재 내 자산 상태": "My current asset status", "보합 →→ ₩0": "Flat →→ ₩0", "📊 시장": "📊 Market", "🔍 상세": "🔍 Detail", "💼 내 주식": "💼 My Stocks", "📡 시장 개장 중... 🎰 폭락도락이다에 오신 것을 환영합니다! ⚠️ 이 게임은 실제 주식이나 도박이 아닌 게임입니다.": "📡 Market open... 🎰 Welcome to Even Rock Bottom Rocks! ⚠️ This is a game — not real stocks or real gambling.", "⏱ 다음 턴까지:": "⏱ Next turn in:", "초": "s", "📰 뉴스": "📰 News", "파산했습니다": "You went bankrupt", "주식은 아무나 하는 게 아닙니다.": "The stock market ain't for everyone.", "made by 정지호": "made by Jiho Jung", "✕ 닫기": "✕ Close", "📖 폭락도락이다 가이드": "📖 Even Rock Bottom Rocks Guide", "가이드 안에서 기능별로 골라 볼 수 있어요.": "Pick a topic below to browse by feature.", "시작": "Start", "시장": "Market", "매매": "Trading", "암시장": "Black Market", "칭호": "Titles", "설정": "Settings", "🎮 게임 규칙": "🎮 Game Rules", "으로 시작합니다.": " is your starting cash.", "주가는": "Prices tick", "설정한 초마다": "every set number of seconds,", "1턴씩": "one turn at a time,", "자동으로 업데이트됩니다.": "all automatically.", "주식을 사고 팔아서 최대한 많은 돈을 버세요!": "Buy and sell stocks to make as much money as you can!", "자산이": "If your assets drop close to", "에 근접하면 게임오버입니다.": ", it's game over.", "💡 초보자 팁": "💡 Beginner Tips", "처음엔": "Start with", "정새싹": "SPROUTY", "또는": "or", "아하기싫다": "Nah", "로 시작하세요.": ".", "뉴스 팝업이 뜨면 주가가 크게 움직이니 주목!": "When a news popup shows up, prices move big — pay attention!", "한 종목에 몰빵하지 말고 여러 곳에 나눠 투자하세요.": "Don't go all-in on one stock — spread your money across several.", "💣 히히히그룹은 초보자에겐 추천 안 합니다… 하지만 재밌습니다.": "💣 Hehehe Group is not recommended for beginners… but it sure is fun.", "📈 주식이란?": "📈 What is a stock?", "주식은 회사의 \"조각\"입니다. 주식을 사면 그 회사의 일부 주인이 됩니다.": "A stock is a “piece” of a company. Buy one and you become a part-owner.", "회사가 잘 나가면 주가(주식 가격)가 올라": "When a company does well, its stock price goes up and you earn a", "이익": "profit", "을 얻고,": ",", "회사가 망하면 주가가 내려": "and when it flops, the price drops and you take a", "손실": "loss", "을 봅니다.": ".", "🏢 종목 소개 & 위험도": "🏢 Companies & Risk Levels", "정새싹 컴퍼니": "SPROUTY Company", "안정적 대형주 · 완만한 상승": "Stable blue chip · Gentle climb", "낮음": "LOW", "아하기싫다 그룹": "Nah Group", "초안정주 · 꾸준한 우상향": "Ultra-stable · Steady uptrend", "패턴형 · 규칙적 후 급변": "Pattern-based · Calm, then sudden swings", "중간": "MEDIUM", "분@무": "SPR@Y", "롤러코스터 · 급등락 반복": "Roller coaster · Repeated spikes and crashes", "높음": "HIGH", "칵퉤컴퍼니": "Ptooey Co.", "고가 변동주 · 큰 폭 움직임": "High-priced volatile stock · Big swings", "히히히그룹": "Hehehe Group", "폭탄주 · 더 크게 흔들림": "Bomb stock · Shakes even harder", "극위험": "EXTREME RISK", "청룡그룹": "Blue Dragon Group", "김지후가 해달래서... 곡선형 상승 후 직선 추락": "Jihu Kim asked for it... A smooth curve up, then a straight-line plunge", "🛒 어떻게 사고팔아요?": "🛒 How do I buy and sell?", "매수": "Buy", "= 주식 사기. 돈을 내고 주식을 받습니다.": "= purchasing stock. You pay money and receive shares.", "매도": "Sell", "= 주식 팔기. 주식을 돌려주고 돈을 받습니다.": "= selling stock. You hand the shares back and get money.", "쌀 때 사서 비쌀 때 파는 게 핵심!": "Buy low, sell high — that's the whole trick!", "종목을 클릭하면 상세 화면에서 사고팔 수 있어요.": "Click a stock to buy and sell on its detail screen.", "💰 손익이 뭔가요?": "💰 What's P/L?", "내가 산 가격(평균단가)보다 현재 가격이 높으면": "If the current price is higher than what you paid (average cost), you have a", "이익(+)": "profit (+)", "낮으면": "and if it's lower, you have a", "손실(-)": "loss (-)", "입니다.": ".", "상세 화면 → 매도 탭에서": "On the Detail screen → Sell tab, you can see", "내 매입가 vs 현재가 비교": "your buy price vs. the current price", "를 볼 수 있어요!": " at a glance!", "🎴 암시장 도박": "🎴 Black Market Gambling", "상단 🎴 버튼으로 진입합니다.": "Enter via the 🎴 button at the top.", "베팅 금액을 입력하고": "Enter your bet and press", "게임 시작": "Start Game", "을 누르세요.": ".", "4장의 카드 중 1장을 선택해서 확정합니다.": "Pick 1 of 4 cards and lock it in.", "맞히면": "Guess right and you get", "베팅액의 2배": "2x your bet", "를 받고, 틀리면": ", but guess wrong and you", "전부 잃습니다.": "lose it all.", "💣 전부걸기": "💣 All In", "로 가진 돈을 전부 베팅할 수 있습니다.": " lets you bet all the cash you have.", "⚠️ 이 기능은 게임 내 가상 도박입니다.": "⚠️ This feature is virtual, in-game gambling.", "🎟️ 로또": "🎟️ Lotto", "암시장 안의": "In the Black Market, go to the", "탭으로 들어갑니다.": " tab.", "1~20 중 겹치지 않게 숫자 4개를 고르고 베팅 금액을 입력합니다.": "Pick 4 different numbers from 1~20 and enter your bet.", "추첨 번호 4개가 하나씩 천천히 공개된 뒤 결과가 나옵니다.": "The 4 winning numbers are revealed one by one, slowly, then you get the result.", "4개 일치": "4 matches", "3개 일치": "3 matches", "2개 일치": "2 matches", "1개 이하 일치는": "With 1 or fewer matches,", "베팅액 전부를 잃습니다.": "you lose your entire bet.", "🎖️ 칭호 시스템": "🎖️ Title System", "칭호는 특정 조건을 달성하면 자동으로 열립니다.": "Titles unlock automatically when you hit certain conditions.", "상단 🎖️ 버튼을 누르면 칭호 목록과 진행도가 보입니다.": "Tap the 🎖️ button at the top to see the title list and your progress.", "획득한 칭호는 장착해서 이름표처럼 달 수 있어요.": "Equip an unlocked title to wear it like a name tag.", "상위 칭호일수록 조건이 거의 벽돌 산입니다.": "Top-tier titles have requirements that are basically a wall of bricks.", "📈 어려운 칭호 예시": "📈 Hard Title Examples", "순자산": "Net worth", "1조": "₩1T", "10조": "₩10T", "100조": "₩100T", "1경": "₩10 quadrillion", "10경": "₩100 quadrillion", "100경": "₩1 quintillion", "누적 수익": "Total profit in the", "조 단위": "trillions", ", 현금 보유": ", cash on hand in the", "⚙️ 설정": "⚙️ Settings", "파산, 가진거다팔기, 처음부터다시하기를 한 번에 관리할 수 있어요.": "Manage bankruptcy, sell-everything, and start-over all in one place.", "일시정지로 잠깐 멈춘 뒤 다시 이어서 할 수 있습니다.": "Pause to freeze the market briefly, then pick up where you left off.", "설정에서 일부 진행 요소를 정리하는 것도 가능합니다.": "You can also clear out some progress items in Settings.", "🧠 플레이 팁": "🧠 Play Tips", "처음엔 시장 탭에서 흐름을 익히고, 상세 탭에서 매수/매도를 연습한 다음, 그 뒤에 상점이나 칭호를 건드리면 훨씬 덜 헷갈립니다.": "Learn the flow in the Market tab first, practice buying/selling in the Detail tab, and only then touch the shop and titles — way less confusing.", "🎴 암시장": "🎴 Black Market", "4장 중 1장이 당첨. 맞히면 2배. 틀리면 전부 잃는다.": "1 of 4 cards wins. Guess right for 2x. Guess wrong and lose it all.", "🃏 카드 도박": "🃏 Card Gambling", "베팅 금액": "Bet Amount", "🃏 게임 시작": "🃏 Start Game", "1~20 중": "Choose", "4개": "4 numbers", "선택": "from 1~20", "/4 선택됨": "/4 selected", "4개 일치 →": "4 matches →", "3개 일치 →": "3 matches →", "2개 일치 →": "2 matches →", "1개 이하 → 베팅액 전액 손실": "1 or fewer → lose your entire bet", "🎟️ 추첨하기": "🎟️ Draw", "🎖️ 칭호": "🎖️ Titles", "현재 칭호:": "Current title:", "전체": "All", "획득": "Unlocked", "미획득": "Locked", "돌아가기": "Back", "가진 걸 정리하거나, 완전히 끝내거나, 처음부터 다시 시작할 수 있어요.": "Clean up what you own, end it all, or start fresh from scratch.", "☠️ 파산": "☠️ Go Bankrupt", "즉시 파산 상태로 넘어갑니다.": "Instantly go bankrupt.", "💸 가진거다팔기": "💸 Sell Everything", "모든 종목을 현재가로 한 번에 매도합니다.": "Sell every stock at the current price in one go.", "🔄 처음부터다시": "🔄 Start Over", "초기 자금으로 새 게임을 시작합니다.": "Start a new game with the starting cash.", "⏱️ 턴 설정": "⏱️ Turn Speed", "1턴당 시간(초) — 숫자가 낮을수록 빠른 시장": "Seconds per turn — the lower the number, the faster the market", "적용": "Apply", "🔐 개발자 인증": "🔐 Dev Verification", "영문/숫자 PIN을 입력하면 치트창이 열립니다.": "Enter the letters/numbers PIN to open the cheat panel.", "🎬 크레딧": "🎬 Credits", "이 게임을 만드는 데 함께한 이름들을 모아봤어요.": "A collection of the names who helped make this game.", "폭락도락이다": "Even Rock Bottom Rocks", "제작자": "Creator", "정지호": "Jiho Jung", "사용한 AI": "AI Used", "앱 개발 · 호스팅 도움": "App development · hosting help", "코드에 관하여": "About the Code", "setTimeout 재귀 + Date.now() 기반 drift 보정": "setTimeout recursion + Date.now()-based drift correction", "160개 선언 (고유 128개)": "160 declarations (128 unique)", "≈ 450개 선택자": "≈ 450 selectors", "onclick 핸들러 75개 지점": "75 onclick handler sites", "종목 7종 · 독립 가격 히스토리 트래킹": "7 stocks · independent price-history tracking", "내부 저장소 파일": "Internal storage files", "호스팅": "Hosting", "Supabase [구버전에 한하여]": "Supabase [old version only]", "제작 시작일": "Started", "김지후": "Jihu Kim", "김지율": "Jiyul Kim", "정성훈": "Seonghun Jung", "이정후": "Junghoo Lee", "이석준": "Seokjun Lee", "장민재": "Minjae Jang", "임시훈": "Sihun Lim", "함께해줘서 고마워요": "Thanks for being there", "인증": "Verify", "PIN을 입력하면 치트창이 열립니다.": "Enter the PIN to open the cheat panel.", "💰 현금 +100만": "💰 Cash +₩1M", "주머니가 묵직해집니다.": "Your pockets feel heavier.", "🏦 현금 +1억": "🏦 Cash +₩100M", "돈다발이 화면을 한 번 스쳐 갑니다.": "A stack of cash swipes across the screen.", "🎖️ 칭호 전부 해금": "🎖️ Unlock All Titles", "조, 경 단위 칭호까지 한꺼번에 열립니다.": "Even the trillion and quadrillion-tier titles open all at once.", "📈 통계 MAX": "📈 Stats MAX", "턴, 거래, 수익 기록을 치트급으로 끌어올립니다.": "Pumps your turns, trades, and profit records to cheat-level.", "⏱️ 1턴 = 1초": "⏱️ 1 turn = 1 sec", "시장을 번개처럼 빠르게 돌립니다.": "Runs the market at lightning speed.", "🛡️ 구제권 +5": "🛡️ Lifeline +5", "파산 직전용 방패를 더 얹습니다.": "Stacks more of the near-bankruptcy shield.", "🧯 파산 복구": "🧯 Bankruptcy Recovery", "게임 오버를 걷어내고 다시 달릴 수 있게 합니다.": "Removes the game over so you can keep running.", "도박 실패": "Gambling Failed", "괜히 손댔다가 혼쭐이 났습니다.": "You messed around and found out.", "📞 도박중독치료는 1336": "📞 Gambling addiction help (KR): 1336", "이 팝업은 게임 오버가 아니라 도박 실패 경고입니다.": "This popup is a gambling-failure warning, not a game over.", "일시정지": "Pause", "가이드": "Guide", "뉴스 팝업 닫기": "Close news popup", "예: 50000": "e.g. 50000", "크레딧 닫기": "Close credits", "개발자 인증 닫기": "Close dev verification", "PIN 입력": "Enter PIN", "도박 조롱 팝업 닫기": "Close gambling roast popup", "대기업 전자제품": "Big-corp electronics", "분무기 제조업체": "Spray bottle maker", "힙합 레이블": "Hip-hop label", "독일계 면도기 기업": "German razor company", "정새싹 라이벌. 고가 변동주": "SPROUTY's rival. High-priced volatile stock", "순수 도박주 🎰": "Pure gambling stock 🎰", "완만한 곡선 뒤 직선 추락": "Gentle curve, then a straight-line plunge", "정새싹, 신형 갤럭시 출시 성공": "SPROUTY's new Galaxy launch is a hit", "역대 최대 사전예약 달성": "Record-breaking pre-orders", "정새싹 영업이익 사상 최대": "SPROUTY operating profit hits all-time high", "해외 수출 45% 급증": "Overseas exports surge 45%", "정새싹 공장 화재 발생": "Fire breaks out at SPROUTY factory", "생산 차질 우려로 주가 하락": "Production disruption fears push the stock down", "정새싹 대규모 리콜 공지": "SPROUTY announces massive recall", "배터리 결함 230만 대": "Battery defect in 2.3 million units", "정새싹, 미국 빅테크와 반도체 협약": "SPROUTY signs semiconductor deal with U.S. Big Tech", "5조원 규모 공급 계약": "₩5T supply contract", "분@무, 농업용 드론 시장 진출": "SPR@Y enters the agricultural drone market", "분무기의 진화... 주가 급등": "The sprayer evolves... stock skyrockets", "분@무 CEO \"회사 망하면 어때요\"": "SPR@Y CEO: “So what if the company fails?”", "황당 인터뷰에 투자자 패닉": "Absurd interview sends investors into a panic", "분@무 신제품 틱톡 바이럴": "SPR@Y's new product goes viral on TikTok", "#분무 챌린지 3억뷰 돌파": "#SprayChallenge hits 300M views", "분@무 제품 안전검사 불합격": "SPR@Y product fails safety inspection", "리콜 대신 \"그냥 쓰세요\" 발언": "Says “just use it” instead of recalling", "분@무, K-뷰티 OEM 계약 체결": "SPR@Y signs K-beauty OEM deal", "미용 분야 확장 기대감": "Hopes for expansion into beauty", "분@무 창고 침수... 재고 전멸": "SPR@Y warehouse flooded... inventory wiped out", "장마에 직격탄": "Hit hard by the monsoon", "The Copycats 신보 빌보드 1위": "The Copycats' new album hits #1 on Billboard", "글로벌 스트리밍 신기록": "New global streaming record", "The Copycats, 표절 소송 당해": "The Copycats sued for plagiarism", "원곡자 측 \"100% 카피\"": "Original artist: “100% copy”", "TCC 소속 아티스트 그래미 수상": "TCC artist wins a Grammy", "국내 힙합 역사 새로 쓰다": "Rewrites Korean hip-hop history", "TCC 간판 프로듀서 탈퇴 선언": "TCC's star producer announces exit", "계약 노예\" 폭로글 확산": "“Contract slavery” exposé spreads", "TCC × 나이키 콜라보 발표": "TCC × Nike collab announced", "한정판 스니커즈 1분 매진": "Limited-edition sneakers sell out in 1 minute", "아하기싫다, 유럽 품질인증 획득": "Nah gets European quality certification", "독일 DIN 기준 최고점": "Top score under the German DIN standard", "아하기싫다, 독일 본사 노조 파업": "Nah's German HQ union goes on strike", "3일간 생산 중단": "Production halted for 3 days", "아하기싫다, 아시아 시장 점유율 1위": "Nah takes #1 market share in Asia", "5년 연속 성장세 지속": "5 straight years of growth", "아하기싫다, 원자재값 상승 타격": "Nah hit by rising raw-material prices", "영업이익률 1.2%p 하락 예상": "Operating margin expected to fall 1.2pp", "아하기싫다 \"30년 무결함 기록 달성\"": "Nah: “30 years of zero defects achieved”", "소비자 만족도 업계 1위": "#1 in the industry for customer satisfaction", "칵퉤, 반도체 자체 설계 성공": "Ptooey successfully designs its own semiconductor", "정새싹 특허 우회 기술 발표": "Announces tech that works around SPROUTY's patents", "칵퉤 CFO 횡령 혐의 검찰 소환": "Ptooey CFO summoned by prosecutors over embezzlement", "내부 감사 결과 유출": "Internal audit results leaked", "칵퉤 × 테슬라 전장부품 납품 계약": "Ptooey signs Tesla automotive-parts supply deal", "10조원 규모 5년 계약": "₩10T, 5-year contract", "칵퉤 신제품 발표회 현장 폭발사고": "Explosion at Ptooey's product launch event", "시연 중 기기 과열 폭발": "Device overheats and explodes during the demo", "칵퉤 AI 칩 성능 세계 1위 인증": "Ptooey AI chip certified #1 in the world", "주가 수직 상승": "Stock goes vertical", "칵퉤 중국 공장 전면 폐쇄": "Ptooey shuts down its China factory entirely", "미·중 무역분쟁 직격탄": "Hit hard by the U.S.–China trade war", "히히히 \"우리가 이겼다\"... 뭘?": "Hehehe: “We won”... won what?", "공시 내용 없음. 주가 급등": "No disclosures filed. Stock skyrockets", "히히히 대표 잠적": "Hehehe CEO goes missing", "어제 사옥서 마지막 목격": "Last seen at HQ yesterday", "히히히, 코인 발행 예고": "Hehehe announces coin launch", "히히히코인\" 백서 공개": "“HeheheCoin” whitepaper released", "히히히코인 스캠 판정": "HeheheCoin ruled a scam", "금감원 \"사기로 봄\"": "Financial regulator: “We call it fraud”", "히히히 신사업: 운석 채굴": "Hehehe's new business: asteroid mining", "우주에서 한 방\"": "“Going big from outer space”", "히히히 운석 채굴선 발사 실패": "Hehehe's asteroid-mining ship launch fails", "폭발 영상 SNS 확산": "Explosion video spreads on social media", "히히히 정부 구제금융 검토": "Government weighs bailout for Hehehe", "망하면 나라 흔들린다\"": "“If it goes under, the whole country shakes”", "청룡그룹, 완만한 우상향 뉴스": "Blue Dragon Group: gentle uptrend news", "곡선이 예쁘게 휘어갑니다": "The curve bends up beautifully", "청룡그룹 신규 계약 체결": "Blue Dragon Group signs a new contract", "시장은 아직 미소를 짓는 중": "The market is still smiling", "청룡그룹 경영진 급변": "Blue Dragon Group management shake-up", "곡선이 꺾이기 시작했습니다": "The curve has started to bend down", "청룡그룹 대형 프로젝트 중단": "Blue Dragon Group halts a major project", "직선 추락의 전조가 포착됩니다": "Signs of a straight-line plunge detected", "주식보다 돈 세는 게 더 빨랐을걸요.": "Honestly, counting your cash would've been faster than trading stocks.", "거스름돈도 틀리는 분이시군요.": "You're the type to miscount the change, too.", "축하합니다! 전 재산을 증발시켰어요.": "Congrats! You made your entire fortune evaporate.", "재능이 있으십니다.": "You've got real talent.", "여기에 잠들다:": "Here lies:", "사랑받았고, 무참히 날렸음.": "Was loved. Got absolutely wiped out.", "엄마한테 용돈 달라고 해야 할 것 같은데요.": "Might be time to ask Mom for allowance.", "이 성과로는 어렵겠지만.": "Not that you'll get it with these results.", "나 주식 좀 해\"라고 말할 수 있는": "You had the guts to say “I do a bit of stock trading,”", "용기만큼은 칭찬합니다.": "and I'll give you credit for that much.", "히히히그룹에 전 재산 넣은 거": "Putting your entire fortune into Hehehe Group —", "본인도 알고 있었죠?": "you knew that was a bad idea, right?", "₩1,000,000을 날리는 데": "Blowing ₩1,000,000 —", "이렇게 재능이 있는 분은 처음 봐요.": "I've never seen anyone this talented at it.", "차트가 울고 있어요.": "The chart is crying.", "아마 당신도 울고 있겠죠.": "And you probably are too.", "안전 쿠션": "Safety Cushion", "전체 장세의 출렁임을 조금 눌러줍니다.": "Dampens the overall market swings a little.", "변동성 -6% · 12턴": "Volatility -6% · 12 turns", "덜 흔들리는 시장": "A calmer market", "뉴스 방패": "News Shield", "호재와 악재의 충격을 무디게 합니다.": "Blunts the impact of good and bad news.", "뉴스 충격 -12% · 9턴": "News impact -12% · 9 turns", "급뉴스 완충": "Breaking-news buffer", "흔들림 브레이크": "Shake Brake", "급락성 파동이 튀는 걸 더 잘 막아줍니다.": "Better at stopping sudden crash-style spikes.", "급변 완화 · 7턴": "Swing easing · 7 turns", "망가질 때 덜 크게 망함": "Crash less hard when things go south", "구제권": "Lifeline", "파산 직전에 한 번 자동으로 구해줍니다.": "Automatically saves you once right before bankruptcy.", "파산 방지 1회 · 5턴": "Bankruptcy shield x1 · 5 turns", "완전 폭망 방지": "Prevents a total wipeout", "안전벨트": "Seatbelt", "가진 종목이 다음 3턴 동안 쉽게 내려앉지 않습니다.": "Your holdings won't easily sink for the next 3 turns.", "보유주 하락 방지 · 3턴": "Holdings drop protection · 3 turns", "안전장치": "Safety net", "드가자ㅏㅏㅏㅏ": "LET'S GOOOOOO", "다음 6턴 동안 모든 주식을 반값에 살 수 있고, 색종이가 쏟아집니다.": "For the next 6 turns, buy every stock at half price — and confetti rains down.", "매수 반값 · 6턴": "Buys 50% off · 6 turns", "피버타임": "Fever Time", "⏸ 일시정지": "⏸ Paused", "⏱ 진행 중": "⏱ Running", "주 획득!": " shares acquired!", "📈 보유 종목 상승": "📈 Your holdings are up", "턴": " turns", "턴 활성화": " turns active", "💸 상점 아이템 살 돈이 부족합니다": "💸 Not enough money to buy shop items", "활성": "Active", "턴 남음": " turns left", "비활성": "Inactive", "구매하기": "Buy", "아이템": "Item", "⏸ 시장을 멈췄습니다": "⏸ Market paused", "▶ 시장을 다시 움직입니다": "▶ Market is moving again", "🧯 구제권이 발동했습니다": "🧯 Lifeline activated", "최종 자산: ₩": "Final assets: ₩", "턴 만에 파산": " turns to bankruptcy", "🫥 팔 주식이 없습니다": "🫥 You have no stocks to sell", "💸 모든 종목 매도! +₩": "💸 Sold every stock! +₩", "💸 잔고가 부족합니다": "💸 Insufficient balance", "주 매수 완료!": " shares bought!", "📦 보유 수량이 부족합니다": "📦 Not enough shares owned", "매도 완료 (": "Sold (", "🟢 수익": "🟢 Profit", "🔴 손실": "🔴 Loss", "📦 팔 주식이 없습니다": "📦 You have no stock to sell", "▲ 수익 중  +₩": "▲ In profit  +₩", "▼ 손실 중  -₩": "▼ At a loss  -₩", "→ 보합  ±₩0": "→ Flat  ±₩0", "보유": "Owned", "주": " shares", "▲ 올랐어요  +": "▲ Went up  +", "▼ 떨어졌어요": "▼ Went down", "→ 변동 없음  0%": "→ No change  0%", "🤑 이득! +₩": "🤑 Profit! +₩", "😢 손해... -₩": "😢 Loss... -₩", "주 팔면 얼마 손익?": " shares — P/L if you sell?", "내가 산 가격": "Your buy price", "지금 가격": "Current price", "평균단가": "Avg cost", "평가손익": "Unrealized P/L", "가격 히스토리 (최근": "Price history (last", "턴)": " turns)", "수량": "Qty", "1주": "1 share", "5주": "5 shares", "10주": "10 shares", "최대": "Max", "💰 매수 (사기)": "💰 Buy", "📤 매도 (팔기)": "📤 Sell", "🧺 모두팔기": "🧺 Sell All", "매수 = 주식 사기 · 매도 = 주식 팔기 · 모두팔기 = 전량 정리": "Buy = purchase shares · Sell = sell shares · Sell All = liquidate everything", "💼 보유 종목 없음": "💼 No holdings", "시장 탭에서 종목을 매수(사기)하세요": "Buy a stock from the Market tab", "주 · 평균": " shares · avg", "→ 현재": "→ now", "📈 호재 뉴스!": "📈 Good news!", "📉 악재 뉴스!": "📉 Bad news!", "▲ 호재": "▲ Good", "▼ 악재": "▼ Bad", "브론즈": "Bronze", "실버": "Silver", "골드": "Gold", "플래티넘": "Platinum", "다이아": "Diamond", "주린이": "Stonks Noob", "처음으로 주식을 매수했다.": "Bought stock for the first time.", "주식 1주 이상 매수": "Buy 1+ share", "손실의 맛": "Taste of Loss", "손실 매도를 경험해봤다.": "Sold at a loss.", "손실 매도 1회": "1 loss sale", "시장 탈출자": "Market Escapee", "일시정지 기능을 써봤다.": "Tried the pause feature.", "일시정지 1회 이상": "Pause 1+ times", "카드쟁이": "Card Shark", "암시장 도박을 한 번 해봤다.": "Gambled on the black market once.", "도박 1회 참가 (승패 무관)": "Join 1 gamble (win or lose)", "30턴 생존자": "30-Turn Survivor", "30턴을 버텨냈다.": "Survived 30 turns.", "생존 턴 수 30+": "Turns survived 30+", "수익의 맛": "Taste of Profit", "수익 매도를 성공시켰다.": "Made a profitable sale.", "수익 매도 1회": "1 profitable sale", "분산투자자": "Diversifier", "동시에 3종목 이상을 보유했다.": "Held 3+ stocks at once.", "동시 보유 3개사 이상": "Hold 3+ companies at once", "거래 중독": "Trade Addict", "총 거래 횟수 10회를 넘겼다.": "Passed 10 total trades.", "매수+매도 합계 10회+": "Buys + sells 10+", "100턴 생존자": "100-Turn Survivor", "100턴을 넘기며 살아남았다.": "Made it past 100 turns alive.", "생존 턴 수 100+": "Turns survived 100+", "3백만 주주": "₩3M Shareholder", "순자산 300만 원을 돌파했다.": "Broke ₩3M net worth.", "총 순자산 ₩3,000,000+": "Total net worth ₩3,000,000+", "포트폴리오 마스터": "Portfolio Master", "동시에 5종목 이상을 굴렸다.": "Juggled 5+ stocks at once.", "동시 보유 5개사 이상": "Hold 5+ companies at once", "거래소 상주": "Exchange Resident", "50번 넘게 매매했다.": "Traded over 50 times.", "매수+매도 합계 50회+": "Buys + sells 50+", "히히히 주주": "Hehehe Shareholder", "히히히그룹 주식을 50주 이상 보유한 적 있다.": "Once held 50+ shares of Hehehe Group.", "히히히그룹 최대 보유량 50주+": "Hehehe Group max holdings 50+ shares", "현금왕": "Cash King", "현금만 200만 원 이상 보유했다.": "Held ₩2M+ in cash alone.", "보유 현금 ₩2,000,000+": "Cash on hand ₩2,000,000+", "300턴의 사나이": "Man of 300 Turns", "300턴을 버텨냈다. 이건 진심이다.": "Survived 300 turns. This is serious.", "생존 턴 수 300+": "Turns survived 300+", "1천만 자산가": "₩10M Asset Holder", "순자산 1,000만 원을 달성했다.": "Reached ₩10M net worth.", "총 순자산 ₩10,000,000+": "Total net worth ₩10,000,000+", "트레이더": "Trader", "200번 이상 매매하며 시장을 누볐다.": "Traded 200+ times, roaming the market.", "매수+매도 합계 200회+": "Buys + sells 200+", "청룡 탑승자": "Blue Dragon Rider", "청룡그룹 주가 추락을 미리 피했다. (매도 후 50% 이상 하락 확인)": "Dodged the Blue Dragon Group crash in advance. (50%+ drop confirmed after selling)", "청룡그룹 고점 매도 후 추락 감지": "Sold Blue Dragon Group at the peak, crash detected", "1.5천만 투자왕": "₩15M Investment King", "순자산 1,500만 원. 이 게임 진심으로 한다.": "Net worth ₩15M. You really take this game seriously.", "총 순자산 ₩15,000,000+": "Total net worth ₩15,000,000+", "500턴 전설": "500-Turn Legend", "500턴. 당신은 이 게임과 결혼했습니까?": "500 turns. Are you married to this game?", "생존 턴 수 500+": "Turns survived 500+", "전종목 보유": "Own Them All", "7개 종목 전부를 동시에 보유했다.": "Held all 7 stocks at once.", "전 종목 동시 보유": "Hold all stocks at once", "히히히 생존자": "Hehehe Survivor", "히히히그룹을 보유하다 추락 후 0원 없이 살아남았다.": "Held Hehehe Group through a crash and survived without hitting ₩0.", "히히히 보유 중 폭락 생존": "Survived a crash while holding Hehehe", "폭락도락 황제": "Emperor of Rock Bottom", "순자산 5,000만 원. 이건 그냥 신화다.": "Net worth ₩50M. This is straight-up legend.", "총 순자산 ₩50,000,000+": "Total net worth ₩50,000,000+", "영원한 시장": "Eternal Market", "1000턴 돌파. 당신은 인간이 아닙니다.": "1000 turns. You are not human.", "생존 턴 수 1000+": "Turns survived 1000+", "도박왕": "Gambling King", "암시장에서만 총 500만 원 이상 땄다.": "Won ₩5M+ from the black market alone.", "도박 누적 수익 ₩5,000,000+": "Gambling total profit ₩5,000,000+", "1억 돌파자": "₩100M Club", "순자산 1억 원을 넘겼다.": "Passed ₩100M net worth.", "총 순자산 ₩100,000,000+": "Total net worth ₩100,000,000+", "10억 대부호": "₩1B Tycoon", "순자산 10억 원을 넘겼다.": "Passed ₩1B net worth.", "총 순자산 ₩1,000,000,000+": "Total net worth ₩1,000,000,000+", "100억 거인": "₩10B Giant", "순자산 100억 원을 넘겼다.": "Passed ₩10B net worth.", "총 순자산 ₩10,000,000,000+": "Total net worth ₩10,000,000,000+", "1조 부자": "₩1T Rich", "순자산 1조 원을 넘겼다.": "Passed ₩1T net worth.", "총 순자산 ₩1,000,000,000,000+": "Total net worth ₩1,000,000,000,000+", "10조 제국": "₩10T Empire", "순자산 10조 원을 넘겼다.": "Passed ₩10T net worth.", "총 순자산 ₩10,000,000,000,000+": "Total net worth ₩10,000,000,000,000+", "100조 패왕": "₩100T Overlord", "순자산 100조 원을 넘겼다.": "Passed ₩100T net worth.", "총 순자산 ₩100,000,000,000,000+": "Total net worth ₩100,000,000,000,000+", "1경의 벽": "The ₩10 Quadrillion Wall", "순자산 1경 원을 넘겼다.": "Passed ₩10 quadrillion net worth.", "총 순자산 ₩10,000,000,000,000,000+": "Total net worth ₩10,000,000,000,000,000+", "10경의 신화": "Myth of ₩100 Quadrillion", "순자산 10경 원을 넘겼다.": "Passed ₩100 quadrillion net worth.", "총 순자산 ₩100,000,000,000,000,000+": "Total net worth ₩100,000,000,000,000,000+", "100경 우주왕": "Cosmic King of ₩1 Quintillion", "순자산 100경 원을 넘겼다.": "Passed ₩1 quintillion net worth.", "총 순자산 ₩1,000,000,000,000,000,000+": "Total net worth ₩1,000,000,000,000,000,000+", "조 단위 현금왕": "Trillion-Tier Cash King", "현금 보유액이 조 단위를 넘겼다.": "Cash on hand passed the trillions.", "보유 현금 ₩1,000,000,000,000+": "Cash on hand ₩1,000,000,000,000+", "조 단위 수익자": "Trillion-Tier Earner", "누적 수익이 조 단위를 넘겼다.": "Total profit passed the trillions.", "누적 수익 ₩1,000,000,000,000+": "Total profit ₩1,000,000,000,000+", "천 번의 거래자": "Thousand-Trade Trader", "매수/매도를 1,000번 넘게 했다.": "Bought/sold over 1,000 times.", "매수+매도 합계 1000회+": "Buys + sells 1000+", "무한 생존자": "Infinite Survivor", "2,000턴을 넘겼다. 기계도 지친다.": "Passed 2,000 turns. Even machines get tired.", "생존 턴 수 2000+": "Turns survived 2000+", "없음": "None", "칭호 획득": "titles unlocked", "✅ 장착중": "✅ Equipped", "장착": "Equip", "💰 해금 보상 +₩": "💰 Unlock reward +₩", "🎖️ 칭호를 해제했습니다": "🎖️ Title removed", "] 칭호를 장착했습니다!": "] title equipped!", "🎖️ 칭호 해금": "🎖️ Unlocked", "개!": " titles!", "포함 +₩": "included · reward +₩", "✅ 개발자 인증 완료. 치트창이 열렸습니다.": "✅ Dev verification complete. Cheat panel unlocked.", "🔓 개발자 인증됨": "🔓 Dev verified", "치트창이 열려 있어요.": "The cheat panel is open.", "PIN을 입력하면 비밀 기능이 열립니다.": "Enter the PIN to unlock secret features.", "🔐 PIN을 입력하세요": "🔐 Enter the PIN", "✨ 개발자 인증 완료, 치트창 오픈!": "✨ Dev verification complete, cheat panel open!", "❌ PIN이 틀렸습니다": "❌ Wrong PIN", "🔐 개발자 인증이 필요합니다": "🔐 Dev verification required", "치트": "Cheat", "🎖️ 모든 칭호 해금! +₩": "🎖️ All titles unlocked! +₩", "📈 스탯 MAX": "📈 Stats MAX", "현금": "Cash", "🧹 파산 상태 정리": "🧹 Bankruptcy state cleared", "⏱ 1턴 =": "⏱ 1 turn =", "초로 설정": " sec (set)", "1~20 중 4개를 골라라. 4개 일치 ×4, 3개 ×2, 2개 ×1.5, 1개 이하는 전부 잃는다.": "Pick 4 from 1~20. 4 matches ×4, 3 matches ×2, 2 matches ×1.5, 1 or fewer loses everything.", "번 카드 선택! 확정 버튼을 누르세요.": " selected! Hit the confirm button.", "💸 베팅 금액을 입력하세요": "💸 Enter your bet amount", "💸 돈이 부족합니다": "💸 Not enough money", "✅ 카드 선택 후 확정": "✅ Pick a card, then confirm", "🃏 카드 한 장을 선택하세요!": "🃏 Pick a card!", "👆 카드를 먼저 선택해주세요": "👆 Pick a card first", "🎉 당첨!": "🎉 Winner!", "⭐ 당첨": "⭐ Winner", "💸 꽝!": "💸 Bust!", "꽝": "Bust", "🎉 당첨! +₩": "🎉 Win! +₩", "획득! (베팅 ₩": "earned! (bet ₩", "💸 꽝... -₩": "💸 Bust... -₩", "손실. 당첨은": "lost. Winning card:", "번이었어요.": "", "🔄 다시 하기": "🔄 Play Again", "공개 중...": "Revealing...", "💸 예약매수 실패:": "💸 Limit buy failed:", "돈이 부족합니다": "not enough money", "📥 예약매수 체결:": "📥 Limit buy filled:", "예약매수": "Limit Buy", "📤 예약매도 실패:": "📤 Limit sell failed:", "보유 수량 부족": "not enough shares", "📤 예약매도 체결:": "📤 Limit sell filled:", "예약매도": "Limit Sell", "🔎 먼저 종목을 선택하세요": "🔎 Select a stock first", "🎯 목표 가격을 입력하세요": "🎯 Enter a target price", "등록:": "Placed:", "주 @ ₩": " shares @ ₩", "🧾 예약을 취소했습니다": "🧾 Order canceled", "예약 주문이 없습니다.": "No pending orders.", "주 · 목표가 ₩": " shares · target ₩", "등록": "Place", "취소": "Cancel", "목표가 ₩": "Target ₩", "💣 전부": "💣 All", "💰 매수": "💰 Buy", "📤 매도": "📤 Sell", "🧷 예약 주문": "🧷 Limit Orders", "목표가 도달 시 자동 체결": "Auto-fills when the target price is hit", "📥 예약매수": "📥 Limit Buy", "이하로 내리면 자동매수": "Auto-buys when it drops to or below", "📤 예약매도": "📤 Limit Sell", "이상으로 오르면 자동매도": "Auto-sells when it rises to or above", "초 후에 게임이 다시 시작됩니다": " seconds until the game restarts", "🔄 재시작 중...": "🔄 Restarting...", "⏱ 파산 대기 시간이 끝나야 다시 시작할 수 있습니다": "⏱ You have to wait out the bankruptcy timer before restarting", "이번 판은 못 버텼습니다.": "You didn't survive this round.", "도박중독은 1336": "Gambling addiction help: 1336 (KR)", "베팅 손실: ₩": "Bet lost: ₩", "당첨 번호는": "winning card:", "번이었습니다.": "", "🎟️ 이미 4개를 골랐어요": "🎟️ You already picked 4", "🎟️ 숫자 4개를 먼저 골라주세요": "🎟️ Pick 4 numbers first", "추첨 중...": "Drawing...", "🎟️ 추첨을 시작합니다!": "🎟️ Starting the draw!", "🎯 4개 전부 일치!! 최고 배당!": "🎯 All 4 match!! Top payout!", "😱 3개 일치! 딱 1개 차이로 최고배당은 놓쳤지만 ×2 적중!": "😱 3 matches! Missed the top payout by just 1, but ×2 hit!", "🙂 2개 일치! ×1.5 적중!": "🙂 2 matches! ×1.5 hit!", "개 일치": " matches", "개 일치! +₩": " matches! +₩", "손실. 당첨 번호:": "Loss. Winning numbers:", "한 끗 차이": "So close", "4개 중 1개 일치 · 베팅 손실: ₩": "1 of 4 matched · Bet lost: ₩", "목표가": "Target price", "폭락도 락이다": "Even Rock Bottom Rocks"};
+  var PATS = [["(\\d+)번 카드 선택! 확정 버튼을 누르세요\\.", "g", "Card $1 selected! Hit the confirm button."]];
+  var HANGUL = /[가-힣]/;
+  var handlers = [];
+
+  function valid(v){ return v === 'ko' || v === 'en'; }
+  function detect(){
+    try{
+      if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
+      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
+      for(var i = 0; i < langs.length; i++){ if(/^ko\b/i.test(langs[i])) return 'ko'; }
+      return 'en';
+    }catch(e){ return 'ko'; }
+  }
+  function read(){
+    try{ var q = new URLSearchParams(location.search).get('lang'); if(valid(q)) return q; }catch(e){}
+    try{ var s = localStorage.getItem(KEY); if(valid(s)) return s; }catch(e){}
+    return detect();
+  }
+  var lang = read();
+
+  // ── dictionary → matchers ──
+  function esc(s){ return s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'); }
+  var NORM = {}, longKeys = [], shortKeys = [];
+  Object.keys(DICT).forEach(function(k){
+    NORM[k.replace(/\s+/g, ' ').trim()] = DICT[k];
+    var n = (k.match(/[가-힣]/g) || []).length;
+    (n <= 2 ? shortKeys : longKeys).push(k);
+  });
+  function byLen(a, b){ return b.length - a.length; }
+  longKeys.sort(byLen); shortKeys.sort(byLen);
+  var LONG_RE = longKeys.length ? new RegExp(longKeys.map(esc).join('|'), 'g') : null;
+  var SHORT_RE = shortKeys.length ? new RegExp('(^|[^가-힣])(' + shortKeys.map(esc).join('|') + ')(?![가-힣])', 'g') : null;
+  var PAT = PATS.map(function(p){ return [new RegExp(p[0], p[1] || 'g'), p[2]]; });
+  var SING = { turns:'turn', shares:'share', seconds:'second', matches:'match', titles:'title', levels:'level', coins:'coin', kills:'kill' };
+  var POST = /(^|[^\d.,])1 (turns|shares|seconds|matches|titles|levels|coins|kills)\b/g;
+
+  var CACHE = new Map(), MISSING = {};
+  function tr(s){
+    if(typeof s !== 'string' || !HANGUL.test(s)) return s;
+    var c = CACHE.get(s);
+    if(c !== undefined) return c;
+    var out = s, t = s.replace(/\s+/g, ' ').trim();
+    if(Object.prototype.hasOwnProperty.call(NORM, t)){
+      var m = s.match(/^(\s*)[\s\S]*?(\s*)$/);
+      out = m[1] + NORM[t] + m[2];
+    }else{
+      for(var i = 0; i < PAT.length; i++) out = out.replace(PAT[i][0], PAT[i][1]);
+      if(LONG_RE) out = out.replace(LONG_RE, function(x){ return DICT[x]; });
+      if(SHORT_RE && HANGUL.test(out)) out = out.replace(SHORT_RE, function(x, p, k){ return p + DICT[k]; });
+    }
+    out = out.replace(POST, function(x, p, w){ return p + '1 ' + SING[w]; });
+    if(CACHE.size > 4000) CACHE.clear();
+    CACHE.set(s, out);
+    if(HANGUL.test(out)) MISSING[out] = 1;
+    return out;
+  }
+
+  // ── DOM ──
+  var ATTRS = ['title', 'placeholder', 'aria-label', 'alt'];
+  var TXT = new WeakMap(), ATT = new WeakMap();
+  function skipNode(n){
+    var p = n.parentNode;
+    return !p || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.nodeName);
+  }
+  function doText(n){
+    if(lang !== 'en' || skipNode(n)) return;
+    var v = n.nodeValue;
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){ TXT.set(n, { ko: v, en: t }); n.nodeValue = t; }
+  }
+  function doAttr(el, name){
+    if(lang !== 'en') return;
+    var v = el.getAttribute(name);
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){
+      var o = ATT.get(el) || {}; o[name] = { ko: v, en: t }; ATT.set(el, o);
+      el.setAttribute(name, t);
+    }
+  }
+  function walk(root){
+    if(root.nodeType === 3){ doText(root); return; }
+    if(root.nodeType !== 1 && root.nodeType !== 9) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())) doText(n);
+    var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label],[alt]') : [];
+    for(var i = 0; i < els.length; i++) ATTRS.forEach(function(a){ if(els[i].hasAttribute(a)) doAttr(els[i], a); });
+    if(root.nodeType === 1) ATTRS.forEach(function(a){ if(root.hasAttribute(a)) doAttr(root, a); });
+  }
+  function restore(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())){
+      var o = TXT.get(n);
+      if(o && n.nodeValue === o.en){ n.nodeValue = o.ko; }
+      TXT.delete(n);
+    }
+    var els = root.querySelectorAll('[title],[placeholder],[aria-label],[alt]');
+    for(var i = 0; i < els.length; i++){
+      var oa = ATT.get(els[i]);
+      if(!oa) continue;
+      Object.keys(oa).forEach(function(a){ if(els[i].getAttribute(a) === oa[a].en) els[i].setAttribute(a, oa[a].ko); });
+      ATT.delete(els[i]);
+    }
+  }
+  var mo = new MutationObserver(function(recs){
+    if(lang !== 'en') return;
+    for(var i = 0; i < recs.length; i++){
+      var r = recs[i];
+      if(r.type === 'characterData') doText(r.target);
+      else if(r.type === 'attributes') doAttr(r.target, r.attributeName);
+      else{
+        for(var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
+      }
+    }
+  });
+  mo.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+
+  // ── canvas text / dialogs ──
+  [window.CanvasRenderingContext2D, window.OffscreenCanvasRenderingContext2D].forEach(function(C){
+    if(!C || !C.prototype) return;
+    ['fillText', 'strokeText', 'measureText'].forEach(function(fn){
+      var orig = C.prototype[fn];
+      if(!orig) return;
+      C.prototype[fn] = function(text){
+        if(lang === 'en' && typeof text === 'string' && HANGUL.test(text)) arguments[0] = tr(text);
+        return orig.apply(this, arguments);
+      };
+    });
+  });
+  ['alert', 'confirm', 'prompt'].forEach(function(fn){
+    var orig = window[fn];
+    if(!orig) return;
+    window[fn] = function(msg){
+      if(lang === 'en' && typeof msg === 'string') arguments[0] = tr(msg);
+      return orig.apply(window, arguments);
+    };
+  });
+
+  // ── public api ──
+  function apply(l){
+    lang = l;
+    api.lang = l;
+    document.documentElement.lang = l;
+    CACHE.clear();
+    if(document.body){ if(l === 'en') walk(document); else restore(document); }
+    for(var i = 0; i < handlers.length; i++){ try{ handlers[i](l); }catch(e){} }
+  }
+  var api = {
+    BRAND: BRAND,
+    lang: lang,
+    tr: tr,
+    t: function(m){ if(m == null) return ''; var v = m[api.lang]; return v != null ? v : (m.ko != null ? m.ko : m.en); },
+    onChange: function(fn){ if(typeof fn === 'function') handlers.push(fn); },
+    set: function(l){
+      if(!valid(l) || l === api.lang) return;
+      try{ localStorage.setItem(KEY, l); }catch(e){}
+      apply(l);
+    },
+    missing: function(){ return Object.keys(MISSING); }
+  };
+  window.SPROUTY = api;
+  if(lang === 'en') document.documentElement.lang = 'en';
+  function start(){ if(lang === 'en') walk(document); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  window.addEventListener('storage', function(e){
+    if(e.key === KEY && valid(e.newValue) && e.newValue !== api.lang) apply(e.newValue);
+  });
+})();
+
 </script>
 </head>
 <body>

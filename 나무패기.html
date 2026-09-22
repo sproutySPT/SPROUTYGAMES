@@ -2,192 +2,6 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>
-/* ════════════════════════════════════════════════════════════════
-   SPROUTY GAMES — language layer (정새싹게임즈 / SPROUTY GAMES / SPTG)
-   · 언어 정하기: ?lang=ko|en → localStorage 'sprouty_lang' → 브라우저 언어 (한국어가 있으면 ko, 아니면 en)
-   · 한국어일 때는 아무것도 바꾸지 않습니다. (원본 그대로)
-   · English 일 때: 화면의 글씨(DOM), 캔버스 글씨, alert/confirm 을 아래 사전으로 바꿔 보여 줍니다.
-   · 게임 코드에서: SPROUTY.lang / SPROUTY.t({ko:'..',en:'..'}) / SPROUTY.onChange(fn) / SPROUTY.set('en')
-   · 번역이 빠진 글씨 확인: 콘솔에서 SPROUTY.missing()
-   ════════════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  var KEY = 'sprouty_lang';
-  var BRAND = { ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' };
-  var DICT = {"🪓 나무꾼 - 강화 & 가이드": "🪓 Lumberjack - Upgrades & Guide", "점수": "SCORE", "🪓 나무꾼": "🪓 LUMBERJACK", "A / ← 는 왼쪽, D / → 는 오른쪽입니다. 설정과 가이드는 위 버튼에서 열 수 있어요.": "A / ← moves left, D / → moves right. Open Settings and the Guide from the buttons above.", "가이드": "Guide", "설정": "Settings", "최고": "BEST", "나무당": "per tree", "왼쪽 (A)": "Left (A)", "오른쪽 (D)": "Right (D)", "A / ← 또는 D / → 로 나무를 베세요. 🌲": "Chop the tree with A / ← or D / →. 🌲", "같은 방향의 가지를 베면 바로 게임 오버입니다.": "Chop toward a branch and it's instant game over.", "⚒️ 강화": "⚒️ Upgrades", "🎒 재료": "🎒 Materials", "✨ 합성": "✨ Craft", "🏆 업적": "🏆 Achievements", "전체 강화": "All Upgrades", "⚔️ 도끼 파워": "⚔️ Axe Power", "✨ 최고 확률 합성": "✨ Best-Odds Craft", "🔁 자동 합성": "🔁 Auto Craft", "재료를 사용해 도끼 파워를 높입니다. 성공하면 +1 (최대 50).": "Spend materials to boost Axe Power. Success gives +1 (max 50).", "성공률이 가장 높은 재료부터 자동으로 골라 합성할 수 있어요.": "Automatically picks the materials with the best success rate and crafts.", "업적 현황": "Achievement Progress", "0 / 0 달성": "0 / 0 unlocked", "⚙️ 설정": "⚙️ Settings", "다크모드": "Dark Mode", "켜면 어두운 테마, 끄면 밝은 테마로 바뀝니다.": "On for a dark theme, off for a light theme.", "made by 정새싹게임즈's 이정후,정지호": "made by SPROUTY GAMES's Junghoo Lee, Jiho Jung", "자동 저장: 켜짐 · 진행도와 설정은 기기에 저장됩니다.": "Auto-save: ON · Progress and settings are saved on this device.", "닫기": "Close", "📘 가이드": "📘 Guide", "1. 나무 베기": "1. Chopping", "A / ← 는 왼쪽, D / → 는 오른쪽입니다. 버튼을 누를 때마다 내가 선 쪽으로 이동합니다.": "A / ← moves left, D / → moves right. Each press moves you to the side you're chopping.", "2. 가지 피하기": "2. Dodge the Branches", "내가 베려는 방향에 가지가 있으면 즉시 게임 오버가 됩니다. 길을 먼저 보고 누르세요.": "If there's a branch on the side you're about to chop, it's instant game over. Read the path before you press.", "3. 상자와 재료": "3. Chests & Materials", "상자를 만나면 게임이 잠깐 멈추고 재료를 얻습니다. 재료는 합성 탭에서 도끼 파워를 올리는 데 씁니다.": "Hit a chest and the game pauses briefly while you loot materials. Use them in the Craft tab to raise Axe Power.", "4. 강화와 골드": "4. Upgrades & Gold", "강화 탭에서는 골드를 써서 시간, 점수, 회복량을 올릴 수 있습니다. 레벨이 오르면 나무 한 번에 얻는 골드도 늘어납니다.": "In the Upgrades tab you spend gold to boost time, score, and recovery. As you level up, every tree pays out more gold.", "5. 설정": "5. Settings", "설정에서 다크모드를 바꾸고 제작자 정보를 확인할 수 있습니다.": "Toggle Dark Mode and check the creator info in Settings.", "캐릭터": "Character", "일반": "Common", "노멀": "Normal", "영웅": "Epic", "신화": "Mythic", "전설": "Legendary", "무한": "Infinite", "냄새나는 장화": "Stinky Boot", "비닐봉지": "Plastic Bag", "냄새나는 양말": "Stinky Sock", "부러진 낚시대": "Snapped Fishing Rod", "마법의 가루": "Magic Dust", "아이스크림 먹다 빠진 용사의 이빨": "Hero's Tooth That Fell Out Mid-Ice-Cream", "드래곤 발톱": "Dragon Claw", "아침에 세탁기에 안 넣은 교복": "School Uniform I Forgot to Wash This Morning", "무한의 호리병": "Gourd of Infinity", "날카로움": "Sharpness", "시간 바가 천천히 줄어듭니다": "The time bar drains more slowly", "시간 +": "Time +", "금빛 도끼날": "Golden Axe Blade", "베기당 추가 골드 획득": "Extra gold per chop", "G/베기": "G/chop", "강철 도끼": "Steel Axe", "베기당 추가 점수": "Extra score per chop", "점수/베기": "score/chop", "마법의 도끼자루": "Magic Axe Handle", "성공 시 시간 회복 증가": "More time restored on success", "% 회복": "% recovery", "획득!": "acquired!", "🕷️ 거미에게 잡혔다!": "🕷️ The spider got you!", "점수:": "Score:", "레벨:": "Level:", "보유 골드:": "Gold:", "다시 시작 🪓": "Try Again 🪓", "🏆 최고 기록!": "🏆 New Record!", "단계": " levels", "⚔️ 도끼 파워:": "⚔️ Axe Power:", "/ 50  (합성으로 올리기)": "/ 50  (raise it via Craft)", "보유:": "Owned:", "개": " pcs", "성공율": "Success rate", "성공률": "Success rate", "보유": "Owned", "합성": "Craft", "❌ 재료가 없습니다!": "❌ No materials!", "✅ 도끼 파워가 최대입니다!": "✅ Axe Power is maxed out!", "✨ 성공!": "✨ Success!", "도끼 파워 +1 (현재:": "· Axe Power +1 (now:", "도끼가 더 날카로워졌다!": "The axe got sharper!", "베기 이펙트가 강화되었습니다.": "Your chop effect has been upgraded.", "💨 실패...": "💨 Whiffed...", "⏹ 자동 합성 중지": "⏹ Stop Auto Craft", "첫 베기": "First Chop", "나무를 1번 베기": "Chop a tree once", "목재 초보": "Timber Noob", "나무를 10번 베기": "Chop 10 trees", "작업반장": "Foreman", "나무를 50번 베기": "Chop 50 trees", "베기 장인": "Chop Master", "나무를 100번 베기": "Chop 100 trees", "숲의 전설": "Legend of the Forest", "나무를 500번 베기": "Chop 500 trees", "시작이 좋다": "Nice Start", "최고 점수 50 달성": "Reach a best score of 50", "점수 상승": "Score Climber", "최고 점수 200 달성": "Reach a best score of 200", "고수": "Pro", "최고 점수 500 달성": "Reach a best score of 500", "천 점 돌파": "Thousand Club", "최고 점수 1000 달성": "Reach a best score of 1000", "왕좌의 나무꾼": "Lumberjack on the Throne", "최고 점수 3000 달성": "Reach a best score of 3000", "동전 수집가": "Coin Collector", "총 획득 골드 1,000G": "Earn 1,000G total", "금빛 손": "Golden Touch", "총 획득 골드 5,000G": "Earn 5,000G total", "재벌": "Filthy Rich", "총 획득 골드 20,000G": "Earn 20,000G total", "레벨업": "Level Up", "레벨 5 달성": "Reach level 5", "숙련자": "Veteran", "레벨 10 달성": "Reach level 10", "도끼 전문가": "Axe Expert", "레벨 20 달성": "Reach level 20", "전설의 성장": "Legendary Growth", "레벨 40 달성": "Reach level 40", "도끼 파워 10": "Axe Power 10", "도끼 파워 10 달성": "Reach Axe Power 10", "강한 도끼": "Strong Axe", "도끼 파워 25 달성": "Reach Axe Power 25", "완전체 도끼": "Final-Form Axe", "도끼 파워 50 달성": "Reach Axe Power 50", "상자 발견": "Chest Found", "상자 1개 열기": "Open 1 chest", "상자 수집가": "Chest Collector", "상자 10개 열기": "Open 10 chests", "보물 탐험가": "Treasure Hunter", "상자 30개 열기": "Open 30 chests", "첫 합성": "First Craft", "합성 1번 시도": "Attempt 1 craft", "연금술 입문": "Alchemy 101", "합성 10번 시도": "Attempt 10 crafts", "합성 마스터": "Craft Master", "합성 30번 시도": "Attempt 30 crafts", "성공의 맛": "Taste of Success", "합성 성공 1번": "1 successful craft", "성공 중독": "Success Addict", "합성 성공 5번": "5 successful crafts", "행운아": "Lucky Duck", "합성 성공 15번": "15 successful crafts", "첫 강화": "First Upgrade", "도끼 강화 1회": "Upgrade the axe once", "강화 입문": "Upgrade Rookie", "도끼 강화 5회": "Upgrade the axe 5 times", "강화 달인": "Upgrade Guru", "도끼 강화 15회": "Upgrade the axe 15 times", "첫 실패": "First Fail", "처음으로 게임 오버": "Get a game over for the first time", "포기하지 않아": "Never Giving Up", "게임 오버 10번 보기": "See the game over screen 10 times", "설명서 확인": "RTFM", "가이드를 한 번 열기": "Open the guide once", "설정 탐험": "Settings Explorer", "설정을 한 번 열기": "Open settings once", "어둠 속 나무꾼": "Lumberjack in the Dark", "다크모드를 사용하기": "Use dark mode", "다시 시작": "Restart", "재시작 1회": "Restart once", "끈질긴 도전자": "Relentless Challenger", "재시작 10회": "Restart 10 times", "🏆 업적 달성!": "🏆 Achievement Unlocked!", "달성": "unlocked", "남은 시간이 더 천천히 줄어듭니다.": "Remaining time drains more slowly.", "한 번 베를 때 얻는 골드가 늘어납니다.": "Gold per chop increases.", "한 번 베를 때 점수가 더 올라갑니다.": "Score per chop increases.", "성공할 때 시간 회복량이 커집니다.": "Time restored on success grows."};
-  var PATS = [];
-  var HANGUL = /[가-힣]/;
-  var handlers = [];
-
-  function valid(v){ return v === 'ko' || v === 'en'; }
-  function detect(){
-    try{
-      if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
-      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
-      for(var i = 0; i < langs.length; i++){ if(/^ko\b/i.test(langs[i])) return 'ko'; }
-      return 'en';
-    }catch(e){ return 'ko'; }
-  }
-  function read(){
-    try{ var q = new URLSearchParams(location.search).get('lang'); if(valid(q)) return q; }catch(e){}
-    try{ var s = localStorage.getItem(KEY); if(valid(s)) return s; }catch(e){}
-    return detect();
-  }
-  var lang = read();
-
-  // ── dictionary → matchers ──
-  function esc(s){ return s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'); }
-  var NORM = {}, longKeys = [], shortKeys = [];
-  Object.keys(DICT).forEach(function(k){
-    NORM[k.replace(/\s+/g, ' ').trim()] = DICT[k];
-    var n = (k.match(/[가-힣]/g) || []).length;
-    (n <= 2 ? shortKeys : longKeys).push(k);
-  });
-  function byLen(a, b){ return b.length - a.length; }
-  longKeys.sort(byLen); shortKeys.sort(byLen);
-  var LONG_RE = longKeys.length ? new RegExp(longKeys.map(esc).join('|'), 'g') : null;
-  var SHORT_RE = shortKeys.length ? new RegExp('(^|[^가-힣])(' + shortKeys.map(esc).join('|') + ')(?![가-힣])', 'g') : null;
-  var PAT = PATS.map(function(p){ return [new RegExp(p[0], p[1] || 'g'), p[2]]; });
-  var SING = { turns:'turn', shares:'share', seconds:'second', matches:'match', titles:'title', levels:'level', coins:'coin', kills:'kill' };
-  var POST = /(^|[^\d.,])1 (turns|shares|seconds|matches|titles|levels|coins|kills)\b/g;
-
-  var CACHE = new Map(), MISSING = {};
-  function tr(s){
-    if(typeof s !== 'string' || !HANGUL.test(s)) return s;
-    var c = CACHE.get(s);
-    if(c !== undefined) return c;
-    var out = s, t = s.replace(/\s+/g, ' ').trim();
-    if(Object.prototype.hasOwnProperty.call(NORM, t)){
-      var m = s.match(/^(\s*)[\s\S]*?(\s*)$/);
-      out = m[1] + NORM[t] + m[2];
-    }else{
-      for(var i = 0; i < PAT.length; i++) out = out.replace(PAT[i][0], PAT[i][1]);
-      if(LONG_RE) out = out.replace(LONG_RE, function(x){ return DICT[x]; });
-      if(SHORT_RE && HANGUL.test(out)) out = out.replace(SHORT_RE, function(x, p, k){ return p + DICT[k]; });
-    }
-    out = out.replace(POST, function(x, p, w){ return p + '1 ' + SING[w]; });
-    if(CACHE.size > 4000) CACHE.clear();
-    CACHE.set(s, out);
-    if(HANGUL.test(out)) MISSING[out] = 1;
-    return out;
-  }
-
-  // ── DOM ──
-  var ATTRS = ['title', 'placeholder', 'aria-label', 'alt'];
-  var TXT = new WeakMap(), ATT = new WeakMap();
-  function skipNode(n){
-    var p = n.parentNode;
-    return !p || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.nodeName);
-  }
-  function doText(n){
-    if(lang !== 'en' || skipNode(n)) return;
-    var v = n.nodeValue;
-    if(!v || !HANGUL.test(v)) return;
-    var t = tr(v);
-    if(t !== v){ TXT.set(n, { ko: v, en: t }); n.nodeValue = t; }
-  }
-  function doAttr(el, name){
-    if(lang !== 'en') return;
-    var v = el.getAttribute(name);
-    if(!v || !HANGUL.test(v)) return;
-    var t = tr(v);
-    if(t !== v){
-      var o = ATT.get(el) || {}; o[name] = { ko: v, en: t }; ATT.set(el, o);
-      el.setAttribute(name, t);
-    }
-  }
-  function walk(root){
-    if(root.nodeType === 3){ doText(root); return; }
-    if(root.nodeType !== 1 && root.nodeType !== 9) return;
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
-    while((n = w.nextNode())) doText(n);
-    var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label],[alt]') : [];
-    for(var i = 0; i < els.length; i++) ATTRS.forEach(function(a){ if(els[i].hasAttribute(a)) doAttr(els[i], a); });
-    if(root.nodeType === 1) ATTRS.forEach(function(a){ if(root.hasAttribute(a)) doAttr(root, a); });
-  }
-  function restore(root){
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
-    while((n = w.nextNode())){
-      var o = TXT.get(n);
-      if(o && n.nodeValue === o.en){ n.nodeValue = o.ko; }
-      TXT.delete(n);
-    }
-    var els = root.querySelectorAll('[title],[placeholder],[aria-label],[alt]');
-    for(var i = 0; i < els.length; i++){
-      var oa = ATT.get(els[i]);
-      if(!oa) continue;
-      Object.keys(oa).forEach(function(a){ if(els[i].getAttribute(a) === oa[a].en) els[i].setAttribute(a, oa[a].ko); });
-      ATT.delete(els[i]);
-    }
-  }
-  var mo = new MutationObserver(function(recs){
-    if(lang !== 'en') return;
-    for(var i = 0; i < recs.length; i++){
-      var r = recs[i];
-      if(r.type === 'characterData') doText(r.target);
-      else if(r.type === 'attributes') doAttr(r.target, r.attributeName);
-      else{
-        for(var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
-      }
-    }
-  });
-  mo.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
-
-  // ── canvas text / dialogs ──
-  [window.CanvasRenderingContext2D, window.OffscreenCanvasRenderingContext2D].forEach(function(C){
-    if(!C || !C.prototype) return;
-    ['fillText', 'strokeText', 'measureText'].forEach(function(fn){
-      var orig = C.prototype[fn];
-      if(!orig) return;
-      C.prototype[fn] = function(text){
-        if(lang === 'en' && typeof text === 'string' && HANGUL.test(text)) arguments[0] = tr(text);
-        return orig.apply(this, arguments);
-      };
-    });
-  });
-  ['alert', 'confirm', 'prompt'].forEach(function(fn){
-    var orig = window[fn];
-    if(!orig) return;
-    window[fn] = function(msg){
-      if(lang === 'en' && typeof msg === 'string') arguments[0] = tr(msg);
-      return orig.apply(window, arguments);
-    };
-  });
-
-  // ── public api ──
-  function apply(l){
-    lang = l;
-    api.lang = l;
-    document.documentElement.lang = l;
-    CACHE.clear();
-    if(document.body){ if(l === 'en') walk(document); else restore(document); }
-    for(var i = 0; i < handlers.length; i++){ try{ handlers[i](l); }catch(e){} }
-  }
-  var api = {
-    BRAND: BRAND,
-    lang: lang,
-    tr: tr,
-    t: function(m){ if(m == null) return ''; var v = m[api.lang]; return v != null ? v : (m.ko != null ? m.ko : m.en); },
-    onChange: function(fn){ if(typeof fn === 'function') handlers.push(fn); },
-    set: function(l){
-      if(!valid(l) || l === api.lang) return;
-      try{ localStorage.setItem(KEY, l); }catch(e){}
-      apply(l);
-    },
-    missing: function(){ return Object.keys(MISSING); }
-  };
-  window.SPROUTY = api;
-  if(lang === 'en') document.documentElement.lang = 'en';
-  function start(){ if(lang === 'en') walk(document); }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
-  window.addEventListener('storage', function(e){
-    if(e.key === KEY && valid(e.newValue) && e.newValue !== api.lang) apply(e.newValue);
-  });
-})();
-
-</script>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🪓 나무꾼 - 강화 & 가이드</title>
 <style>
@@ -828,6 +642,191 @@ body.light-mode .buy-mode-btn { color: #567056; }
 body.light-mode .upgrade-power-hint { color: #4d6a52; }
 
 </style>
+<script>
+/* ════════════════════════════════════════════════════════════════
+   SPROUTY GAMES — language layer (정새싹게임즈 / SPROUTY GAMES / SPTG)
+   · 언어 정하기: ?lang=ko|en → localStorage 'sprouty_lang' → 브라우저 언어 (한국어가 있으면 ko, 아니면 en)
+   · 한국어일 때는 아무것도 바꾸지 않습니다. (원본 그대로)
+   · English 일 때: 화면의 글씨(DOM), 캔버스 글씨, alert/confirm 을 아래 사전으로 바꿔 보여 줍니다.
+   · 게임 코드에서: SPROUTY.lang / SPROUTY.t({ko:'..',en:'..'}) / SPROUTY.onChange(fn) / SPROUTY.set('en')
+   · 번역이 빠진 글씨 확인: 콘솔에서 SPROUTY.missing()
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var KEY = 'sprouty_lang';
+  var BRAND = { ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' };
+  var DICT = {"🪓 나무꾼 - 강화 & 가이드": "🪓 Lumberjack - Upgrades & Guide", "점수": "SCORE", "🪓 나무꾼": "🪓 LUMBERJACK", "A / ← 는 왼쪽, D / → 는 오른쪽입니다. 설정과 가이드는 위 버튼에서 열 수 있어요.": "A / ← moves left, D / → moves right. Open Settings and the Guide from the buttons above.", "가이드": "Guide", "설정": "Settings", "최고": "BEST", "나무당": "per tree", "왼쪽 (A)": "Left (A)", "오른쪽 (D)": "Right (D)", "A / ← 또는 D / → 로 나무를 베세요. 🌲": "Chop the tree with A / ← or D / →. 🌲", "같은 방향의 가지를 베면 바로 게임 오버입니다.": "Chop toward a branch and it's instant game over.", "⚒️ 강화": "⚒️ Upgrades", "🎒 재료": "🎒 Materials", "✨ 합성": "✨ Craft", "🏆 업적": "🏆 Achievements", "전체 강화": "All Upgrades", "⚔️ 도끼 파워": "⚔️ Axe Power", "✨ 최고 확률 합성": "✨ Best-Odds Craft", "🔁 자동 합성": "🔁 Auto Craft", "재료를 사용해 도끼 파워를 높입니다. 성공하면 +1 (최대 50).": "Spend materials to boost Axe Power. Success gives +1 (max 50).", "성공률이 가장 높은 재료부터 자동으로 골라 합성할 수 있어요.": "Automatically picks the materials with the best success rate and crafts.", "업적 현황": "Achievement Progress", "0 / 0 달성": "0 / 0 unlocked", "⚙️ 설정": "⚙️ Settings", "다크모드": "Dark Mode", "켜면 어두운 테마, 끄면 밝은 테마로 바뀝니다.": "On for a dark theme, off for a light theme.", "made by 정새싹게임즈's 이정후,정지호": "made by SPROUTY GAMES's Junghoo Lee, Jiho Jung", "자동 저장: 켜짐 · 진행도와 설정은 기기에 저장됩니다.": "Auto-save: ON · Progress and settings are saved on this device.", "닫기": "Close", "📘 가이드": "📘 Guide", "1. 나무 베기": "1. Chopping", "A / ← 는 왼쪽, D / → 는 오른쪽입니다. 버튼을 누를 때마다 내가 선 쪽으로 이동합니다.": "A / ← moves left, D / → moves right. Each press moves you to the side you're chopping.", "2. 가지 피하기": "2. Dodge the Branches", "내가 베려는 방향에 가지가 있으면 즉시 게임 오버가 됩니다. 길을 먼저 보고 누르세요.": "If there's a branch on the side you're about to chop, it's instant game over. Read the path before you press.", "3. 상자와 재료": "3. Chests & Materials", "상자를 만나면 게임이 잠깐 멈추고 재료를 얻습니다. 재료는 합성 탭에서 도끼 파워를 올리는 데 씁니다.": "Hit a chest and the game pauses briefly while you loot materials. Use them in the Craft tab to raise Axe Power.", "4. 강화와 골드": "4. Upgrades & Gold", "강화 탭에서는 골드를 써서 시간, 점수, 회복량을 올릴 수 있습니다. 레벨이 오르면 나무 한 번에 얻는 골드도 늘어납니다.": "In the Upgrades tab you spend gold to boost time, score, and recovery. As you level up, every tree pays out more gold.", "5. 설정": "5. Settings", "설정에서 다크모드를 바꾸고 제작자 정보를 확인할 수 있습니다.": "Toggle Dark Mode and check the creator info in Settings.", "캐릭터": "Character", "일반": "Common", "노멀": "Normal", "영웅": "Epic", "신화": "Mythic", "전설": "Legendary", "무한": "Infinite", "냄새나는 장화": "Stinky Boot", "비닐봉지": "Plastic Bag", "냄새나는 양말": "Stinky Sock", "부러진 낚시대": "Snapped Fishing Rod", "마법의 가루": "Magic Dust", "아이스크림 먹다 빠진 용사의 이빨": "Hero's Tooth That Fell Out Mid-Ice-Cream", "드래곤 발톱": "Dragon Claw", "아침에 세탁기에 안 넣은 교복": "School Uniform I Forgot to Wash This Morning", "무한의 호리병": "Gourd of Infinity", "날카로움": "Sharpness", "시간 바가 천천히 줄어듭니다": "The time bar drains more slowly", "시간 +": "Time +", "금빛 도끼날": "Golden Axe Blade", "베기당 추가 골드 획득": "Extra gold per chop", "G/베기": "G/chop", "강철 도끼": "Steel Axe", "베기당 추가 점수": "Extra score per chop", "점수/베기": "score/chop", "마법의 도끼자루": "Magic Axe Handle", "성공 시 시간 회복 증가": "More time restored on success", "% 회복": "% recovery", "획득!": "acquired!", "🕷️ 거미에게 잡혔다!": "🕷️ The spider got you!", "점수:": "Score:", "레벨:": "Level:", "보유 골드:": "Gold:", "다시 시작 🪓": "Try Again 🪓", "🏆 최고 기록!": "🏆 New Record!", "단계": " levels", "⚔️ 도끼 파워:": "⚔️ Axe Power:", "/ 50  (합성으로 올리기)": "/ 50  (raise it via Craft)", "보유:": "Owned:", "개": " pcs", "성공율": "Success rate", "성공률": "Success rate", "보유": "Owned", "합성": "Craft", "❌ 재료가 없습니다!": "❌ No materials!", "✅ 도끼 파워가 최대입니다!": "✅ Axe Power is maxed out!", "✨ 성공!": "✨ Success!", "도끼 파워 +1 (현재:": "· Axe Power +1 (now:", "도끼가 더 날카로워졌다!": "The axe got sharper!", "베기 이펙트가 강화되었습니다.": "Your chop effect has been upgraded.", "💨 실패...": "💨 Whiffed...", "⏹ 자동 합성 중지": "⏹ Stop Auto Craft", "첫 베기": "First Chop", "나무를 1번 베기": "Chop a tree once", "목재 초보": "Timber Noob", "나무를 10번 베기": "Chop 10 trees", "작업반장": "Foreman", "나무를 50번 베기": "Chop 50 trees", "베기 장인": "Chop Master", "나무를 100번 베기": "Chop 100 trees", "숲의 전설": "Legend of the Forest", "나무를 500번 베기": "Chop 500 trees", "시작이 좋다": "Nice Start", "최고 점수 50 달성": "Reach a best score of 50", "점수 상승": "Score Climber", "최고 점수 200 달성": "Reach a best score of 200", "고수": "Pro", "최고 점수 500 달성": "Reach a best score of 500", "천 점 돌파": "Thousand Club", "최고 점수 1000 달성": "Reach a best score of 1000", "왕좌의 나무꾼": "Lumberjack on the Throne", "최고 점수 3000 달성": "Reach a best score of 3000", "동전 수집가": "Coin Collector", "총 획득 골드 1,000G": "Earn 1,000G total", "금빛 손": "Golden Touch", "총 획득 골드 5,000G": "Earn 5,000G total", "재벌": "Filthy Rich", "총 획득 골드 20,000G": "Earn 20,000G total", "레벨업": "Level Up", "레벨 5 달성": "Reach level 5", "숙련자": "Veteran", "레벨 10 달성": "Reach level 10", "도끼 전문가": "Axe Expert", "레벨 20 달성": "Reach level 20", "전설의 성장": "Legendary Growth", "레벨 40 달성": "Reach level 40", "도끼 파워 10": "Axe Power 10", "도끼 파워 10 달성": "Reach Axe Power 10", "강한 도끼": "Strong Axe", "도끼 파워 25 달성": "Reach Axe Power 25", "완전체 도끼": "Final-Form Axe", "도끼 파워 50 달성": "Reach Axe Power 50", "상자 발견": "Chest Found", "상자 1개 열기": "Open 1 chest", "상자 수집가": "Chest Collector", "상자 10개 열기": "Open 10 chests", "보물 탐험가": "Treasure Hunter", "상자 30개 열기": "Open 30 chests", "첫 합성": "First Craft", "합성 1번 시도": "Attempt 1 craft", "연금술 입문": "Alchemy 101", "합성 10번 시도": "Attempt 10 crafts", "합성 마스터": "Craft Master", "합성 30번 시도": "Attempt 30 crafts", "성공의 맛": "Taste of Success", "합성 성공 1번": "1 successful craft", "성공 중독": "Success Addict", "합성 성공 5번": "5 successful crafts", "행운아": "Lucky Duck", "합성 성공 15번": "15 successful crafts", "첫 강화": "First Upgrade", "도끼 강화 1회": "Upgrade the axe once", "강화 입문": "Upgrade Rookie", "도끼 강화 5회": "Upgrade the axe 5 times", "강화 달인": "Upgrade Guru", "도끼 강화 15회": "Upgrade the axe 15 times", "첫 실패": "First Fail", "처음으로 게임 오버": "Get a game over for the first time", "포기하지 않아": "Never Giving Up", "게임 오버 10번 보기": "See the game over screen 10 times", "설명서 확인": "RTFM", "가이드를 한 번 열기": "Open the guide once", "설정 탐험": "Settings Explorer", "설정을 한 번 열기": "Open settings once", "어둠 속 나무꾼": "Lumberjack in the Dark", "다크모드를 사용하기": "Use dark mode", "다시 시작": "Restart", "재시작 1회": "Restart once", "끈질긴 도전자": "Relentless Challenger", "재시작 10회": "Restart 10 times", "🏆 업적 달성!": "🏆 Achievement Unlocked!", "달성": "unlocked", "남은 시간이 더 천천히 줄어듭니다.": "Remaining time drains more slowly.", "한 번 베를 때 얻는 골드가 늘어납니다.": "Gold per chop increases.", "한 번 베를 때 점수가 더 올라갑니다.": "Score per chop increases.", "성공할 때 시간 회복량이 커집니다.": "Time restored on success grows."};
+  var PATS = [];
+  var HANGUL = /[가-힣]/;
+  var handlers = [];
+
+  function valid(v){ return v === 'ko' || v === 'en'; }
+  function detect(){
+    try{
+      if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
+      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
+      for(var i = 0; i < langs.length; i++){ if(/^ko\b/i.test(langs[i])) return 'ko'; }
+      return 'en';
+    }catch(e){ return 'ko'; }
+  }
+  function read(){
+    try{ var q = new URLSearchParams(location.search).get('lang'); if(valid(q)) return q; }catch(e){}
+    try{ var s = localStorage.getItem(KEY); if(valid(s)) return s; }catch(e){}
+    return detect();
+  }
+  var lang = read();
+
+  // ── dictionary → matchers ──
+  function esc(s){ return s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'); }
+  var NORM = {}, longKeys = [], shortKeys = [];
+  Object.keys(DICT).forEach(function(k){
+    NORM[k.replace(/\s+/g, ' ').trim()] = DICT[k];
+    var n = (k.match(/[가-힣]/g) || []).length;
+    (n <= 2 ? shortKeys : longKeys).push(k);
+  });
+  function byLen(a, b){ return b.length - a.length; }
+  longKeys.sort(byLen); shortKeys.sort(byLen);
+  var LONG_RE = longKeys.length ? new RegExp(longKeys.map(esc).join('|'), 'g') : null;
+  var SHORT_RE = shortKeys.length ? new RegExp('(^|[^가-힣])(' + shortKeys.map(esc).join('|') + ')(?![가-힣])', 'g') : null;
+  var PAT = PATS.map(function(p){ return [new RegExp(p[0], p[1] || 'g'), p[2]]; });
+  var SING = { turns:'turn', shares:'share', seconds:'second', matches:'match', titles:'title', levels:'level', coins:'coin', kills:'kill' };
+  var POST = /(^|[^\d.,])1 (turns|shares|seconds|matches|titles|levels|coins|kills)\b/g;
+
+  var CACHE = new Map(), MISSING = {};
+  function tr(s){
+    if(typeof s !== 'string' || !HANGUL.test(s)) return s;
+    var c = CACHE.get(s);
+    if(c !== undefined) return c;
+    var out = s, t = s.replace(/\s+/g, ' ').trim();
+    if(Object.prototype.hasOwnProperty.call(NORM, t)){
+      var m = s.match(/^(\s*)[\s\S]*?(\s*)$/);
+      out = m[1] + NORM[t] + m[2];
+    }else{
+      for(var i = 0; i < PAT.length; i++) out = out.replace(PAT[i][0], PAT[i][1]);
+      if(LONG_RE) out = out.replace(LONG_RE, function(x){ return DICT[x]; });
+      if(SHORT_RE && HANGUL.test(out)) out = out.replace(SHORT_RE, function(x, p, k){ return p + DICT[k]; });
+    }
+    out = out.replace(POST, function(x, p, w){ return p + '1 ' + SING[w]; });
+    if(CACHE.size > 4000) CACHE.clear();
+    CACHE.set(s, out);
+    if(HANGUL.test(out)) MISSING[out] = 1;
+    return out;
+  }
+
+  // ── DOM ──
+  var ATTRS = ['title', 'placeholder', 'aria-label', 'alt'];
+  var TXT = new WeakMap(), ATT = new WeakMap();
+  function skipNode(n){
+    var p = n.parentNode;
+    return !p || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.nodeName);
+  }
+  function doText(n){
+    if(lang !== 'en' || skipNode(n)) return;
+    var v = n.nodeValue;
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){ TXT.set(n, { ko: v, en: t }); n.nodeValue = t; }
+  }
+  function doAttr(el, name){
+    if(lang !== 'en') return;
+    var v = el.getAttribute(name);
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){
+      var o = ATT.get(el) || {}; o[name] = { ko: v, en: t }; ATT.set(el, o);
+      el.setAttribute(name, t);
+    }
+  }
+  function walk(root){
+    if(root.nodeType === 3){ doText(root); return; }
+    if(root.nodeType !== 1 && root.nodeType !== 9) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())) doText(n);
+    var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label],[alt]') : [];
+    for(var i = 0; i < els.length; i++) ATTRS.forEach(function(a){ if(els[i].hasAttribute(a)) doAttr(els[i], a); });
+    if(root.nodeType === 1) ATTRS.forEach(function(a){ if(root.hasAttribute(a)) doAttr(root, a); });
+  }
+  function restore(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())){
+      var o = TXT.get(n);
+      if(o && n.nodeValue === o.en){ n.nodeValue = o.ko; }
+      TXT.delete(n);
+    }
+    var els = root.querySelectorAll('[title],[placeholder],[aria-label],[alt]');
+    for(var i = 0; i < els.length; i++){
+      var oa = ATT.get(els[i]);
+      if(!oa) continue;
+      Object.keys(oa).forEach(function(a){ if(els[i].getAttribute(a) === oa[a].en) els[i].setAttribute(a, oa[a].ko); });
+      ATT.delete(els[i]);
+    }
+  }
+  var mo = new MutationObserver(function(recs){
+    if(lang !== 'en') return;
+    for(var i = 0; i < recs.length; i++){
+      var r = recs[i];
+      if(r.type === 'characterData') doText(r.target);
+      else if(r.type === 'attributes') doAttr(r.target, r.attributeName);
+      else{
+        for(var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
+      }
+    }
+  });
+  mo.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+
+  // ── canvas text / dialogs ──
+  [window.CanvasRenderingContext2D, window.OffscreenCanvasRenderingContext2D].forEach(function(C){
+    if(!C || !C.prototype) return;
+    ['fillText', 'strokeText', 'measureText'].forEach(function(fn){
+      var orig = C.prototype[fn];
+      if(!orig) return;
+      C.prototype[fn] = function(text){
+        if(lang === 'en' && typeof text === 'string' && HANGUL.test(text)) arguments[0] = tr(text);
+        return orig.apply(this, arguments);
+      };
+    });
+  });
+  ['alert', 'confirm', 'prompt'].forEach(function(fn){
+    var orig = window[fn];
+    if(!orig) return;
+    window[fn] = function(msg){
+      if(lang === 'en' && typeof msg === 'string') arguments[0] = tr(msg);
+      return orig.apply(window, arguments);
+    };
+  });
+
+  // ── public api ──
+  function apply(l){
+    lang = l;
+    api.lang = l;
+    document.documentElement.lang = l;
+    CACHE.clear();
+    if(document.body){ if(l === 'en') walk(document); else restore(document); }
+    for(var i = 0; i < handlers.length; i++){ try{ handlers[i](l); }catch(e){} }
+  }
+  var api = {
+    BRAND: BRAND,
+    lang: lang,
+    tr: tr,
+    t: function(m){ if(m == null) return ''; var v = m[api.lang]; return v != null ? v : (m.ko != null ? m.ko : m.en); },
+    onChange: function(fn){ if(typeof fn === 'function') handlers.push(fn); },
+    set: function(l){
+      if(!valid(l) || l === api.lang) return;
+      try{ localStorage.setItem(KEY, l); }catch(e){}
+      apply(l);
+    },
+    missing: function(){ return Object.keys(MISSING); }
+  };
+  window.SPROUTY = api;
+  if(lang === 'en') document.documentElement.lang = 'en';
+  function start(){ if(lang === 'en') walk(document); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  window.addEventListener('storage', function(e){
+    if(e.key === KEY && valid(e.newValue) && e.newValue !== api.lang) apply(e.newValue);
+  });
+})();
+
+</script>
 </head>
 <body>
 

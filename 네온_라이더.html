@@ -2,192 +2,6 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<script>
-/* ════════════════════════════════════════════════════════════════
-   SPROUTY GAMES — language layer (정새싹게임즈 / SPROUTY GAMES / SPTG)
-   · 언어 정하기: ?lang=ko|en → localStorage 'sprouty_lang' → 브라우저 언어 (한국어가 있으면 ko, 아니면 en)
-   · 한국어일 때는 아무것도 바꾸지 않습니다. (원본 그대로)
-   · English 일 때: 화면의 글씨(DOM), 캔버스 글씨, alert/confirm 을 아래 사전으로 바꿔 보여 줍니다.
-   · 게임 코드에서: SPROUTY.lang / SPROUTY.t({ko:'..',en:'..'}) / SPROUTY.onChange(fn) / SPROUTY.set('en')
-   · 번역이 빠진 글씨 확인: 콘솔에서 SPROUTY.missing()
-   ════════════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  var KEY = 'sprouty_lang';
-  var BRAND = { ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' };
-  var DICT = {"새 라이더": "New Rider", "를 무료로 획득했습니다.": " has been added to your roster for free.", "쇠사슬": "Chain", "을 발사해 맞은 적의 움직임을 영구적으로 봉인합니다.": " shoots out and permanently seals the movement of any enemy it hits.", "운명의 장난": "Twist of Fate", "으로 적을 불태우고,": " torches enemies, and", "최후의 발악": "Last Gasp", "으로 자폭합니다.": " blows itself up.", "DEATH 받기 · 확인": "CLAIM DEATH · OK", "화면을 가로로 돌려주세요": "Please rotate your screen to landscape", "NEON RIDERS는 가로(landscape) 모드에서": "NEON RIDERS can only be played in", "플레이할 수 있습니다.": "landscape mode.", "목표 0": "GOAL 0", "잡은수 0": "KILLS 0", "왼쪽 조이스틱으로 이동 · 적을 피하고 전진하세요": "Move with the left joystick · Dodge enemies and push forward", "캐릭터를 고르고 PLAY를 누르세요.": "Pick a rider and hit PLAY.", "⚡ 일반": "⚡ NORMAL", "💀 보스전": "💀 BOSS", "♾️ 엔드리스": "♾️ ENDLESS", "전투로 ULT 게이지를 채우고 필살기를 발동하세요.": "Fill the ULT gauge in combat, then unleash your ultimate.", "스테이지를 고르고 START STAGE를 누르세요.": "Pick a stage and hit START STAGE.", "캐릭터를 선택하세요.": "Choose your rider.", "라이더 상세 정보": "Rider Details", "현재 레벨": "Current Level", "업그레이드 비용": "Upgrade Cost", "공격력": "Attack", "이동속도": "Speed", "특수기술": "Special Skill", "평타 · 궁극기": "Basic · Ultimate", "업그레이드 순서": "Upgrade Path", "선택": "SELECT", "레벨업": "LEVEL UP", "도전과제를 완료하면 주로 코인을 받습니다. ELITE를 완료하면 SPROUTY가 해금됩니다.": "Complete challenges to earn coins. Finish ELITE to unlock SPROUTY.", "코인으로 스킨을 구매하고 장착해 라이더를 꾸며보세요.": "Spend coins on skins and equip them to style your rider.", "코드 해금": "CODE UNLOCK", "해금": "UNLOCK", "개발자 전용 간지나는 스페셜 스킨을 얻을수있습니다. 코드를 안다면요!": "Unlock a drippy dev-exclusive special skin. If you know the code, that is!", "데이터 초기화": "RESET DATA", "개발자 인증": "DEV AUTH", "인증": "VERIFY", "made by 정새싹게임즈's 정지호": "made by SPROUTY GAMES's Jiho Jung", "demo version by 정새싹게임즈's 염시우": "demo version by SPROUTY GAMES's Siu Yeom", "아레나 정보 열기": "Open arena info", "닫기": "Close", "코드 입력": "Enter code", "비밀번호 입력": "Enter password", "일시정지": "PAUSED", "기본 네온 스킨": "Default Neon Skin", "핑크 글로우 스킨": "Pink Glow Skin", "시원한 아이스 스킨": "Cool Ice Skin", "여름나기": "Summer Vibes", "청량한 초록빛 여름 스킨": "A fresh green summer skin", "정새싹게임즈": "SPROUTY GAMES", "정새싹게임즈 시그니처 퍼플 스킨": "SPROUTY GAMES signature purple skin", "위험인물": "Menace", "빨강과 노랑이 서서히 교차하는 스킨": "A skin where red and yellow slowly cross-fade", "얼티밋마스터-정지호 스페셜": "Ultimate Master - Jiho Jung Special", "무지개빛으로 빛나는 초고가 최상위 스킨": "A rainbow-glowing, ultra-premium top-tier skin", "오로라 스트림": "Aurora Stream", "보랏빛과 민트가 번지는 스킨": "A skin where violet and mint bleed together", "이정후 스페셜": "Junghoo Lee Special", "빛나는 황금 그라데이션 스킨": "A shining golden gradient skin", "염시우 스페셜": "Siu Yeom Special", "연한 똥색과 진한 똥색이 반복되는 비밀 스킨": "A secret skin that loops between light poop-brown and dark poop-brown", "LV.1 기본": "LV.1 Base", "LV.2 이동속도 증가": "LV.2 Speed up", "LV.3 탄환 속도 증가": "LV.3 Bullet speed up", "LV.4 데미지 증가": "LV.4 Damage up", "LV.5 체력증가": "LV.5 HP up", "LV.6 공격 넉백 추가 / 강화": "LV.6 Attack knockback added / boosted", "LV.7 특수기술 추가": "LV.7 Special skill added", "백만볼트 · 맞은 적이 얼어붙는 산탄총을 한번 쏩니다.": "Million Volts · Fires one shotgun blast that freezes enemies it hits.", "피터지는 싸움 · 10초간 무적이 되고 이동속도가 1.5배 증가합니다.": "Brawl Mode · Become invincible for 10s and gain 1.5x move speed.", "데스스타 · 주위 적들을 사격하는 포탑을 세웁니다.": "Death Star · Deploys a turret that shoots nearby enemies.", "화염병 · 주위 적들을 불태우는 탄환 3개를 던집니다.": "Molotov · Throws 3 projectiles that set nearby enemies ablaze.", "seed · 돌면서 작은 탄을 계속 흩뿌립니다.": "seed · Spins around, spraying small bullets nonstop.", "아이셔 · 맵 내부의 모든 적들을 넉백으로 밀어버립니다.": "Sour Blast · Knocks every enemy on the map away.", "덩굴 · 주위 적들을 덩굴로 감싸서 꼼짝 못하게 합니다.": "Vines · Wraps nearby enemies in vines so they can't move.", "플렉스 · 거대한 동전을 던집니다.": "FLEX · Tosses a giant coin.", "운명의 장난 · 가장 가까운 적 하나에게 큰 피해를 주고 불태웁니다.": "Twist of Fate · Deals heavy damage to the nearest enemy and sets it on fire.", "초고속 연사형": "Rapid-Fire", "빠른 탄속과 짧은 재장전으로 끊임없이 압박하는 스피드 라이더.": "A speed rider that keeps the pressure on with fast bullets and quick reloads.", "친플": "Squad Up", "5초 동안 양옆에 복제 둘이 생기며 함께 사격합니다.": "For 5s, two clones appear at your sides and fire along with you.", "근접 산탄형": "Close-Range Shotgun", "좁은 범위로 더 많은 탄을 쏟아내는 압살형 라이더.": "A crusher of a rider that unloads more pellets in a tight spread.", "블러드문 버스트": "Blood Moon Burst", "화면 전체에 충격파를 발사해 모든 적에게 강력한 피해를 줍니다.": "Fires a shockwave across the whole screen, dealing heavy damage to every enemy.", "충전 레이저형": "Charge Laser", "길게 충전할수록 더 넓고 강한 레이저를 쏘는 정밀형 라이더.": "A precision rider: the longer you charge, the wider and stronger the laser.", "활성화 중에는 평타가 자동으로 최대 충전 상태로 발사됩니다.": "While active, basic attacks auto-fire at full charge.", "폭발형 라이더": "Explosive Rider", "빠르게 튀는 화염탄과 폭발 연출에 특화된 신규 라이더.": "A new rider specialized in fast-bouncing fireballs and explosive effects.", "플레어스톰": "Flarestorm", "잠깐 동안 전방에 화염 탄막을 쏟아냅니다.": "Unleashes a barrage of fire in front of you for a short time.", "중거리 넉백형": "Mid-Range Knockback", "일반 스테이지 1~15 모두 클리어시 얻는 라이더. 동그란 코딱지를 발사하여 주위적들에게 피해를입힙니다..": "Unlocked by clearing all Normal stages 1~15. Fires round boogers to damage nearby enemies..", "새싹이헬리콥터": "SPROUTY Copter", "Carl처럼 돌면서 작은 탄을 계속 흩뿌리며 적을 밀어냅니다.": "Spins like Carl, spraying small bullets nonstop and pushing enemies back.", "이중 네모탄형": "Dual Square Shots", "두 개의 네모 발사체로 빠르게 압박하는 공격형 라이더.": "An offensive rider that pressures fast with two square projectiles.", "세 갈래로 갈라지는 부메랑 탄막을 연속으로 퍼붓습니다.": "Pours out a nonstop barrage of boomerang shots that split three ways.", "폭탄 지대형": "Bomb Zone", "전방 폭탄과 화염 지대로 길을 막는 지형 제어형 라이더.": "A terrain-control rider that blocks the path with forward bombs and fire zones.", "거대한 폭탄이 터지며 세 갈래 폭탄으로 분열하고 화염 지대를 남깁니다.": "A giant bomb explodes, splits into three bombs, and leaves fire zones behind.", "코인 넉백형": "Coin Knockback", "코인 탄막으로 적을 밀어내고 체인 궁극기로 맵을 쓸어버립니다.": "Pushes enemies back with a coin barrage and sweeps the map with a chain ultimate.", "왼쪽에서 오른쪽으로 천천히 지나가는 체인이 모든 적을 베어냅니다.": "A chain slowly sweeping left to right slices through every enemy.", "영구 정지형": "Permanent Freeze", "접속 보상으로 지급되는 해골 라이더. 쇠사슬로 적의 움직임을 영구적으로 봉인합니다.": "A skull rider given as a login reward. Permanently seals enemy movement with a chain.", "자폭해 전장의 모든 적에게 엄청난 피해를 주고 자신의 HP를 20으로 만듭니다.": "Self-destructs for massive damage to every enemy on the field, setting your own HP to 20.", "기본 탄막 패턴. 조준탄 + 산탄 + 소용돌이 탄막.": "Basic bullet-hell pattern. Aimed shots + spread shots + spiral barrage.", "회전 탄막 + 조준탄 + 비탄막 낙하가 섞인다.": "Rotating barrage + aimed shots + falling rain-style bullets mixed together.", "빠른 크로스 패턴 + 집중탄 + 링탄이 겹친다.": "Fast cross patterns, focused shots, and ring bullets overlap.", "격자 탄막 + 고속 회전 + 낙하탄이 이어진다.": "Grid barrages, high-speed spins, and falling shots chain together.", "모든 패턴이 혼합된 궁극의 보스.": "The ultimate boss with every pattern mixed together.", "정새싹": "SPROUTY", "SPROUTY의 평타와 궁극기를 뒤섞어 몰아치는 진짜 최종 보스.": "The real final boss, mixing SPROUTY's basic attacks and ultimates into one storm.", "일반 스테이지 1회 클리어": "Clear a Normal stage once", "적 50기 처치": "Defeat 50 enemies", "일반 스테이지 3회 클리어": "Clear Normal stages 3 times", "누적 코인 300 획득": "Earn 300 coins total", "일반 스테이지 1~15 전부 클리어": "Clear all Normal stages 1~15", "적 250기 처치": "Defeat 250 enemies", "보스전 1회 클리어": "Clear a Boss fight once", "일반 스테이지 5회 클리어": "Clear Normal stages 5 times", "누적 코인 1000 획득": "Earn 1000 coins total", "일반 스테이지 10회 클리어": "Clear Normal stages 10 times", "적 500기 처치": "Defeat 500 enemies", "보스전 2회 클리어": "Clear Boss fights 2 times", "보스전 3회 클리어": "Clear Boss fights 3 times", "라이더 4종 보유": "Own 4 riders", "일반 스테이지 20회 클리어": "Clear Normal stages 20 times", "적 1000기 처치": "Defeat 1000 enemies", "누적 코인 2000 획득": "Earn 2000 coins total", "보스전 5회 클리어": "Clear Boss fights 5 times", "라이더 5종 보유": "Own 5 riders", "일반 스테이지 25회 클리어": "Clear Normal stages 25 times", "적 1500기 처치": "Defeat 1500 enemies", "누적 코인 3500 획득": "Earn 3500 coins total", "보스전 7회 클리어": "Clear Boss fights 7 times", "라이더 6종 보유": "Own 6 riders", "일반 스테이지 30회 클리어": "Clear Normal stages 30 times", "적 2500기 처치": "Defeat 2500 enemies", "누적 코인 5000 획득": "Earn 5000 coins total", "보스전 10회 클리어": "Clear Boss fights 10 times", "라이더 7종 보유": "Own 7 riders", "일반 스테이지 40회 클리어": "Clear Normal stages 40 times", "새 라이더 해금!": "New rider unlocked!", "완료 · 보상 +": "Done · Reward +", "수령 완료": "Claimed", "보상 받기": "CLAIM", "진행 중": "In progress", "보상 +": "Reward +", "목표": "GOAL", "최고": "BEST", "잡은수": "KILLS", "특수기술 정보가 없습니다.": "No special skill info.", "비밀 코드로 해금해야 합니다.": "Must be unlocked with a secret code.", "비밀 해금 필요": "Secret unlock required", "카드를 누르면 상세 팝업이 열리고, 거기서 레벨업할 수 있어요.": "Tap a card to open its details, where you can level up.", "전투 중에는 캐릭터를 바꿀 수 없어요": "Can't switch riders mid-fight", "스테이지 1~15 클리어로 해금!": "Unlock by clearing stages 1~15!", "목표: 적": "Goal: Defeat", "마리 처치": " enemies", "난이도:": "Difficulty:", "보상:": "Reward:", "체력:": "HP:", "설명:": "Info:", "언더테일 스타일 탄막 패턴!": "Undertale-style bullet-hell patterns!", "보스 아레나 안에서 탄막을 피하세요.": "Dodge the bullets inside the boss arena.", "보스를 고르고 START STAGE를 누르세요. 언더테일식 탄막을 피하세요!": "Pick a boss and hit START STAGE. Dodge those Undertale-style bullets!", "빠른 연사로 압박하는 전자탄.": "Electric bolts that pressure with rapid fire.", "근접 산탄으로 한 번에 밀어붙이는 압살형 평타.": "A crushing basic attack that shoves everything back with close-range pellets.", "충전할수록 더 강한 레이저 평타.": "A laser basic attack that gets stronger the longer you charge.", "화염탄과 폭발 압박이 섞인 빠른 평타.": "A fast basic attack mixing fireballs and explosive pressure.", "야구배트처럼 휘두르며 중거리 넉백을 넣는 평타.": "A basic attack swung like a baseball bat for mid-range knockback.", "이중 네모탄으로 좁은 길을 빠르게 압박하는 평타.": "A basic attack that pressures narrow paths with dual square shots.", "폭탄과 덩굴 느낌의 지형 제어 평타.": "A terrain-control basic attack with a bomb-and-vine feel.", "코인 탄막으로 적을 밀어내는 평타.": "A basic attack that pushes enemies away with a coin barrage.", "긴 쇠사슬을 발사합니다. 맞은 적은 영구적으로 움직이지 못합니다.": "Fires a long chain. Enemies it hits can never move again.", "궁극기: 친플": "Ultimate: Squad Up", "궁극기: 블러드문 버스트": "Ultimate: Blood Moon Burst", "궁극기: BATTERY": "Ultimate: BATTERY", "궁극기: 플레어스톰": "Ultimate: Flarestorm", "궁극기: 새싹이헬리콥터": "Ultimate: SPROUTY Copter", "궁극기: SQUEEZE": "Ultimate: SQUEEZE", "궁극기: HACK": "Ultimate: HACK", "궁극기: CHAIN": "Ultimate: CHAIN", "궁극기: 최후의 발악": "Ultimate: Last Gasp", "궁극기:": "Ultimate:", "미해금": "Locked", "LV.7 특수기술:": "LV.7 Special skill:", "상세 정보를 닫았습니다.": "Details closed.", "이미 최대 레벨입니다.": "Already max level.", "코인이": "Need", "필요해요": "coins", "레벨업!": "LEVEL UP!", "특수기술 해금!": "Special skill unlocked!", "✅ 개발자 인증됨 — 코인과 라이더 강화 해금": "✅ Dev verified — coins and rider upgrades unlocked", "🔓 개발자 인증 완료! 999,999,999 코인 획득": "🔓 Dev verification complete! Got 999,999,999 coins", "비밀번호가 올바르지 않습니다.": "Wrong password.", "코드를 입력해 주세요.": "Please enter a code.", "올바르지 않은 코드입니다.": "Invalid code.", "해금 완료!": "Unlocked!", "모든 저장 데이터를 초기화할까요?": "Reset all saved data?", "등장!": "incoming!", "스테이지": "Stage", "클리어!": "CLEAR!", "마리 달성!": " kills reached!", "보상": "Reward", "COINS 획득.": "COINS earned.", "다음 스테이지": "Next Stage", "다시 플레이": "Play Again", "친플!": "SQUAD UP!", "LV.7에서 해금됩니다.": "Unlocks at LV.7.", "쿨타임": "Cooldown", "초": "s", "격파! +": "DEFEATED! +", "격파!": "DEFEATED!", "잡은 수": "KILLS", "보너스 +": "Bonus +", "COINS 획득": "COINS earned", "🏆 최고 기록 경신!": "🏆 New Best!", "최고 기록": "Best", "킬 · WAVE": "Kills · WAVE", "점수": "Score", "다시 도전하세요!": "Try again!", "예상치 못한 오류를 자동으로 막았어요.": "An unexpected error was caught automatically.", "다시 PLAY를 누르면 이어서 즐길 수 있어요.": "Hit PLAY again to keep going.", "캐릭터를 고르고 START를 누르세요": "Pick a rider and hit START"};
-  var PATS = [];
-  var HANGUL = /[가-힣]/;
-  var handlers = [];
-
-  function valid(v){ return v === 'ko' || v === 'en'; }
-  function detect(){
-    try{
-      if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
-      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
-      for(var i = 0; i < langs.length; i++){ if(/^ko\b/i.test(langs[i])) return 'ko'; }
-      return 'en';
-    }catch(e){ return 'ko'; }
-  }
-  function read(){
-    try{ var q = new URLSearchParams(location.search).get('lang'); if(valid(q)) return q; }catch(e){}
-    try{ var s = localStorage.getItem(KEY); if(valid(s)) return s; }catch(e){}
-    return detect();
-  }
-  var lang = read();
-
-  // ── dictionary → matchers ──
-  function esc(s){ return s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'); }
-  var NORM = {}, longKeys = [], shortKeys = [];
-  Object.keys(DICT).forEach(function(k){
-    NORM[k.replace(/\s+/g, ' ').trim()] = DICT[k];
-    var n = (k.match(/[가-힣]/g) || []).length;
-    (n <= 2 ? shortKeys : longKeys).push(k);
-  });
-  function byLen(a, b){ return b.length - a.length; }
-  longKeys.sort(byLen); shortKeys.sort(byLen);
-  var LONG_RE = longKeys.length ? new RegExp(longKeys.map(esc).join('|'), 'g') : null;
-  var SHORT_RE = shortKeys.length ? new RegExp('(^|[^가-힣])(' + shortKeys.map(esc).join('|') + ')(?![가-힣])', 'g') : null;
-  var PAT = PATS.map(function(p){ return [new RegExp(p[0], p[1] || 'g'), p[2]]; });
-  var SING = { turns:'turn', shares:'share', seconds:'second', matches:'match', titles:'title', levels:'level', coins:'coin', kills:'kill' };
-  var POST = /(^|[^\d.,])1 (turns|shares|seconds|matches|titles|levels|coins|kills)\b/g;
-
-  var CACHE = new Map(), MISSING = {};
-  function tr(s){
-    if(typeof s !== 'string' || !HANGUL.test(s)) return s;
-    var c = CACHE.get(s);
-    if(c !== undefined) return c;
-    var out = s, t = s.replace(/\s+/g, ' ').trim();
-    if(Object.prototype.hasOwnProperty.call(NORM, t)){
-      var m = s.match(/^(\s*)[\s\S]*?(\s*)$/);
-      out = m[1] + NORM[t] + m[2];
-    }else{
-      for(var i = 0; i < PAT.length; i++) out = out.replace(PAT[i][0], PAT[i][1]);
-      if(LONG_RE) out = out.replace(LONG_RE, function(x){ return DICT[x]; });
-      if(SHORT_RE && HANGUL.test(out)) out = out.replace(SHORT_RE, function(x, p, k){ return p + DICT[k]; });
-    }
-    out = out.replace(POST, function(x, p, w){ return p + '1 ' + SING[w]; });
-    if(CACHE.size > 4000) CACHE.clear();
-    CACHE.set(s, out);
-    if(HANGUL.test(out)) MISSING[out] = 1;
-    return out;
-  }
-
-  // ── DOM ──
-  var ATTRS = ['title', 'placeholder', 'aria-label', 'alt'];
-  var TXT = new WeakMap(), ATT = new WeakMap();
-  function skipNode(n){
-    var p = n.parentNode;
-    return !p || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.nodeName);
-  }
-  function doText(n){
-    if(lang !== 'en' || skipNode(n)) return;
-    var v = n.nodeValue;
-    if(!v || !HANGUL.test(v)) return;
-    var t = tr(v);
-    if(t !== v){ TXT.set(n, { ko: v, en: t }); n.nodeValue = t; }
-  }
-  function doAttr(el, name){
-    if(lang !== 'en') return;
-    var v = el.getAttribute(name);
-    if(!v || !HANGUL.test(v)) return;
-    var t = tr(v);
-    if(t !== v){
-      var o = ATT.get(el) || {}; o[name] = { ko: v, en: t }; ATT.set(el, o);
-      el.setAttribute(name, t);
-    }
-  }
-  function walk(root){
-    if(root.nodeType === 3){ doText(root); return; }
-    if(root.nodeType !== 1 && root.nodeType !== 9) return;
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
-    while((n = w.nextNode())) doText(n);
-    var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label],[alt]') : [];
-    for(var i = 0; i < els.length; i++) ATTRS.forEach(function(a){ if(els[i].hasAttribute(a)) doAttr(els[i], a); });
-    if(root.nodeType === 1) ATTRS.forEach(function(a){ if(root.hasAttribute(a)) doAttr(root, a); });
-  }
-  function restore(root){
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
-    while((n = w.nextNode())){
-      var o = TXT.get(n);
-      if(o && n.nodeValue === o.en){ n.nodeValue = o.ko; }
-      TXT.delete(n);
-    }
-    var els = root.querySelectorAll('[title],[placeholder],[aria-label],[alt]');
-    for(var i = 0; i < els.length; i++){
-      var oa = ATT.get(els[i]);
-      if(!oa) continue;
-      Object.keys(oa).forEach(function(a){ if(els[i].getAttribute(a) === oa[a].en) els[i].setAttribute(a, oa[a].ko); });
-      ATT.delete(els[i]);
-    }
-  }
-  var mo = new MutationObserver(function(recs){
-    if(lang !== 'en') return;
-    for(var i = 0; i < recs.length; i++){
-      var r = recs[i];
-      if(r.type === 'characterData') doText(r.target);
-      else if(r.type === 'attributes') doAttr(r.target, r.attributeName);
-      else{
-        for(var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
-      }
-    }
-  });
-  mo.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
-
-  // ── canvas text / dialogs ──
-  [window.CanvasRenderingContext2D, window.OffscreenCanvasRenderingContext2D].forEach(function(C){
-    if(!C || !C.prototype) return;
-    ['fillText', 'strokeText', 'measureText'].forEach(function(fn){
-      var orig = C.prototype[fn];
-      if(!orig) return;
-      C.prototype[fn] = function(text){
-        if(lang === 'en' && typeof text === 'string' && HANGUL.test(text)) arguments[0] = tr(text);
-        return orig.apply(this, arguments);
-      };
-    });
-  });
-  ['alert', 'confirm', 'prompt'].forEach(function(fn){
-    var orig = window[fn];
-    if(!orig) return;
-    window[fn] = function(msg){
-      if(lang === 'en' && typeof msg === 'string') arguments[0] = tr(msg);
-      return orig.apply(window, arguments);
-    };
-  });
-
-  // ── public api ──
-  function apply(l){
-    lang = l;
-    api.lang = l;
-    document.documentElement.lang = l;
-    CACHE.clear();
-    if(document.body){ if(l === 'en') walk(document); else restore(document); }
-    for(var i = 0; i < handlers.length; i++){ try{ handlers[i](l); }catch(e){} }
-  }
-  var api = {
-    BRAND: BRAND,
-    lang: lang,
-    tr: tr,
-    t: function(m){ if(m == null) return ''; var v = m[api.lang]; return v != null ? v : (m.ko != null ? m.ko : m.en); },
-    onChange: function(fn){ if(typeof fn === 'function') handlers.push(fn); },
-    set: function(l){
-      if(!valid(l) || l === api.lang) return;
-      try{ localStorage.setItem(KEY, l); }catch(e){}
-      apply(l);
-    },
-    missing: function(){ return Object.keys(MISSING); }
-  };
-  window.SPROUTY = api;
-  if(lang === 'en') document.documentElement.lang = 'en';
-  function start(){ if(lang === 'en') walk(document); }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
-  window.addEventListener('storage', function(e){
-    if(e.key === KEY && valid(e.newValue) && e.newValue !== api.lang) apply(e.newValue);
-  });
-})();
-
-</script>
-
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <title>NEON RIDERS</title>
 <style>
@@ -775,6 +589,191 @@
   .death-gift-btn{width:100%;margin-top:15px;border:none;border-radius:16px;padding:14px;color:#fff;font-weight:1000;letter-spacing:1px;font-size:14px;background:linear-gradient(135deg,#ff4658,#871324);box-shadow:0 10px 26px rgba(255,70,88,.24)}
   @keyframes deathFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 </style>
+<script>
+/* ════════════════════════════════════════════════════════════════
+   SPROUTY GAMES — language layer (정새싹게임즈 / SPROUTY GAMES / SPTG)
+   · 언어 정하기: ?lang=ko|en → localStorage 'sprouty_lang' → 브라우저 언어 (한국어가 있으면 ko, 아니면 en)
+   · 한국어일 때는 아무것도 바꾸지 않습니다. (원본 그대로)
+   · English 일 때: 화면의 글씨(DOM), 캔버스 글씨, alert/confirm 을 아래 사전으로 바꿔 보여 줍니다.
+   · 게임 코드에서: SPROUTY.lang / SPROUTY.t({ko:'..',en:'..'}) / SPROUTY.onChange(fn) / SPROUTY.set('en')
+   · 번역이 빠진 글씨 확인: 콘솔에서 SPROUTY.missing()
+   ════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var KEY = 'sprouty_lang';
+  var BRAND = { ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' };
+  var DICT = {"새 라이더": "New Rider", "를 무료로 획득했습니다.": " has been added to your roster for free.", "쇠사슬": "Chain", "을 발사해 맞은 적의 움직임을 영구적으로 봉인합니다.": " shoots out and permanently seals the movement of any enemy it hits.", "운명의 장난": "Twist of Fate", "으로 적을 불태우고,": " torches enemies, and", "최후의 발악": "Last Gasp", "으로 자폭합니다.": " blows itself up.", "DEATH 받기 · 확인": "CLAIM DEATH · OK", "화면을 가로로 돌려주세요": "Please rotate your screen to landscape", "NEON RIDERS는 가로(landscape) 모드에서": "NEON RIDERS can only be played in", "플레이할 수 있습니다.": "landscape mode.", "목표 0": "GOAL 0", "잡은수 0": "KILLS 0", "왼쪽 조이스틱으로 이동 · 적을 피하고 전진하세요": "Move with the left joystick · Dodge enemies and push forward", "캐릭터를 고르고 PLAY를 누르세요.": "Pick a rider and hit PLAY.", "⚡ 일반": "⚡ NORMAL", "💀 보스전": "💀 BOSS", "♾️ 엔드리스": "♾️ ENDLESS", "전투로 ULT 게이지를 채우고 필살기를 발동하세요.": "Fill the ULT gauge in combat, then unleash your ultimate.", "스테이지를 고르고 START STAGE를 누르세요.": "Pick a stage and hit START STAGE.", "캐릭터를 선택하세요.": "Choose your rider.", "라이더 상세 정보": "Rider Details", "현재 레벨": "Current Level", "업그레이드 비용": "Upgrade Cost", "공격력": "Attack", "이동속도": "Speed", "특수기술": "Special Skill", "평타 · 궁극기": "Basic · Ultimate", "업그레이드 순서": "Upgrade Path", "선택": "SELECT", "레벨업": "LEVEL UP", "도전과제를 완료하면 주로 코인을 받습니다. ELITE를 완료하면 SPROUTY가 해금됩니다.": "Complete challenges to earn coins. Finish ELITE to unlock SPROUTY.", "코인으로 스킨을 구매하고 장착해 라이더를 꾸며보세요.": "Spend coins on skins and equip them to style your rider.", "코드 해금": "CODE UNLOCK", "해금": "UNLOCK", "개발자 전용 간지나는 스페셜 스킨을 얻을수있습니다. 코드를 안다면요!": "Unlock a drippy dev-exclusive special skin. If you know the code, that is!", "데이터 초기화": "RESET DATA", "개발자 인증": "DEV AUTH", "인증": "VERIFY", "made by 정새싹게임즈's 정지호": "made by SPROUTY GAMES's Jiho Jung", "demo version by 정새싹게임즈's 염시우": "demo version by SPROUTY GAMES's Siu Yeom", "아레나 정보 열기": "Open arena info", "닫기": "Close", "코드 입력": "Enter code", "비밀번호 입력": "Enter password", "일시정지": "PAUSED", "기본 네온 스킨": "Default Neon Skin", "핑크 글로우 스킨": "Pink Glow Skin", "시원한 아이스 스킨": "Cool Ice Skin", "여름나기": "Summer Vibes", "청량한 초록빛 여름 스킨": "A fresh green summer skin", "정새싹게임즈": "SPROUTY GAMES", "정새싹게임즈 시그니처 퍼플 스킨": "SPROUTY GAMES signature purple skin", "위험인물": "Menace", "빨강과 노랑이 서서히 교차하는 스킨": "A skin where red and yellow slowly cross-fade", "얼티밋마스터-정지호 스페셜": "Ultimate Master - Jiho Jung Special", "무지개빛으로 빛나는 초고가 최상위 스킨": "A rainbow-glowing, ultra-premium top-tier skin", "오로라 스트림": "Aurora Stream", "보랏빛과 민트가 번지는 스킨": "A skin where violet and mint bleed together", "이정후 스페셜": "Junghoo Lee Special", "빛나는 황금 그라데이션 스킨": "A shining golden gradient skin", "염시우 스페셜": "Siu Yeom Special", "연한 똥색과 진한 똥색이 반복되는 비밀 스킨": "A secret skin that loops between light poop-brown and dark poop-brown", "LV.1 기본": "LV.1 Base", "LV.2 이동속도 증가": "LV.2 Speed up", "LV.3 탄환 속도 증가": "LV.3 Bullet speed up", "LV.4 데미지 증가": "LV.4 Damage up", "LV.5 체력증가": "LV.5 HP up", "LV.6 공격 넉백 추가 / 강화": "LV.6 Attack knockback added / boosted", "LV.7 특수기술 추가": "LV.7 Special skill added", "백만볼트 · 맞은 적이 얼어붙는 산탄총을 한번 쏩니다.": "Million Volts · Fires one shotgun blast that freezes enemies it hits.", "피터지는 싸움 · 10초간 무적이 되고 이동속도가 1.5배 증가합니다.": "Brawl Mode · Become invincible for 10s and gain 1.5x move speed.", "데스스타 · 주위 적들을 사격하는 포탑을 세웁니다.": "Death Star · Deploys a turret that shoots nearby enemies.", "화염병 · 주위 적들을 불태우는 탄환 3개를 던집니다.": "Molotov · Throws 3 projectiles that set nearby enemies ablaze.", "seed · 돌면서 작은 탄을 계속 흩뿌립니다.": "seed · Spins around, spraying small bullets nonstop.", "아이셔 · 맵 내부의 모든 적들을 넉백으로 밀어버립니다.": "Sour Blast · Knocks every enemy on the map away.", "덩굴 · 주위 적들을 덩굴로 감싸서 꼼짝 못하게 합니다.": "Vines · Wraps nearby enemies in vines so they can't move.", "플렉스 · 거대한 동전을 던집니다.": "FLEX · Tosses a giant coin.", "운명의 장난 · 가장 가까운 적 하나에게 큰 피해를 주고 불태웁니다.": "Twist of Fate · Deals heavy damage to the nearest enemy and sets it on fire.", "초고속 연사형": "Rapid-Fire", "빠른 탄속과 짧은 재장전으로 끊임없이 압박하는 스피드 라이더.": "A speed rider that keeps the pressure on with fast bullets and quick reloads.", "친플": "Squad Up", "5초 동안 양옆에 복제 둘이 생기며 함께 사격합니다.": "For 5s, two clones appear at your sides and fire along with you.", "근접 산탄형": "Close-Range Shotgun", "좁은 범위로 더 많은 탄을 쏟아내는 압살형 라이더.": "A crusher of a rider that unloads more pellets in a tight spread.", "블러드문 버스트": "Blood Moon Burst", "화면 전체에 충격파를 발사해 모든 적에게 강력한 피해를 줍니다.": "Fires a shockwave across the whole screen, dealing heavy damage to every enemy.", "충전 레이저형": "Charge Laser", "길게 충전할수록 더 넓고 강한 레이저를 쏘는 정밀형 라이더.": "A precision rider: the longer you charge, the wider and stronger the laser.", "활성화 중에는 평타가 자동으로 최대 충전 상태로 발사됩니다.": "While active, basic attacks auto-fire at full charge.", "폭발형 라이더": "Explosive Rider", "빠르게 튀는 화염탄과 폭발 연출에 특화된 신규 라이더.": "A new rider specialized in fast-bouncing fireballs and explosive effects.", "플레어스톰": "Flarestorm", "잠깐 동안 전방에 화염 탄막을 쏟아냅니다.": "Unleashes a barrage of fire in front of you for a short time.", "중거리 넉백형": "Mid-Range Knockback", "일반 스테이지 1~15 모두 클리어시 얻는 라이더. 동그란 코딱지를 발사하여 주위적들에게 피해를입힙니다..": "Unlocked by clearing all Normal stages 1~15. Fires round boogers to damage nearby enemies..", "새싹이헬리콥터": "SPROUTY Copter", "Carl처럼 돌면서 작은 탄을 계속 흩뿌리며 적을 밀어냅니다.": "Spins like Carl, spraying small bullets nonstop and pushing enemies back.", "이중 네모탄형": "Dual Square Shots", "두 개의 네모 발사체로 빠르게 압박하는 공격형 라이더.": "An offensive rider that pressures fast with two square projectiles.", "세 갈래로 갈라지는 부메랑 탄막을 연속으로 퍼붓습니다.": "Pours out a nonstop barrage of boomerang shots that split three ways.", "폭탄 지대형": "Bomb Zone", "전방 폭탄과 화염 지대로 길을 막는 지형 제어형 라이더.": "A terrain-control rider that blocks the path with forward bombs and fire zones.", "거대한 폭탄이 터지며 세 갈래 폭탄으로 분열하고 화염 지대를 남깁니다.": "A giant bomb explodes, splits into three bombs, and leaves fire zones behind.", "코인 넉백형": "Coin Knockback", "코인 탄막으로 적을 밀어내고 체인 궁극기로 맵을 쓸어버립니다.": "Pushes enemies back with a coin barrage and sweeps the map with a chain ultimate.", "왼쪽에서 오른쪽으로 천천히 지나가는 체인이 모든 적을 베어냅니다.": "A chain slowly sweeping left to right slices through every enemy.", "영구 정지형": "Permanent Freeze", "접속 보상으로 지급되는 해골 라이더. 쇠사슬로 적의 움직임을 영구적으로 봉인합니다.": "A skull rider given as a login reward. Permanently seals enemy movement with a chain.", "자폭해 전장의 모든 적에게 엄청난 피해를 주고 자신의 HP를 20으로 만듭니다.": "Self-destructs for massive damage to every enemy on the field, setting your own HP to 20.", "기본 탄막 패턴. 조준탄 + 산탄 + 소용돌이 탄막.": "Basic bullet-hell pattern. Aimed shots + spread shots + spiral barrage.", "회전 탄막 + 조준탄 + 비탄막 낙하가 섞인다.": "Rotating barrage + aimed shots + falling rain-style bullets mixed together.", "빠른 크로스 패턴 + 집중탄 + 링탄이 겹친다.": "Fast cross patterns, focused shots, and ring bullets overlap.", "격자 탄막 + 고속 회전 + 낙하탄이 이어진다.": "Grid barrages, high-speed spins, and falling shots chain together.", "모든 패턴이 혼합된 궁극의 보스.": "The ultimate boss with every pattern mixed together.", "정새싹": "SPROUTY", "SPROUTY의 평타와 궁극기를 뒤섞어 몰아치는 진짜 최종 보스.": "The real final boss, mixing SPROUTY's basic attacks and ultimates into one storm.", "일반 스테이지 1회 클리어": "Clear a Normal stage once", "적 50기 처치": "Defeat 50 enemies", "일반 스테이지 3회 클리어": "Clear Normal stages 3 times", "누적 코인 300 획득": "Earn 300 coins total", "일반 스테이지 1~15 전부 클리어": "Clear all Normal stages 1~15", "적 250기 처치": "Defeat 250 enemies", "보스전 1회 클리어": "Clear a Boss fight once", "일반 스테이지 5회 클리어": "Clear Normal stages 5 times", "누적 코인 1000 획득": "Earn 1000 coins total", "일반 스테이지 10회 클리어": "Clear Normal stages 10 times", "적 500기 처치": "Defeat 500 enemies", "보스전 2회 클리어": "Clear Boss fights 2 times", "보스전 3회 클리어": "Clear Boss fights 3 times", "라이더 4종 보유": "Own 4 riders", "일반 스테이지 20회 클리어": "Clear Normal stages 20 times", "적 1000기 처치": "Defeat 1000 enemies", "누적 코인 2000 획득": "Earn 2000 coins total", "보스전 5회 클리어": "Clear Boss fights 5 times", "라이더 5종 보유": "Own 5 riders", "일반 스테이지 25회 클리어": "Clear Normal stages 25 times", "적 1500기 처치": "Defeat 1500 enemies", "누적 코인 3500 획득": "Earn 3500 coins total", "보스전 7회 클리어": "Clear Boss fights 7 times", "라이더 6종 보유": "Own 6 riders", "일반 스테이지 30회 클리어": "Clear Normal stages 30 times", "적 2500기 처치": "Defeat 2500 enemies", "누적 코인 5000 획득": "Earn 5000 coins total", "보스전 10회 클리어": "Clear Boss fights 10 times", "라이더 7종 보유": "Own 7 riders", "일반 스테이지 40회 클리어": "Clear Normal stages 40 times", "새 라이더 해금!": "New rider unlocked!", "완료 · 보상 +": "Done · Reward +", "수령 완료": "Claimed", "보상 받기": "CLAIM", "진행 중": "In progress", "보상 +": "Reward +", "목표": "GOAL", "최고": "BEST", "잡은수": "KILLS", "특수기술 정보가 없습니다.": "No special skill info.", "비밀 코드로 해금해야 합니다.": "Must be unlocked with a secret code.", "비밀 해금 필요": "Secret unlock required", "카드를 누르면 상세 팝업이 열리고, 거기서 레벨업할 수 있어요.": "Tap a card to open its details, where you can level up.", "전투 중에는 캐릭터를 바꿀 수 없어요": "Can't switch riders mid-fight", "스테이지 1~15 클리어로 해금!": "Unlock by clearing stages 1~15!", "목표: 적": "Goal: Defeat", "마리 처치": " enemies", "난이도:": "Difficulty:", "보상:": "Reward:", "체력:": "HP:", "설명:": "Info:", "언더테일 스타일 탄막 패턴!": "Undertale-style bullet-hell patterns!", "보스 아레나 안에서 탄막을 피하세요.": "Dodge the bullets inside the boss arena.", "보스를 고르고 START STAGE를 누르세요. 언더테일식 탄막을 피하세요!": "Pick a boss and hit START STAGE. Dodge those Undertale-style bullets!", "빠른 연사로 압박하는 전자탄.": "Electric bolts that pressure with rapid fire.", "근접 산탄으로 한 번에 밀어붙이는 압살형 평타.": "A crushing basic attack that shoves everything back with close-range pellets.", "충전할수록 더 강한 레이저 평타.": "A laser basic attack that gets stronger the longer you charge.", "화염탄과 폭발 압박이 섞인 빠른 평타.": "A fast basic attack mixing fireballs and explosive pressure.", "야구배트처럼 휘두르며 중거리 넉백을 넣는 평타.": "A basic attack swung like a baseball bat for mid-range knockback.", "이중 네모탄으로 좁은 길을 빠르게 압박하는 평타.": "A basic attack that pressures narrow paths with dual square shots.", "폭탄과 덩굴 느낌의 지형 제어 평타.": "A terrain-control basic attack with a bomb-and-vine feel.", "코인 탄막으로 적을 밀어내는 평타.": "A basic attack that pushes enemies away with a coin barrage.", "긴 쇠사슬을 발사합니다. 맞은 적은 영구적으로 움직이지 못합니다.": "Fires a long chain. Enemies it hits can never move again.", "궁극기: 친플": "Ultimate: Squad Up", "궁극기: 블러드문 버스트": "Ultimate: Blood Moon Burst", "궁극기: BATTERY": "Ultimate: BATTERY", "궁극기: 플레어스톰": "Ultimate: Flarestorm", "궁극기: 새싹이헬리콥터": "Ultimate: SPROUTY Copter", "궁극기: SQUEEZE": "Ultimate: SQUEEZE", "궁극기: HACK": "Ultimate: HACK", "궁극기: CHAIN": "Ultimate: CHAIN", "궁극기: 최후의 발악": "Ultimate: Last Gasp", "궁극기:": "Ultimate:", "미해금": "Locked", "LV.7 특수기술:": "LV.7 Special skill:", "상세 정보를 닫았습니다.": "Details closed.", "이미 최대 레벨입니다.": "Already max level.", "코인이": "Need", "필요해요": "coins", "레벨업!": "LEVEL UP!", "특수기술 해금!": "Special skill unlocked!", "✅ 개발자 인증됨 — 코인과 라이더 강화 해금": "✅ Dev verified — coins and rider upgrades unlocked", "🔓 개발자 인증 완료! 999,999,999 코인 획득": "🔓 Dev verification complete! Got 999,999,999 coins", "비밀번호가 올바르지 않습니다.": "Wrong password.", "코드를 입력해 주세요.": "Please enter a code.", "올바르지 않은 코드입니다.": "Invalid code.", "해금 완료!": "Unlocked!", "모든 저장 데이터를 초기화할까요?": "Reset all saved data?", "등장!": "incoming!", "스테이지": "Stage", "클리어!": "CLEAR!", "마리 달성!": " kills reached!", "보상": "Reward", "COINS 획득.": "COINS earned.", "다음 스테이지": "Next Stage", "다시 플레이": "Play Again", "친플!": "SQUAD UP!", "LV.7에서 해금됩니다.": "Unlocks at LV.7.", "쿨타임": "Cooldown", "초": "s", "격파! +": "DEFEATED! +", "격파!": "DEFEATED!", "잡은 수": "KILLS", "보너스 +": "Bonus +", "COINS 획득": "COINS earned", "🏆 최고 기록 경신!": "🏆 New Best!", "최고 기록": "Best", "킬 · WAVE": "Kills · WAVE", "점수": "Score", "다시 도전하세요!": "Try again!", "예상치 못한 오류를 자동으로 막았어요.": "An unexpected error was caught automatically.", "다시 PLAY를 누르면 이어서 즐길 수 있어요.": "Hit PLAY again to keep going.", "캐릭터를 고르고 START를 누르세요": "Pick a rider and hit START"};
+  var PATS = [];
+  var HANGUL = /[가-힣]/;
+  var handlers = [];
+
+  function valid(v){ return v === 'ko' || v === 'en'; }
+  function detect(){
+    try{
+      if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
+      var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
+      for(var i = 0; i < langs.length; i++){ if(/^ko\b/i.test(langs[i])) return 'ko'; }
+      return 'en';
+    }catch(e){ return 'ko'; }
+  }
+  function read(){
+    try{ var q = new URLSearchParams(location.search).get('lang'); if(valid(q)) return q; }catch(e){}
+    try{ var s = localStorage.getItem(KEY); if(valid(s)) return s; }catch(e){}
+    return detect();
+  }
+  var lang = read();
+
+  // ── dictionary → matchers ──
+  function esc(s){ return s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&'); }
+  var NORM = {}, longKeys = [], shortKeys = [];
+  Object.keys(DICT).forEach(function(k){
+    NORM[k.replace(/\s+/g, ' ').trim()] = DICT[k];
+    var n = (k.match(/[가-힣]/g) || []).length;
+    (n <= 2 ? shortKeys : longKeys).push(k);
+  });
+  function byLen(a, b){ return b.length - a.length; }
+  longKeys.sort(byLen); shortKeys.sort(byLen);
+  var LONG_RE = longKeys.length ? new RegExp(longKeys.map(esc).join('|'), 'g') : null;
+  var SHORT_RE = shortKeys.length ? new RegExp('(^|[^가-힣])(' + shortKeys.map(esc).join('|') + ')(?![가-힣])', 'g') : null;
+  var PAT = PATS.map(function(p){ return [new RegExp(p[0], p[1] || 'g'), p[2]]; });
+  var SING = { turns:'turn', shares:'share', seconds:'second', matches:'match', titles:'title', levels:'level', coins:'coin', kills:'kill' };
+  var POST = /(^|[^\d.,])1 (turns|shares|seconds|matches|titles|levels|coins|kills)\b/g;
+
+  var CACHE = new Map(), MISSING = {};
+  function tr(s){
+    if(typeof s !== 'string' || !HANGUL.test(s)) return s;
+    var c = CACHE.get(s);
+    if(c !== undefined) return c;
+    var out = s, t = s.replace(/\s+/g, ' ').trim();
+    if(Object.prototype.hasOwnProperty.call(NORM, t)){
+      var m = s.match(/^(\s*)[\s\S]*?(\s*)$/);
+      out = m[1] + NORM[t] + m[2];
+    }else{
+      for(var i = 0; i < PAT.length; i++) out = out.replace(PAT[i][0], PAT[i][1]);
+      if(LONG_RE) out = out.replace(LONG_RE, function(x){ return DICT[x]; });
+      if(SHORT_RE && HANGUL.test(out)) out = out.replace(SHORT_RE, function(x, p, k){ return p + DICT[k]; });
+    }
+    out = out.replace(POST, function(x, p, w){ return p + '1 ' + SING[w]; });
+    if(CACHE.size > 4000) CACHE.clear();
+    CACHE.set(s, out);
+    if(HANGUL.test(out)) MISSING[out] = 1;
+    return out;
+  }
+
+  // ── DOM ──
+  var ATTRS = ['title', 'placeholder', 'aria-label', 'alt'];
+  var TXT = new WeakMap(), ATT = new WeakMap();
+  function skipNode(n){
+    var p = n.parentNode;
+    return !p || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(p.nodeName);
+  }
+  function doText(n){
+    if(lang !== 'en' || skipNode(n)) return;
+    var v = n.nodeValue;
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){ TXT.set(n, { ko: v, en: t }); n.nodeValue = t; }
+  }
+  function doAttr(el, name){
+    if(lang !== 'en') return;
+    var v = el.getAttribute(name);
+    if(!v || !HANGUL.test(v)) return;
+    var t = tr(v);
+    if(t !== v){
+      var o = ATT.get(el) || {}; o[name] = { ko: v, en: t }; ATT.set(el, o);
+      el.setAttribute(name, t);
+    }
+  }
+  function walk(root){
+    if(root.nodeType === 3){ doText(root); return; }
+    if(root.nodeType !== 1 && root.nodeType !== 9) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())) doText(n);
+    var els = root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label],[alt]') : [];
+    for(var i = 0; i < els.length; i++) ATTRS.forEach(function(a){ if(els[i].hasAttribute(a)) doAttr(els[i], a); });
+    if(root.nodeType === 1) ATTRS.forEach(function(a){ if(root.hasAttribute(a)) doAttr(root, a); });
+  }
+  function restore(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while((n = w.nextNode())){
+      var o = TXT.get(n);
+      if(o && n.nodeValue === o.en){ n.nodeValue = o.ko; }
+      TXT.delete(n);
+    }
+    var els = root.querySelectorAll('[title],[placeholder],[aria-label],[alt]');
+    for(var i = 0; i < els.length; i++){
+      var oa = ATT.get(els[i]);
+      if(!oa) continue;
+      Object.keys(oa).forEach(function(a){ if(els[i].getAttribute(a) === oa[a].en) els[i].setAttribute(a, oa[a].ko); });
+      ATT.delete(els[i]);
+    }
+  }
+  var mo = new MutationObserver(function(recs){
+    if(lang !== 'en') return;
+    for(var i = 0; i < recs.length; i++){
+      var r = recs[i];
+      if(r.type === 'characterData') doText(r.target);
+      else if(r.type === 'attributes') doAttr(r.target, r.attributeName);
+      else{
+        for(var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
+      }
+    }
+  });
+  mo.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+
+  // ── canvas text / dialogs ──
+  [window.CanvasRenderingContext2D, window.OffscreenCanvasRenderingContext2D].forEach(function(C){
+    if(!C || !C.prototype) return;
+    ['fillText', 'strokeText', 'measureText'].forEach(function(fn){
+      var orig = C.prototype[fn];
+      if(!orig) return;
+      C.prototype[fn] = function(text){
+        if(lang === 'en' && typeof text === 'string' && HANGUL.test(text)) arguments[0] = tr(text);
+        return orig.apply(this, arguments);
+      };
+    });
+  });
+  ['alert', 'confirm', 'prompt'].forEach(function(fn){
+    var orig = window[fn];
+    if(!orig) return;
+    window[fn] = function(msg){
+      if(lang === 'en' && typeof msg === 'string') arguments[0] = tr(msg);
+      return orig.apply(window, arguments);
+    };
+  });
+
+  // ── public api ──
+  function apply(l){
+    lang = l;
+    api.lang = l;
+    document.documentElement.lang = l;
+    CACHE.clear();
+    if(document.body){ if(l === 'en') walk(document); else restore(document); }
+    for(var i = 0; i < handlers.length; i++){ try{ handlers[i](l); }catch(e){} }
+  }
+  var api = {
+    BRAND: BRAND,
+    lang: lang,
+    tr: tr,
+    t: function(m){ if(m == null) return ''; var v = m[api.lang]; return v != null ? v : (m.ko != null ? m.ko : m.en); },
+    onChange: function(fn){ if(typeof fn === 'function') handlers.push(fn); },
+    set: function(l){
+      if(!valid(l) || l === api.lang) return;
+      try{ localStorage.setItem(KEY, l); }catch(e){}
+      apply(l);
+    },
+    missing: function(){ return Object.keys(MISSING); }
+  };
+  window.SPROUTY = api;
+  if(lang === 'en') document.documentElement.lang = 'en';
+  function start(){ if(lang === 'en') walk(document); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  window.addEventListener('storage', function(e){
+    if(e.key === KEY && valid(e.newValue) && e.newValue !== api.lang) apply(e.newValue);
+  });
+})();
+
+</script>
 </head>
 <body>
   <div class="opening-splash" id="openingSplash" aria-hidden="true">
