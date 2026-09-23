@@ -89,7 +89,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{background:#0b0d0b;scroll-behavior:smooth}
+html{background:#0b0d0b;scroll-behavior:smooth;cursor:url('C.jpg'),auto}
 body{
   min-height:100vh;
   margin:0;
@@ -100,6 +100,7 @@ body{
   color:var(--white);
   font-family:var(--sans);
   overflow-x:hidden;
+  cursor:url('C.jpg'),auto;
 }
 button,input{font:inherit}
 button{appearance:none}
@@ -219,7 +220,7 @@ a{color:inherit}
 .section-title .line{height:1px;flex:1;background:#3e4b3c}
 .banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .banner-card{border:var(--card-border);border-radius:var(--r-card);background:#111711;box-shadow:var(--card-shadow);overflow:hidden}
-.banner-card img{width:100%;height:118px;object-fit:cover;display:block;filter:saturate(.65) contrast(1.02)}
+.banner-card img{width:100%;height:auto;aspect-ratio:2.85/1;object-fit:cover;display:block;filter:saturate(.65) contrast(1.02)}
 .notice-list{margin-top:11px;border:var(--card-border);border-radius:var(--r-card);background:var(--card-bg);box-shadow:var(--card-shadow);overflow:hidden}
 .notice-item{display:grid;grid-template-columns:78px 58px 1fr;gap:10px;align-items:start;padding:11px;border-bottom:1px dashed #344033}
 .notice-item:last-child{border-bottom:0}
@@ -397,6 +398,23 @@ body.modal-open{overflow:hidden}
 @media(max-width:900px){
   body{padding:12px 8px 26px}.handheld{padding:12px;border-radius:22px 22px 28px 28px}.handheld::after{display:none}.screen-frame{padding:12px;border-radius:16px}.screen{min-height:0}.gl-stage{height:clamp(420px,calc(100vh - 290px),640px);height:clamp(420px,calc(100svh - 290px),640px)}
 }
+@media(min-width:901px){
+  /* 홈 화면이 웬만한 데스크톱 창 높이에서 스크롤 없이 한 번에 보이도록 여백과 영상/목록 높이를 압축합니다.
+     공지가 아주 많아지거나 개발자 노트가 길어지는 경우엔 해당 박스 안에서만 살짝 스크롤됩니다. */
+  .screen{min-height:0}
+  .tab-panel{padding:12px 0 20px}
+  .screen-titlebar{margin:2px 0 10px}
+  #tab-home .home-hero video{max-height:min(300px,34vh);min-height:140px}
+  #tab-home .primary-btn.home-cta{margin-top:10px;padding:11px 16px}
+  #tab-home .section-title{margin:16px 0 9px}
+  #tab-home #noticeList{max-height:230px;overflow-y:auto}
+  #tab-home .sprout-note{margin-top:9px;padding:11px}
+  #tab-home .sprout-note-body{max-height:110px;overflow-y:auto}
+  #tab-home #noticeList,#tab-home .sprout-note-body{scrollbar-width:thin;scrollbar-color:#5b6c56 #131b13}
+  #tab-home #noticeList::-webkit-scrollbar,#tab-home .sprout-note-body::-webkit-scrollbar{width:7px}
+  #tab-home #noticeList::-webkit-scrollbar-track,#tab-home .sprout-note-body::-webkit-scrollbar-track{background:#131b13}
+  #tab-home #noticeList::-webkit-scrollbar-thumb,#tab-home .sprout-note-body::-webkit-scrollbar-thumb{background:#5b6c56;border-radius:6px}
+}
 @media(max-width:640px){
   .screen-topbar{height:auto;min-height:54px;padding:10px 12px}.brand-title{font-size:8px}.brand-sub{display:none}.system-strip{font-size:7px}.sys-clock{font-size:8px}:root{--wrap-pad:10px}.wrap{padding:0 var(--wrap-pad) calc(78px + env(safe-area-inset-bottom,0px))}.banner-grid{grid-template-columns:1fr}.notice-item{grid-template-columns:64px 46px 1fr;gap:7px}.notice-text{font-size:9px}.about-stats{grid-template-columns:1fr 1fr}.about-stat:last-child{grid-column:1/-1}.team-grid{grid-template-columns:1fr}.game-detail-main{grid-template-columns:110px 1fr}.game-detail-cover{width:110px;height:110px}.game-detail-title{font-size:9px}.game-detail-desc{font-size:9px}.tab-btn{font-size:6px}.gl-hint{display:none}.gl-arrow{width:36px;height:36px}.gl-arrow.prev{left:8px}.gl-arrow.next{right:8px}.gl-open{padding:10px 12px}
 }
@@ -434,7 +452,7 @@ body.modal-open{overflow:hidden}
         <div class="sr-only" data-i18n="sr.title"><span data-brand="ko">정새싹게임즈</span> — 레트로 핸드헬드 콘솔 스타일 미니게임 포털</div>
         <div class="brand-lockup">
           <span class="brand-icon">🌱</span>
-          <div><div class="brand-title" data-brand="en">SPROUTY GAMES</div><div class="brand-sub" data-brand="abbr">SPTG</div></div>
+          <div><div class="brand-title" id="brandTitleMain">SPROUTY GAMES</div><div class="brand-sub" data-brand="abbr">SPTG</div></div>
         </div>
         <div class="system-strip"><span class="status-led"></span><span>ONLINE</span><div class="sys-clock" id="sysClock">--:--</div><button id="navLangBtn" type="button" class="lang-toggle-top" aria-label="Language / 언어" title="Language / 언어"><span data-l="ko">KO</span><span data-l="en">EN</span></button><button id="navFeedbackBtn" type="button" class="feedback-btn-top">FEEDBACK</button></div>
       </header>
@@ -613,25 +631,16 @@ const CONTACT = Object.freeze({ email: 'sproutygames@gmail.com', feedbackKo: 'ht
    · HTML 에서 data-i18n="키" 가 붙은 글씨는 아래 I18N_EN[키] 로 바뀝니다. (한국어 원문은 HTML 에 그대로 있음)
    · data-i18n-attr="alt:키; aria-label:키" 는 속성(alt, aria-label 등)을 바꿉니다.
    · 공지(NOTICES)는 en:, 게임 팝업(GAME_DETAILS_EN), 크레딧 반응(CREDIT_EGGS_EN)은 각각 아래 영어판을 고치면 됩니다.
-   · 고른 언어는 localStorage('sprouty_lang') 에 저장됩니다. (저장된 게 없으면 브라우저 언어로 자동 선택)
+   · 고른 언어는 localStorage('sprouty_lang') 에 저장됩니다. (저장된 게 없으면 항상 한국어가 기본)
    ════════════════════════════════════════════════════ */
 const LANG_KEY = 'sprouty_lang';
-// 첫 방문: 브라우저 언어에 한국어가 하나라도 있으면 한국어, 없으면 영어. (검색엔진 봇은 항상 한국어)
-// 직접 고른 언어(localStorage)가 있으면 그게 항상 우선입니다.
-function detectLang(){
-  try{
-    if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return 'ko';
-    const langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
-    return langs.some(l => /^ko\b/i.test(l)) ? 'ko' : 'en';
-  }catch(e){ return 'ko'; }
-}
+// 첫 방문 기본값은 항상 한국어입니다. 직접 고른 언어(localStorage)가 있으면 그게 항상 우선입니다.
 let LANG = 'ko';
 let langChosen = false;
 try{
   const saved = localStorage.getItem(LANG_KEY);
   if(saved === 'en' || saved === 'ko'){ LANG = saved; langChosen = true; }
 }catch(e){}
-if(!langChosen) LANG = detectLang();
 const langHooks = [];   // 언어가 바뀔 때 같이 다시 그려야 하는 것들이 여기에 등록됩니다
 
 const I18N_EN = {
@@ -2393,6 +2402,12 @@ function applyLang(lang, persist){
   document.body.dataset.lang = LANG;
   document.title = ui('pageTitle');
   if(META_DESC) META_DESC.setAttribute('content', en ? I18N_EN['meta.desc'] : META_DESC_KO);
+
+  // 맨 위 헤더 로고: 한국어 모드에선 정새싹게임즈, English 모드에선 SPROUTY GAMES
+  const brandTitleMain = document.getElementById('brandTitleMain');
+  if(brandTitleMain) brandTitleMain.textContent = en ? BRAND.en : BRAND.ko;
+  const shellMain = document.querySelector('.handheld');
+  if(shellMain) shellMain.dataset.shellLabel = (en ? BRAND.en : BRAND.ko) + ' • ' + BRAND.abbr;
 
   // HTML 에 data-i18n 이 붙은 글씨 (한국어 원문은 처음 한 번 보관해 두었다가 되돌립니다)
   document.querySelectorAll('[data-i18n]').forEach(el => {
