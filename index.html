@@ -51,6 +51,27 @@
 }
 </script>
 
+<!-- ═══════════════════════════════════════════════════════════════
+     📊 FIREBASE ANALYTICS (GA4) — 방문자 통계
+     ═══════════════════════════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCifbe_hRnfFEU7UF09-xeN97rP3onS1dE",
+    authDomain: "sprouty-games.firebaseapp.com",
+    projectId: "sprouty-games",
+    storageBucket: "sprouty-games.firebasestorage.app",
+    messagingSenderId: "259145148090",
+    appId: "1:259145148090:web:4328ff5b117487c09dc483",
+    measurementId: "G-T7Z6MZ5MD6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;600;700;900&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css');
