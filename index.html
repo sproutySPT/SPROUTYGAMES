@@ -195,6 +195,7 @@ a{color:inherit}
 }
 .screen::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:40;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.22) 100%)}
 .screen-noise{position:absolute;inset:0;pointer-events:none;z-index:39;opacity:.045;background-image:radial-gradient(rgba(255,255,255,.6) .6px,transparent .7px);background-size:4px 4px;mix-blend-mode:screen}
+.screen-weather{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:38;display:block}
 
 .screen-topbar{
   height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px;
@@ -469,6 +470,7 @@ body.modal-open{overflow:hidden}
   <div class="screen-frame">
     <div class="screen">
       <div class="screen-noise"></div>
+      <canvas class="screen-weather" id="weatherFx" aria-hidden="true"></canvas>
       <header class="screen-topbar">
         <div class="sr-only" data-i18n="sr.title"><span data-brand="ko">정새싹게임즈</span> — 레트로 핸드헬드 콘솔 스타일 미니게임 포털</div>
         <div class="brand-lockup">
@@ -2617,6 +2619,210 @@ function animateStatCount(el){
   }, { threshold:0.12, rootMargin:'0px 0px -50px 0px' });
 
   targets.forEach(el => io.observe(el));
+})();
+
+// ── 소스 보기 방지(가벼운 차단) — 우클릭·저장 단축키·개발자도구 단축키를 막습니다.
+//    (완전한 차단은 아니고, 일반 방문자가 쉽게 코드를 긁어가지 못하게 하는 정도입니다.
+//     개발자도구를 메뉴로 직접 열거나 네트워크 탭에서 파일을 받으면 우회됩니다.) ──
+(function initSourceGuard(){
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('dragstart', e => e.preventDefault());
+  document.addEventListener('keydown', function(e){
+    const k = e.key;
+    const isSaveOrView = e.ctrlKey && !e.shiftKey && !e.altKey && (k === 'u' || k === 'U' || k === 's' || k === 'S');
+    const isDevtools = (e.ctrlKey || e.metaKey) && e.shiftKey && ['i','I','j','J','c','C'].includes(k);
+    if(k === 'F12' || isSaveOrView || isDevtools){ e.preventDefault(); }
+  });
+})();
+
+// ── 방문자 위치의 실제 날씨를 화면 위에 픽셀 이펙트로 살짝 얹어줍니다.
+//    권한 팝업 없이 IP로 대략적인 위치만 추정 → Open-Meteo(무료, 키 불필요) API로 현재 날씨 조회.
+//    위치/날씨를 확인할 수 없거나 맑은 낮이면 아무 효과도 띄우지 않고 조용히 넘어갑니다. ──
+(function initWeatherFx(){
+  const canvas = document.getElementById('weatherFx');
+  if(!canvas || !canvas.getContext) return;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  try{ if(/bot|crawl|spider|slurp|yeti|daum|naver|lighthouse/i.test(navigator.userAgent)) return; }catch(e){}
+
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0, mode = null, isNight = false, particles = [], running = false, rafId = null, lastFlash = 0;
+
+  function resize(){
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = Math.max(1, Math.round(rect.width));
+    H = Math.max(1, Math.round(rect.height));
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if(mode) buildParticles();
+  }
+
+  function buildParticles(){
+    particles = [];
+    if(mode === 'rain' || mode === 'thunder'){
+      const n = Math.round((W*H)/9000) + 20;
+      for(let i=0;i<n;i++) particles.push({ x:Math.random()*W, y:Math.random()*H, len:6+Math.random()*10, speed:260+Math.random()*160 });
+    }else if(mode === 'snow'){
+      const n = Math.round((W*H)/14000) + 16;
+      for(let i=0;i<n;i++) particles.push({ x:Math.random()*W, y:Math.random()*H, r:1+Math.random()*2, speed:22+Math.random()*26, sway:Math.random()*Math.PI*2, swaySpeed:.6+Math.random()*.8 });
+    }else if(mode === 'fog'){
+      for(let i=0;i<3;i++) particles.push({ x:Math.random()*W, y:H*(.15+i*.28)+Math.random()*20, w:W*0.9, h:46+Math.random()*20, speed:6+Math.random()*6, dir:i%2===0?1:-1 });
+    }else if(mode === 'cloudy'){
+      for(let i=0;i<3;i++) particles.push({ x:Math.random()*W, y:14+Math.random()*30, w:60+Math.random()*40, h:14, speed:4+Math.random()*4 });
+    }else if(mode === 'clear' && isNight){
+      const n = Math.round((W*H)/3200) + 10;
+      for(let i=0;i<n;i++) particles.push({ x:Math.random()*W, y:Math.random()*H*0.7, r:Math.random()<0.8?1:1.6, phase:Math.random()*Math.PI*2, speed:.5+Math.random()*.7 });
+    }
+  }
+
+  function draw(ts){
+    ctx.clearRect(0,0,W,H);
+    if(mode === 'rain' || mode === 'thunder'){
+      ctx.strokeStyle = 'rgba(190,225,255,.55)';
+      ctx.lineWidth = 1;
+      particles.forEach(p => {
+        ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p.x-2,p.y+p.len); ctx.stroke();
+        p.y += p.speed/60; p.x -= 2/6;
+        if(p.y > H){ p.y = -p.len; p.x = Math.random()*W; }
+      });
+      if(mode === 'thunder'){
+        if(!lastFlash) lastFlash = ts;
+        if(ts - lastFlash > (2500 + Math.random()*4000)){
+          lastFlash = ts;
+          ctx.fillStyle = 'rgba(255,255,255,.35)';
+          ctx.fillRect(0,0,W,H);
+        }
+      }
+    }else if(mode === 'snow'){
+      ctx.fillStyle = 'rgba(255,255,255,.85)';
+      particles.forEach(p => {
+        p.sway += p.swaySpeed/60; p.y += p.speed/60;
+        const x = p.x + Math.sin(p.sway)*10;
+        const s = Math.ceil(p.r*2);
+        ctx.fillRect(Math.round(x), Math.round(p.y), s, s);
+        if(p.y > H){ p.y = -4; p.x = Math.random()*W; }
+      });
+    }else if(mode === 'fog'){
+      ctx.fillStyle = 'rgba(255,255,255,.06)';
+      particles.forEach(p => {
+        p.x += p.dir*p.speed/60;
+        if(p.dir>0 && p.x > W+p.w) p.x = -p.w;
+        if(p.dir<0 && p.x < -p.w) p.x = W+p.w;
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+      });
+    }else if(mode === 'cloudy'){
+      ctx.fillStyle = 'rgba(255,255,255,.05)';
+      particles.forEach(p => {
+        p.x += p.speed/60;
+        if(p.x > W+p.w) p.x = -p.w;
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+      });
+    }else if(mode === 'clear' && isNight){
+      ctx.fillStyle = 'rgba(0,0,0,.32)';
+      ctx.fillRect(0,0,W,H);
+      particles.forEach(p => {
+        p.phase += p.speed/60;
+        const a = Math.max(0, .35 + Math.sin(p.phase)*.35);
+        ctx.fillStyle = 'rgba(255,255,255,'+a.toFixed(2)+')';
+        ctx.fillRect(p.x, p.y, p.r, p.r);
+      });
+    }
+  }
+
+  function loop(ts){
+    if(!running) return;
+    draw(ts || 0);
+    rafId = requestAnimationFrame(loop);
+  }
+  function start(){
+    if(running || !mode) return;
+    buildParticles();
+    running = true;
+    rafId = requestAnimationFrame(loop);
+  }
+  function stop(){
+    running = false;
+    if(rafId) cancelAnimationFrame(rafId);
+    if(W && H) ctx.clearRect(0,0,W,H);
+  }
+
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) stop(); else if(mode) start();
+  });
+
+  if('ResizeObserver' in window){
+    new ResizeObserver(resize).observe(canvas.parentElement);
+  }else{
+    window.addEventListener('resize', resize, { passive:true });
+  }
+  resize();
+
+  function codeToMode(code){
+    if([95,96,99].includes(code)) return 'thunder';
+    if([71,73,75,77,85,86].includes(code)) return 'snow';
+    if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return 'rain';
+    if([45,48].includes(code)) return 'fog';
+    if([1,2,3].includes(code)) return 'cloudy';
+    return 'clear';
+  }
+
+  function applyWeather(code, isDay){
+    mode = codeToMode(code);
+    isNight = !isDay;
+    if(mode === 'clear' && !isNight) return; // 맑은 낮엔 조용히 아무 효과 없음
+    start();
+  }
+
+  // 겨울(12·1·2월)엔 실제 날씨와 상관없이 늘 눈이 오도록 고정합니다.
+  function isWinterNow(){
+    const m = new Date().getMonth(); // 0=1월 … 11=12월
+    return m === 11 || m === 0 || m === 1;
+  }
+
+  const WX_CACHE_KEY = 'sprouty_wx_v1';
+
+  function fetchWeather(lat, lon){
+    fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current_weather=true', { cache:'no-store' })
+      .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+      .then(function(data){
+        const cw = data && data.current_weather;
+        if(!cw) return;
+        const isDay = cw.is_day !== 0;
+        try{ sessionStorage.setItem(WX_CACHE_KEY, JSON.stringify({ code: cw.weathercode, isDay: isDay })); }catch(e){}
+        applyWeather(cw.weathercode, isDay);
+      })
+      .catch(function(){ /* 날씨를 못 가져오면 조용히 넘어갑니다 */ });
+  }
+
+  function fromGeojs(){
+    fetch('https://get.geojs.io/v1/ip/geo.json', { cache:'no-store' })
+      .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+      .then(function(data){ if(data && data.latitude && data.longitude) fetchWeather(data.latitude, data.longitude); })
+      .catch(function(){});
+  }
+
+  function loadInitialWeather(){
+    if(isWinterNow()){
+      mode = 'snow';
+      start();
+      return; // 겨울엔 API 조회 없이 바로 눈으로 고정
+    }
+    try{
+      const cached = JSON.parse(sessionStorage.getItem(WX_CACHE_KEY) || 'null');
+      if(cached && typeof cached.code === 'number'){ applyWeather(cached.code, cached.isDay); return; }
+    }catch(e){}
+
+    fetch('https://ipwho.is/', { cache:'no-store' })
+      .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+      .then(function(data){
+        if(data && data.success !== false && data.latitude && data.longitude) fetchWeather(data.latitude, data.longitude);
+        else fromGeojs();
+      })
+      .catch(fromGeojs);
+  }
+
+  loadInitialWeather();
 })();
 </script>
 </body>
