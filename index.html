@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="정새싹게임즈 🌱 — 간단하고 중독성 넘치는 웹 미니게임을 직접 플레이해보세요. 한번시작하면 멈출수없을지도?" />
+<meta name="description" content="정새싹게임즈 🌱 — 간단하고 중독성 넘치는 웹 미니게임을 직접 플레이해보세요. 한번시작하면 멈출수없을지도? 병맛낚시는 모바일 전용입니다." />
 <meta name="robots" content="index,follow">
-<meta name="keywords" content="정새싹게임즈, SPROUTY GAMES, SPTG, 웹게임, 미니게임, 폭락도 락이다, 네온 라이더, 나무패기, 정새싹:프론트라인, 정새싹게임즈 좀비디펜스">
+<meta name="keywords" content="정새싹게임즈, SPROUTY GAMES, SPTG, 웹게임, 미니게임, 폭락도 락이다, 네온 라이더, 나무패기, 병맛낚시, 정새싹:프론트라인, 정새싹게임즈 좀비디펜스">
 <meta name="author" content="정새싹게임즈">
 <meta name="language" content="ko">
 <meta name="geo.region" content="KR">
@@ -227,7 +227,7 @@ a{color:inherit}
 
 /* ===== HOME ===== */
 .home-hero{position:relative;overflow:hidden;border:var(--card-border);border-radius:var(--r-card);box-shadow:var(--card-shadow);background:#050806;line-height:0}
-.home-hero video{display:block;width:100%;height:auto;min-height:180px;max-height:72vh;object-fit:cover;background:#050806;pointer-events:none}
+.home-hero video{display:block;width:100%;height:auto;min-height:180px;max-height:72vh;object-fit:contain;background:#050806;pointer-events:none}
 .primary-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;margin-top:18px;padding:12px 16px;width:max-content;border-radius:var(--r-btn);border:2px solid var(--lime);background:#bedf75;color:#12170e;box-shadow:3px 3px 0 #060805;cursor:pointer;font:10px var(--pixel);transition:.12s}
 .primary-btn:hover{transform:translate(-1px,-1px);filter:brightness(1.04)}
 .primary-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #060805}
@@ -242,7 +242,7 @@ a{color:inherit}
 .section-title .line{height:1px;flex:1;background:#3e4b3c}
 .banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .banner-card{border:var(--card-border);border-radius:var(--r-card);background:#111711;box-shadow:var(--card-shadow);overflow:hidden}
-.banner-card img{width:100%;height:auto;aspect-ratio:2.85/1;object-fit:cover;display:block;filter:saturate(.65) contrast(1.02)}
+.banner-card img{width:100%;height:auto;aspect-ratio:2.85/1;object-fit:contain;display:block;filter:saturate(.65) contrast(1.02)}
 .notice-list{margin-top:11px;border:var(--card-border);border-radius:var(--r-card);background:var(--card-bg);box-shadow:var(--card-shadow);overflow:hidden}
 .notice-item{display:grid;grid-template-columns:78px 58px 1fr;gap:10px;align-items:start;padding:11px;border-bottom:1px dashed #344033}
 .notice-item:last-child{border-bottom:0}
@@ -318,9 +318,11 @@ a{color:inherit}
 .gl-fb-card{position:relative;flex:none;width:180px;aspect-ratio:3/4;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.2);background:#0b140f;color:#fff;text-decoration:none;scroll-snap-align:start}
 .gl-fb-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .gl-fb-card::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,8,8,.9),transparent 55%)}
+.gl-fb-card.mobile-only{border-color:rgba(114,216,255,.7);box-shadow:0 0 0 1px rgba(114,216,255,.12),0 10px 30px rgba(0,0,0,.24)}
 .gl-fb-title{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;font:800 13px/1.4 var(--sans);text-shadow:0 1px 4px rgba(0,0,0,.6)}
 .gl-fb-badge{position:absolute;top:10px;left:10px;z-index:2;padding:3px 8px;border-radius:var(--r-chip);background:var(--lime);color:#152210;font:700 9px var(--mono)}
 .gl-fb-badge.hot{background:var(--amber);color:#241b06}
+.gl-fb-badge.mobile{background:#72d8ff;color:#09202a;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 3px 10px rgba(114,216,255,.22)}
 
 /* ===== ABOUT / LOG ===== */
 .about-intro,.team-launch,.wide-banner{border:var(--card-border);border-radius:var(--r-card);background:var(--card-bg);box-shadow:var(--card-shadow)}
@@ -329,7 +331,7 @@ a{color:inherit}
 .about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.about-stat{padding:11px;border:1px solid #3d4b3b;border-radius:8px;background:#0d130d}.about-stat .num{font:12px var(--pixel);color:#dceace}.about-stat .lbl{margin-top:5px;font:6px var(--mono);color:#728270}
 .about-contact{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;font:7px var(--mono);color:#71806f}.about-contact a{padding:6px 8px;border-radius:var(--r-chip);border:1px solid #445140;background:#141d14;text-decoration:none;color:#9cad96}
 
-.wide-banner{margin-top:18px;overflow:hidden}.wide-banner img{display:block;width:100%;height:120px;object-fit:cover;filter:saturate(.55)}
+.wide-banner{margin-top:18px;overflow:hidden}.wide-banner img{display:block;width:100%;height:120px;object-fit:contain;filter:saturate(.55)}
 .team-launch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;margin-top:12px}.team-launch p{font:9px/1.6 var(--sans);color:#849382}.team-open-btn,.team-close-btn,.feedback-btn{cursor:pointer}.team-open-btn{padding:9px 12px;border-radius:var(--r-btn);border:1px solid #81976f;background:#182117;color:#bfdbb2;font:7px var(--mono);transition:.12s}.team-open-btn:hover{border-color:var(--lime);color:var(--lime)}
 .ticker-bar{margin-top:16px;border:var(--card-border);border-radius:var(--r-card);background:#0d120d;overflow:hidden;white-space:nowrap;padding:7px 0}.ticker-track{display:inline-block;padding-left:100%;font:7px var(--mono);color:#86987f;animation:ticker 21s linear infinite}@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:18px;font:7px var(--mono);color:#60695c;border-top:1px solid #364233;padding-top:12px}.grow{color:#7a8c77}
@@ -341,7 +343,8 @@ body.modal-open{overflow:hidden}
 .team-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #3d4a3b;background:#151d15}.team-title{font:9px var(--pixel);color:var(--lime)}.team-sub{margin-top:4px;font:7px var(--mono);color:#75846f}.team-close-btn{padding:7px 10px;border-radius:var(--r-btn);background:#121811;color:#aab9a5;border:1px solid #4d5b49;font:7px var(--mono)}.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:10px;overflow:auto}.team-card{border:1px solid #3e4d3b;border-radius:10px;background:#141d14;padding:10px;display:flex;flex-direction:column;gap:9px}.team-photo{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;border:1px solid #4e5b4b;background:#20251f}.team-name{font:8px var(--pixel);color:#dae7d6}.team-role{margin-left:5px;padding:3px 6px;border-radius:var(--r-chip);border:1px solid #5c6e56;color:#9cb295;font:6px var(--mono)}.team-contrib{padding:8px;border-radius:6px;border:1px solid #394739;background:#101610;font:7px/1.7 var(--mono);color:#8c9c8a}.team-contrib b{color:var(--amber)}.team-desc{font:9px/1.65 var(--sans);color:#768471}.team-shoutout{text-align:center;padding:8px 10px 12px;font:7px var(--mono);color:#75846f}
 
 .game-detail-shell{width:min(760px,100%);max-height:90vh;overflow:auto;border:2px solid #677860;border-radius:14px;background:#101610;box-shadow:0 0 0 4px #080908,0 18px 46px rgba(0,0,0,.62);color:#d8e3d5}
-.game-detail-top{display:flex;justify-content:flex-end;padding:8px}.game-detail-close{width:30px;height:30px;border-radius:8px;border:1px solid #4e5c4b;background:#131c13;color:#a1b19c;font:16px Arial;cursor:pointer}.game-detail-main{display:grid;grid-template-columns:210px 1fr;gap:14px;padding:0 14px 14px}.game-detail-cover{width:210px;height:210px;object-fit:cover;border-radius:10px;border:1px solid #53634f;background:#1b241a}.game-detail-info{display:flex;flex-direction:column;justify-content:center;gap:9px}.game-detail-title{font:12px/1.6 var(--pixel);color:var(--lime)}.game-detail-desc{font:10px/1.75 var(--sans);color:#a4b3a1}.game-detail-meta{display:flex;gap:5px;flex-wrap:wrap}.game-detail-meta span{padding:4px 6px;border-radius:5px;border:1px solid #435240;background:#131c13;color:#93a78e;font:6px var(--mono)}.game-detail-long{margin:0 14px 12px;padding:11px;border-radius:8px;border:1px solid #3e4c3b;background:#0d130d}.game-detail-long-title{font:7px var(--pixel);color:var(--amber);margin-bottom:7px}.game-detail-long-body{font:9px/1.8 var(--sans);color:#9fad9b}.game-detail-info-row{display:flex;flex-wrap:wrap;gap:12px;padding:10px 14px;margin:0 14px 12px;border-radius:8px;border:1px solid #3d493a;background:#0d130d;font:7px var(--mono);color:#798673}.game-detail-info-row .label{color:#92ad8b;margin-right:4px}.game-detail-info-row a{color:#aeb9ab !important;text-decoration:none !important;overflow-wrap:anywhere}.game-detail-footer{padding:0 14px 14px}.game-play-btn{width:100%;padding:12px;border-radius:var(--r-btn);border:1px solid var(--lime);background:#bddc73;color:#11170d;cursor:pointer;font:8px var(--pixel);box-shadow:3px 3px 0 #050705}
+.game-detail-top{display:flex;justify-content:flex-end;padding:8px}.game-detail-close{width:30px;height:30px;border-radius:8px;border:1px solid #4e5c4b;background:#131c13;color:#a1b19c;font:16px Arial;cursor:pointer}.game-detail-main{display:grid;grid-template-columns:210px 1fr;gap:14px;padding:0 14px 14px}.game-detail-cover{width:210px;height:210px;object-fit:cover;border-radius:10px;border:1px solid #53634f;background:#1b241a}.game-detail-info{display:flex;flex-direction:column;justify-content:center;gap:9px}.game-detail-title{font:12px/1.6 var(--pixel);color:var(--lime)}.game-detail-desc{font:10px/1.75 var(--sans);color:#a4b3a1}.game-detail-meta{display:flex;gap:5px;flex-wrap:wrap}.game-detail-meta span{padding:4px 6px;border-radius:5px;border:1px solid #435240;background:#131c13;color:#93a78e;font:6px var(--mono)}
+.game-detail-mobile-notice{display:none;align-items:center;gap:8px;margin-top:8px;padding:9px 10px;border-radius:8px;border:1px solid #62c8ec;background:linear-gradient(90deg,rgba(98,200,236,.18),rgba(98,200,236,.05));color:#bceeff;font:800 9px/1.5 var(--mono);letter-spacing:.03em;text-transform:uppercase}.game-detail-mobile-notice.show{display:flex}.game-detail-long{margin:0 14px 12px;padding:11px;border-radius:8px;border:1px solid #3e4c3b;background:#0d130d}.game-detail-long-title{font:7px var(--pixel);color:var(--amber);margin-bottom:7px}.game-detail-long-body{font:9px/1.8 var(--sans);color:#9fad9b}.game-detail-info-row{display:flex;flex-wrap:wrap;gap:12px;padding:10px 14px;margin:0 14px 12px;border-radius:8px;border:1px solid #3d493a;background:#0d130d;font:7px var(--mono);color:#798673}.game-detail-info-row .label{color:#92ad8b;margin-right:4px}.game-detail-info-row a{color:#aeb9ab !important;text-decoration:none !important;overflow-wrap:anywhere}.game-detail-footer{padding:0 14px 14px}.game-play-btn{width:100%;padding:12px;border-radius:var(--r-btn);border:1px solid var(--lime);background:#bddc73;color:#11170d;cursor:pointer;font:8px var(--pixel);box-shadow:3px 3px 0 #050705}
 
 /* ===== CREDITS ===== */
 .credits-shell{position:relative;width:min(640px,100%);max-height:90vh;display:flex;flex-direction:column;border:2px solid #65745f;border-radius:14px;background:#0d140e;box-shadow:0 0 0 4px #080908,0 16px 44px rgba(0,0,0,.62);overflow:hidden}
@@ -507,7 +510,7 @@ body.modal-open{overflow:hidden}
             <canvas class="gl-canvas" id="glCanvas" aria-hidden="true"></canvas>
             <div class="gl-top">
               <div class="gl-hint" data-i18n="gl.hint">좌우로 스크롤하거나 드래그해서 고르세요</div>
-              <div class="gl-count" id="glCount">1 / 5</div>
+              <div class="gl-count" id="glCount">1 / 6</div>
             </div>
             <button class="gl-arrow prev" id="glPrev" type="button" aria-label="이전 게임" data-i18n-attr="aria-label:gl.prev">‹</button>
             <button class="gl-arrow next" id="glNext" type="button" aria-label="다음 게임" data-i18n-attr="aria-label:gl.next">›</button>
@@ -542,6 +545,10 @@ body.modal-open{overflow:hidden}
               <img src="FPS.png" alt="정새싹:프론트라인 썸네일" data-i18n-attr="alt:game.frontline.alt"><span class="gl-fb-badge">NEW</span><span class="gl-fb-title" data-i18n="game.frontline.title">정새싹:프론트라인</span>
               <span class="sr-only" data-i18n="game.frontline.sr">간단하게 즐기는 짜릿한 FPS! 🎯 FPS 🌐 웹게임</span>
             </a>
+            <a class="gl-fb-card mobile-only" data-game-id="fishing" data-video="fishing.mp4" href="https://www.정새싹게임즈.서버.한국/병맛낚시" target="_blank" rel="noopener">
+              <img src="fishing.jpg" alt="병맛낚시 썸네일" data-i18n-attr="alt:game.fishing.alt"><span class="gl-fb-badge mobile">MOBILE ONLY</span><span class="gl-fb-title" data-i18n="game.fishing.title">병맛낚시 🎣</span>
+              <span class="sr-only" data-i18n="game.fishing.sr">모바일 전용 낚시 미니게임. 📱 스마트폰과 태블릿에서만 플레이할 수 있습니다.</span>
+            </a>
           </nav>
         </section>
 
@@ -560,7 +567,7 @@ body.modal-open{overflow:hidden}
           <div class="about-intro" data-reveal>
             <div class="about-intro-title" data-i18n="about.title"><span data-brand="ko">정새싹게임즈</span> / <span data-brand="en">SPROUTY GAMES</span></div>
             <div class="about-intro-body" data-i18n="about.body"><span data-brand="ko">정새싹게임즈</span>는 <span class="accent">어딘가 맛이 가버린 2013년생 학생 둘</span>이 함께 운영하는 미니게임 개발 팀입니다.<br>돈도 많이 벌고, 무엇보다 <span class="accent">재밌고 중독적인 게임</span>을 만드는 것이 목표입니다.<br><br>Vibe-coding 기반으로 빠르게 만들다 보니 게임이 좀 요상한 구석이 있을 수 있습니다. 너그러운 마음으로 봐.(?)</div>
-            <div class="about-stats"><div class="about-stat"><div class="num">2</div><div class="lbl">TEAM MEMBERS</div></div><div class="about-stat"><div class="num">5</div><div class="lbl">RELEASED GAMES</div></div><div class="about-stat"><div class="num">2026.6.14</div><div class="lbl">SINCE</div></div></div>
+            <div class="about-stats"><div class="about-stat"><div class="num">2</div><div class="lbl">TEAM MEMBERS</div></div><div class="about-stat"><div class="num">6</div><div class="lbl">RELEASED GAMES</div></div><div class="about-stat"><div class="num">2026.6.14</div><div class="lbl">SINCE</div></div></div>
             <div class="about-contact"><span>✉️ CONTACT</span><a href="mailto:sproutygames@gmail.com" data-contact>sproutygames@gmail.com</a></div>
           </div>
 
@@ -628,7 +635,7 @@ body.modal-open{overflow:hidden}
   </div>
 </div>
 
-<div id="gameDetailModal" class="game-detail-modal" aria-hidden="true"><div class="game-detail-shell" role="dialog" aria-modal="true" aria-labelledby="gameDetailTitle"><div class="game-detail-top"><button class="game-detail-close" id="gameDetailClose" type="button" aria-label="닫기" data-i18n-attr="aria-label:common.closeLabel">×</button></div><div class="game-detail-main"><img id="gameDetailCover" class="game-detail-cover" src="" alt=""><div class="game-detail-info"><div id="gameDetailTitle" class="game-detail-title"></div><div id="gameDetailDesc" class="game-detail-desc"></div><div id="gameDetailMeta" class="game-detail-meta"></div></div></div><section class="game-detail-long"><div class="game-detail-long-title">GAME DESCRIPTION</div><div id="gameDetailLongBody" class="game-detail-long-body"></div></section><div class="game-detail-info-row"><div><span class="label">LINK</span><a id="gameDetailLink" href="#" target="_blank" rel="noopener"></a></div><div><span class="label">DEV</span><span id="gameDetailDeveloper" data-i18n="dev.default"><span data-brand="ko">정새싹게임즈</span></span></div></div><div class="game-detail-footer"><button id="gameDetailPlay" class="game-play-btn" type="button">▶ PLAY</button></div></div></div>
+<div id="gameDetailModal" class="game-detail-modal" aria-hidden="true"><div class="game-detail-shell" role="dialog" aria-modal="true" aria-labelledby="gameDetailTitle"><div class="game-detail-top"><button class="game-detail-close" id="gameDetailClose" type="button" aria-label="닫기" data-i18n-attr="aria-label:common.closeLabel">×</button></div><div class="game-detail-main"><img id="gameDetailCover" class="game-detail-cover" src="" alt=""><div class="game-detail-info"><div id="gameDetailTitle" class="game-detail-title"></div><div id="gameDetailDesc" class="game-detail-desc"></div><div id="gameDetailMeta" class="game-detail-meta"></div><div id="gameDetailMobileNotice" class="game-detail-mobile-notice">📱 MOBILE ONLY · 스마트폰/태블릿 전용</div></div></div><section class="game-detail-long"><div class="game-detail-long-title">GAME DESCRIPTION</div><div id="gameDetailLongBody" class="game-detail-long-body"></div></section><div class="game-detail-info-row"><div><span class="label">LINK</span><a id="gameDetailLink" href="#" target="_blank" rel="noopener"></a></div><div><span class="label">DEV</span><span id="gameDetailDeveloper" data-i18n="dev.default"><span data-brand="ko">정새싹게임즈</span></span></div></div><div class="game-detail-footer"><button id="gameDetailPlay" class="game-play-btn" type="button">▶ PLAY</button></div></div></div>
 
 <script>
 /* ════════════════════════════════════════════════════
@@ -699,10 +706,13 @@ const I18N_EN = {
   'game.frontline.title': `SPROUTY: FRONTLINE`,
   'game.frontline.alt': `SPROUTY: FRONTLINE thumbnail`,
   'game.frontline.sr': `Pick-up-and-play FPS that hits different! 🎯 FPS 🌐 Web Game`,
+  'game.fishing.title': `Ridiculous Fishing 🎣`,
+  'game.fishing.alt': `Ridiculous Fishing thumbnail`,
+  'game.fishing.sr': `Mobile-only fishing mini-game. 📱 Playable on smartphones and tablets only.`,
 
   /* ABOUT */
   'lang.desc': `🌐 Pick your display language`,
-  'dev.default': `${BRAND.en}`,
+  'dev.default': 'SPROUTY',
   'about.title': `${BRAND.en}`,
   'about.body': `${BRAND.en} is a mini-game dev team run by <span class="accent">two slightly unhinged students born in 2013</span>.<br>Our goal: make bank and, more importantly, ship <span class="accent">fun, insanely addictive games</span>.<br><br>We build fast on pure vibe-coding, so a few games might be a little janky. Go easy on us, okay.(?)`,
   'about.bannerFooter': `Footer banner`,
@@ -1019,8 +1029,17 @@ const GAME_DETAILS = {
     shortDescription: '간단하게 즐기는 짜릿한 FPS!',
     description: '빠르게 시작해서 바로 즐길 수 있는 간단한 웹 FPS입니다. 다양한 무기로 전장을 누비며 적을 상대해 보세요.',
     genres: ['🎯 FPS', '🌐 웹게임'],
-    developer: BRAND.ko,
+    developer: '정새싹',
     link: 'https://www.정새싹게임즈.서버.한국/정새싹_프론트라인'
+  },
+
+  fishing: {
+    title: '병맛낚시 🎣',
+    shortDescription: '📱 모바일 전용 — 휴대폰/태블릿에서만 플레이 가능!',
+    description: '병맛 감성으로 즐기는 낚시 미니게임입니다. 이 게임은 모바일 기기에서만 플레이할 수 있습니다.',
+    genres: ['📱 모바일 전용', '🎣 낚시', '🌐 웹게임'],
+    developer: '정새싹',
+    link: 'https://www.정새싹게임즈.서버.한국/병맛낚시'
   }
 
 };
@@ -1067,6 +1086,14 @@ const GAME_DETAILS_EN = {
     description: "A simple web FPS you can boot up and start playing instantly. Run around the battlefield with a whole arsenal and clap some enemies.",
     genres: ['🎯 FPS', '🌐 Web Game'],
     developer: BRAND.en
+  },
+
+  fishing: {
+    title: 'Ridiculous Fishing 🎣',
+    shortDescription: '📱 MOBILE ONLY — smartphones and tablets only!',
+    description: 'A ridiculous little fishing mini-game made for mobile devices. This game is not playable on PC.',
+    genres: ['📱 Mobile Only', '🎣 Fishing', '🌐 Web Game'],
+    developer: BRAND.en
   }
 
 };
@@ -1089,6 +1116,7 @@ const gameDetailLongBody = document.getElementById('gameDetailLongBody');
 const gameDetailLink = document.getElementById('gameDetailLink');
 const gameDetailDeveloper = document.getElementById('gameDetailDeveloper');
 const gameDetailPlay = document.getElementById('gameDetailPlay');
+const gameDetailMobileNotice = document.getElementById('gameDetailMobileNotice');
 
 // 게임 목록은 #glFallback 안의 링크(HTML)에서 읽어옵니다. 게임을 추가/삭제할 땐 그쪽 <a> 와 GAME_DETAILS 를 같이 고치면 됩니다.
 const GAMES = Array.from(document.querySelectorAll('#glFallback .gl-fb-card')).map(a => {
@@ -1102,7 +1130,7 @@ const GAMES = Array.from(document.querySelectorAll('#glFallback .gl-fb-card')).m
     href: a.getAttribute('href'),
     video: a.dataset.video || '',
     badge: badge ? badge.textContent.trim() : '',
-    badgeType: badge && badge.classList.contains('hot') ? 'hot' : 'new'
+    badgeType: badge && badge.classList.contains('mobile') ? 'mobile' : (badge && badge.classList.contains('hot') ? 'hot' : 'new')
   };
 });
 
@@ -1146,7 +1174,8 @@ function openGameDetail(gameId){
     gameDetailMeta.appendChild(span);
   });
 
-  gameDetailLink.textContent = baseUrl;        // 화면에는 깔끔한 주소, 실제 이동은 ?lang= 이 붙은 주소
+  gameDetailLink.textContent = baseUrl;
+  if(gameDetailMobileNotice) gameDetailMobileNotice.classList.toggle('show', gameId === 'fishing');        // 화면에는 깔끔한 주소, 실제 이동은 ?lang= 이 붙은 주소
   gameDetailLink.href = selectedGameUrl;
   gameDetailDeveloper.textContent = detail.developer || ui('devDefault');
 
@@ -1341,7 +1370,7 @@ function paintCard(cv, game, img){
     const bw = ctx.measureText(game.badge).width + 34, bh = 46;
     const bx = PAD + 28, by = PAD + 28;
     roundRectPath(ctx, bx, by, bw, bh, bh / 2);
-    ctx.fillStyle = game.badgeType === 'hot' ? '#f1d27a' : '#c4ef74';
+    ctx.fillStyle = game.badgeType === 'mobile' ? '#72d8ff' : (game.badgeType === 'hot' ? '#f1d27a' : '#c4ef74');
     ctx.fill();
     ctx.fillStyle = '#16210f';
     ctx.textAlign = 'left';
@@ -1388,18 +1417,33 @@ void main(){
   vec4 t = texture2D(uMap, vUv);
   vec3 tex = t.rgb;
 
-  // 영상 미리보기: 카드 안을 꽉 채우는 느낌으로 사용하고,
+  // 영상 미리보기: 화면비가 무엇이든 절대 잘리지 않도록 카드 안에 레터박스로 온전히 담고,
   // 하단 게임 제목 영역만 원래 카드 텍스처를 남긴다.
   if(uVidMix > 0.002){
-    vec2 px = vUv * vec2(720.0, 960.0);
     vec2 iuv = vUv;
 
-    // 카드 전체와 같은 3:4 비율로 영상을 cover 처리한다.
+    // 카드(3:4)와 영상의 비율 차이만큼 위아래(또는 좌우) 여백을 두고,
+    // 그 여백 밖(fit=0)에서는 영상 대신 원본 카드 텍스처가 그대로 보이게 한다 → 크롭 없음.
     vec2 vuv = iuv;
     float containerAspect = 720.0 / 960.0;
     float relAspect = uVidAspect / containerAspect;
-    if(relAspect > 1.0) vuv.x = (iuv.x - 0.5) / relAspect + 0.5;
-    else vuv.y = (iuv.y - 0.5) * relAspect + 0.5;
+    float fit = 1.0;
+    float edge = 0.004;
+    if(relAspect > 1.0){
+      // 영상이 카드보다 상대적으로 넓다 → 위아래 레터박스
+      float hFrac = 1.0 / relAspect;
+      float v0 = 0.5 - hFrac * 0.5;
+      float v1 = 0.5 + hFrac * 0.5;
+      vuv.y = (iuv.y - v0) / hFrac;
+      fit = smoothstep(v0 - edge, v0 + edge, iuv.y) * (1.0 - smoothstep(v1 - edge, v1 + edge, iuv.y));
+    } else {
+      // 영상이 카드보다 상대적으로 좁다 → 좌우 레터박스(필러박스)
+      float wFrac = relAspect;
+      float u0 = 0.5 - wFrac * 0.5;
+      float u1 = 0.5 + wFrac * 0.5;
+      vuv.x = (iuv.x - u0) / wFrac;
+      fit = smoothstep(u0 - edge, u0 + edge, iuv.x) * (1.0 - smoothstep(u1 - edge, u1 + edge, iuv.x));
+    }
 
     vec3 vid = texture2D(uVid, clamp(vuv, 0.0, 1.0)).rgb;
 
@@ -1413,7 +1457,7 @@ void main(){
     float edgeY = smoothstep(0.0, 0.035, min(iuv.y, 1.0 - iuv.y));
     float inner = edgeX * edgeY;
 
-    tex = mix(tex, vid, uVidMix * videoMask * inner);
+    tex = mix(tex, vid, uVidMix * videoMask * inner * fit);
   }
 
   vec3 c = tex * (0.52 + 0.48 * uFocus + 0.10 * uHover);
