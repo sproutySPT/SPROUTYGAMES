@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>병맛낚시</title><meta name="description" content="정새싹게임즈 - 병맛낚시"><meta name="theme-color" content="#06121f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none;background:#04121d}
+body{
+  display:flex;align-items:center;justify-content:center;
+  touch-action:none;user-select:none;-webkit-user-select:none;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  background:radial-gradient(130% 85% at 50% -15%,#2f7ea3 0%,#123a52 45%,#0a2032 65%,#040d16 100%);
+}
+canvas{
+  width:min(96vw,54vh);height:auto;aspect-ratio:9/16;display:block;
+  border-radius:22px;background:#06121f;
+  box-shadow:0 0 0 3px #09131c,0 0 0 6px #24445b,0 25px 70px -15px #000c,inset 0 0 50px #0008;
+  animation:rise .5s ease-out;
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+</style></head><body><canvas id="c" width="360" height="640"></canvas>
+<div id="pcblock" style="display:none;position:fixed;inset:0;z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:radial-gradient(130% 85% at 50% -15%,#2f7ea3 0%,#123a52 45%,#0a2032 65%,#040d16 100%);color:#fff;text-align:center;padding:24px;font-family:'Jua',sans-serif;">
+<div style="font-size:52px">🖥️🚫</div>
+<div style="font-size:21px;line-height:1.6">이 게임은 PC에선<br>작동하지 않아요🥺<br>대신 다른 게임들을<br>보러 갈까요?</div>
+<a href="https://www.정새싹게임즈.서버.한국" style="background:#c9a8ff;color:#2a1a40;padding:14px 34px;border-radius:999px;font-family:'Jua',sans-serif;font-size:16px;text-decoration:none;box-shadow:0 8px 24px -6px #0008">다른 게임 보러가기</a>
+</div>
+<script>(function(){var isTouch=matchMedia('(hover:none),(pointer:coarse)').matches||navigator.maxTouchPoints>0;if(!isTouch)document.getElementById('pcblock').style.display='flex'})();</script><script>
+const C=document.getElementById('c'),X=C.getContext('2d'),W=360,H=640;
+const T=["🥾장화,🥫빈 캔,🧦젖은 양말,🗑️초특급 쓰레기,🛍️비닐봉지,🛞낡은 타이어,📰물먹은 신문,☂️부러진 우산,🔑녹슨 열쇠,🪵썩은 나뭇가지,🍼페트병,📺잃어버린 리모컨,🌿해초뭉치,🩴한쪽 슬리퍼,👓깨진 안경,🥅찢어진 그물,⌚고장난 시계,📄젖은 이력서,🪝내 낚싯바늘,🐚빈 조개껍데기",
+"🐟붕어,🐠잉어,🐍미꾸라지,🐟피라미,🐟메기,🐟송사리,🐟빙어,🐟쏘가리,🐟꺽지,🗡️갈치,🐟고등어,🐟멸치,🦑오징어,🐙문어,🦀꽃게,🦐새우,🦞가재,🐟우럭,🐟광어,🐟놀래미,🐟전갱이,🐟꽁치,🐟삼치,🐟정어리,🐙쭈꾸미,🐙낙지,💧해파리,🐡복어,🐟도미,🐍장어",
+"🐟참치,🍣연어,🐟가오리,👄아귀,🗡️청새치,🛡️철갑상어,🐍산갈치,🐍곰치,🐡개복치,😱심해아귀,⚡전기뱀장어,🦷피라냐,🦇만타가오리,🐢바다거북,🐧길 잃은 펭귄,🌊해마,🤡흰동가리,🦞랍스터,🦀킹크랩,🦑대왕오징어,🦖실러캔스,🪖투구게,🐔수영하는 치킨,🧑‍💼야근하던 김대리,🦪진주 든 조개",
+"🦈백상아리,🐋고래상어,🐳향유고래,🦈메가로돈,🐙크라켄,🐉리바이어던,🧜‍♀️인어공주,🦕네시,👑황금 잉어,🌈무지개 고래,🤴용왕님 아들,🥸물고기 탈 쓴 사장님,🚢진짜 잠수함,🚆해저 열차,🗝️아틀란티스 열쇠",
+"🌱정새싹,⚔️오르빗 마스터 소드,📉폭락도락이다 차트,🎟️정새싹연구소 뽑기권,🌌우주 고래,🛸외계인 UFO,🍗마지막 치킨 다리,⏳시간의 모래시계,🏆낚시왕 트로피,🎣신의 낚싯대"];
+const F=[];T.forEach((s,t)=>s.split(',').forEach(x=>{const m=x.match(/^([^\p{L}]+)(.*)$/u);F.push({e:m[1],n:m[2],t,i:F.length})}));
+const TN=['쓰레기','흔함','희귀','전설','신화'],TC=['#9a9','#8cf','#c9f','#fc3','#f5a'],VAL=[3,15,90,600,6000];
+const FL=['…쓰레기네.','오, 평범한데?','오오 이건 좀 하는데!','대박!! 전설이다!!','미쳤다!!! 신화급!!!'];
+const UN=['🪝 줄 길이','🧲 갈고리','🔫 총','🍀 행운'],CB=[40,30,30,40],CG=[1.45,1.42,1.42,1.45];
+const BOMB={e:'💣',n:'폭탄복어',t:1,i:-1},ZT=[0,600,1200,2000,2900],ZN=['🌊 얕은 바다','🪸 산호숲','🌑 심해','🌋 해저 화산','🛸 우주 바다'],ZH=[205,175,235,10,280];
+const zone=y=>Math.max(0,ZT.filter(v=>y>=v).length-1),QD=['물고기 %마리 명중','희귀 이상 %마리 명중','최대 콤보 x%','%m 깊이 도달','황금 물고기 %마리','폭탄복어 %번 터뜨리기'],QB=[20,5,8,0,3,2],QM=[1,3,2,2,4,4];
+let S={coins:0,up:[0,0,0,0],dex:Array(100).fill(0)};
+try{Object.assign(S,JSON.parse(localStorage.getItem('fish2')||'{}'))}catch(e){}
+S.up=[0,1,2,3].map(i=>S.up[i]|0);if(typeof S.snd!='boolean')S.snd=true;if(!Array.isArray(S.dex)||S.dex.length!=100)S.dex=Array.from({length:100},(_,i)=>S.dex&&S.dex[i]|0||0);
+const save=()=>{try{localStorage.setItem('fish2',JSON.stringify(S))}catch(e){}};
+const cost=i=>Math.round(CB[i]*CG[i]**S.up[i]),LD=()=>600+S.up[0]*330,CAP=()=>3+S.up[1]*2,GR=()=>18+S.up[2]*5,PM=()=>1+S.pr*.5;
+S.pr|=0;if(!S.q||S.q.length!=3)S.q=[0,1,2].map(newQ);
+let ph=(S.seen?'dock':'tut'),t=0,now=0,lx=180,ly=200,mx=180,my=300,camY=0,fs=[],hk=[],fl=[],parts=[],combo=0,mc=0,sc=0,shot=0,lost=0,nn=0,best=null,view=0,sel=-1,shake=0,fx=0,fc='#fff',bz=0,bn=0,pw=-9,pw2=-9,bub=[];
+let A;function snd(f,d=.1,ty='square',v=.07,dl=0){if(!S.snd)return;try{A=A||new(window.AudioContext||window.webkitAudioContext)();const o=A.createOscillator(),g=A.createGain(),t0=A.currentTime+dl;o.type=ty;o.frequency.setValueAtTime(f,t0);g.gain.setValueAtTime(v,t0);g.gain.exponentialRampToValueAtTime(.001,t0+d);o.connect(g);g.connect(A.destination);o.start(t0);o.stop(t0+d)}catch(e){}}
+const tx=(s,x,y,z=16,c='#fff',a='center')=>{X.font='400 '+z+'px "Jua",sans-serif';X.textAlign=a;X.lineJoin='round';X.lineWidth=Math.max(2,z*.16);X.strokeStyle='rgba(0,0,0,.4)';X.strokeText(s,x,y);X.fillStyle=c;X.fillText(s,x,y)};
+function rr(x,y,w,h,r){r=Math.min(r,w/2,h/2);X.beginPath();X.moveTo(x+r,y);X.arcTo(x+w,y,x+w,y+h,r);X.arcTo(x+w,y+h,x,y+h,r);X.arcTo(x,y+h,x,y,r);X.arcTo(x,y,x+w,y,r);X.closePath()}
+function panel(x,y,w,h,r,c1,c2,bc){const g=X.createLinearGradient(0,y,0,y+h);g.addColorStop(0,c1);g.addColorStop(1,c2);rr(x,y,w,h,r);X.fillStyle=g;X.fill();if(bc){X.lineWidth=2;X.strokeStyle=bc;X.stroke()}}
+function spawn(y){const b=(y-250)/2900*4.6+(Math.random()-.5)*2.2+S.up[3]*.1,k=Math.max(0,Math.min(4,Math.round(b))),l=F.filter(f=>f.t==k);const q=Math.random(),o={f:q<.05?BOMB:l[Math.random()*l.length|0],g:q>.94,x:Math.random()*W,y,vx:(Math.random()<.5?-1:1)*(35+Math.random()*60),r:12+k*4,dep:y};return o}
+function cast(){fs=[];for(let i=0,n=LD()/40|0;i<n;i++)fs.push(spawn(260+Math.random()*(LD()-200)));hk=[];fl=[];parts=[];ph='dive';lx=mx=Math.max(20,Math.min(W-20,mx));ly=200;combo=mc=sc=shot=lost=nn=0;best=null;bz=0;bn=0;snd(300,.15,'triangle')}
+function boom(x,y,e,n){for(let k=0;k<n;k++)parts.push({x,y,vx:(Math.random()-.5)*300,vy:-Math.random()*250,g:600,l:.7,e,z:18})}
+function shoot(x,y){let b=null,d=1e9;fl.forEach(o=>{const q=Math.hypot(o.x-x,o.y-y);if(q<o.r+GR()&&q<d){d=q;b=o}});
+if(!b){combo=0;snd(120,.08,'sawtooth',.05);parts.push({x,y,vx:0,vy:0,g:0,l:.25,e:'💨',z:20});return}
+if(b.f.i<0){fl.splice(fl.indexOf(b),1);boom(b.x,b.y,'💥',16);shake=18;fx=.6;fc='#fa4';snd(90,.4,'sawtooth',.15);fl.slice().forEach(hit);qp(5,1);return}hit(b)}
+function hit(b){fl.splice(fl.indexOf(b),1);if(b.f.i<0)return;const f=b.f,DB=1+Math.min(1,Math.max(0,(b.dep||200)-200)/LD())*.9,g=Math.round((f.n=='초특급 쓰레기'?777:VAL[f.t])*(1+Math.min(combo,20)*.35)*(b.g?5:1)*PM()*DB),nw=!S.dex[f.i];
+combo++;mc=Math.max(mc,combo);sc+=g;shot++;S.coins+=g;S.dex[f.i]++;if(nw)nn++;qp(0,1);qp(2,combo);if(f.t>=2)qp(1,1);if(b.g)qp(4,1);
+if(!best||f.t>best.f.t)best={f};
+boom(b.x,b.y,f.t>2?'✨':'💥',8);parts.push({x:b.x,y:b.y-14,vx:0,vy:-70,g:0,l:.9,e:'+'+g,z:18+f.t*3,c:'#fd4'});if(nw)parts.push({x:b.x,y:b.y-38,vx:0,vy:-50,g:0,l:1,e:'NEW!',z:16,c:'#9ff'});
+snd(380+combo*55,.09);if(f.t>=3){shake=14;fx=.6;fc=TC[f.t];[523,659,784,1047].forEach((q,i)=>snd(q,.14,'square',.07,i*.07))}}
+function toggleSnd(){S.snd=!S.snd;save();if(S.snd)snd(880,.08)}
+function resetGame(){if(now-pw2<3){try{localStorage.removeItem('fish2')}catch(e){}if(typeof location!='undefined'&&location.reload)location.reload();pw2=-9}else pw2=now}
+function buy(i){const c=cost(i);if(S.coins>=c&&S.up[i]<20){S.coins-=c;S.up[i]++;snd(880,.08);snd(1175,.12,'square',.07,.08);save()}else snd(160,.15,'sawtooth')}
+function newQ(){const k=Math.random()*6|0,n=k==3?Math.max(5,Math.round(LD()/10*.9/5)*5):Math.max(1,Math.round(QB[k]*(1+S.pr*.5)));return{k,n,p:0,r:Math.round(120*(1+S.up.reduce((a,b)=>a+b,0)*.6)*QM[k])}}
+function qp(k,v){S.q.forEach(q=>{if(q.k!=k)return;q.p=(k==2||k==3)?Math.max(q.p,v):q.p+v;if(q.p>=q.n){S.coins+=q.r;parts.push({x:W/2,y:120,vx:0,vy:-25,g:0,l:1.8,e:'📜 퀘스트 완료! +'+q.r,z:16,c:'#8f8'});[659,784,988].forEach((f,i)=>snd(f,.12,'square',.07,i*.08));Object.assign(q,newQ());save()}})}
+function PR(){if(S.up[0]<8){parts.push({x:W/2,y:110,vx:0,vy:-30,g:0,l:1.4,e:'줄 Lv8부터 환생 가능!',z:15,c:'#fa8'});return}
+if(now-pw<3){S.pr++;S.coins=0;S.up=[0,0,0,0];S.q=[0,1,2].map(newQ);pw=-9;[523,659,784,1047].forEach((f,i)=>snd(f,.15,'square',.07,i*.08));save()}else pw=now}
+function tap(x,y){
+if(ph=='tut'){S.seen=1;save();ph='dock';return}
+if(view==1){if(y<50||y>520)view=0;else{const c=(x-20)/32|0,r=(y-70)/32|0;if(c>=0&&c<10&&r>=0&&r<10)sel=r*10+c}return}
+if(view==2){if(y>=210&&y<=260){toggleSnd();return}if(y>=280&&y<=330){resetGame();return}if(y<50||y>560)view=0;return}
+if(ph=='fling'){shoot(x,y);return}
+if(y<44&&x>320){view=1;return}
+if(y<44&&x>275&&x<=320){view=2;return}
+if(ph=='dock'||ph=='res'){if(y>=46&&y<=80&&x>=236){PR();return}if(y>=548){buy(Math.min(3,x/90|0));return}if(ph=='res'&&t<.4)return;cast()}}
+const px=e=>{const r=C.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
+C.addEventListener('pointermove',e=>{const p=px(e);mx=p[0];my=p[1]});
+C.addEventListener('pointerdown',e=>{const[x,y]=px(e);mx=x;tap(x,y)});
+function upd(dt){now+=dt;bn-=dt;shake*=.88;fx*=.9;
+if(ph!='tut'){if(Math.random()<dt*2.2)bub.push({x:Math.random()*W,y:(ph=='dock'?200:ly)+(Math.random()-.5)*420,vy:-(30+Math.random()*35),r:1.5+Math.random()*2.5});bub.forEach(b=>b.y+=b.vy*dt);bub=bub.filter(b=>b.y-camY>-60&&b.y-camY<H+60)}
+if(ph=='dive'){lx+=(mx-lx)*Math.min(1,dt*9);ly+=230*dt;
+fs.forEach(o=>{o.x+=o.vx*dt;if(o.x<-20)o.x=W+20;if(o.x>W+20)o.x=-20});camY=Math.max(0,ly-250);
+qp(3,(ly-200)/10|0);const zz=zone(ly-200);if(zz!=bz){bz=zz;bn=1.8;if(zz)snd(660,.2,'triangle')}
+for(let i=fs.length-1;i>=0;i--){const o=fs[i];if(Math.hypot(o.x-lx,o.y-ly)<o.r+14+S.up[1]*2){
+if(o.f.i<0){fs.splice(i,1);boom(lx,ly,'💥',14);shake=14;fx=.5;fc='#fa4';snd(90,.35,'sawtooth',.15);qp(5,1);ph='rise';snd(200,.2,'sawtooth');break}
+if(hk.length<CAP()){fs.splice(i,1);hk.push({o,ox:(Math.random()-.5)*50,oy:10+Math.random()*30,dep:o.dep});snd(500+hk.length*40,.06,'triangle')}}}
+if(ph=='dive'&&(ly>=LD()||hk.length>=CAP())){ph='rise';snd(200,.2,'sawtooth')}}
+else if(ph=='rise'){lx+=(mx-lx)*Math.min(1,dt*4);ly-=460*dt;camY=Math.max(0,ly-250);
+hk.forEach(h=>{h.o.x=lx+h.ox;h.o.y=ly+h.oy});
+if(ly<=200){ph='fling';camY=0;t=0;hk.forEach(h=>fl.push({f:h.o.f,x:h.o.x,y:200,vx:(Math.random()-.5)*240,vy:-(250+Math.random()*90),r:h.o.r,g:h.o.g,dep:h.dep}));hk=[];snd(150,.3,'sine',.12)}}
+else if(ph=='fling'){t+=dt;fl.forEach(o=>{o.x+=o.vx*dt;o.y+=o.vy*dt;o.vy+=380*dt;if(o.x<10||o.x>W-10)o.vx*=-1});
+for(let i=fl.length-1;i>=0;i--)if(fl[i].y>215&&fl[i].vy>0){fl.splice(i,1);lost++;combo=0}
+if(!fl.length&&t>.4){ph='res';t=0;save()}}
+else if(ph=='res')t+=dt;
+parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.l-=dt});parts=parts.filter(p=>p.l>0)}
+function draw(){
+X.setTransform(C.width/W,0,0,C.height/H,0,0);X.save();if(shake>.5)X.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+if(ph=='tut'){X.fillStyle='#06121f';X.fillRect(0,0,W,H);tx('🎣 병맛낚시',W/2,170,28,'#fd4');
+tx('① 드래그로 물고기 피해 잠수',W/2,250,16);tx('② 올라오며 자동으로 낚기',W/2,282,16);tx('③ 탭해서 쏘고 콤보 잇기',W/2,314,16);
+tx('깊이 내려갈수록 희귀 물고기 등장!',W/2,356,14,'#9df');tx('탭해서 시작',W/2,440,20,'#9f9');tx('정새싹게임즈',W/2,H-30,12,'#567');X.restore();return}
+const cy=camY;X.fillStyle='hsl('+ZH[zone(cy+120)]+' 70% '+Math.max(5,42-cy/75)+'%)';X.fillRect(0,0,W,H);
+if(cy<200){const g=X.createLinearGradient(0,0,0,200-cy);g.addColorStop(0,'#ff9e6b');g.addColorStop(1,'#ffe3a8');X.fillStyle=g;X.fillRect(0,0,W,200-cy);
+tx('☀️',290,110-cy,50);tx('🚤',W/2,196-cy,44);X.strokeStyle='#fff6';X.lineWidth=2;X.beginPath();for(let x=0;x<=W;x+=8){const y=200-cy+Math.sin(x/22+now*2)*3;x?X.lineTo(x,y):X.moveTo(x,y)}X.stroke()}
+bub.forEach(b=>{const yy=b.y-cy;X.globalAlpha=.35;X.fillStyle='#bfe8ff';X.beginPath();X.arc(b.x,yy,b.r,0,7);X.fill()});X.globalAlpha=1;
+fs.forEach(o=>{const y=o.y-cy;if(y>-40&&y<H+40){tx(o.f.e,o.x,y+8,o.r*1.7);if(o.g)tx('✨',o.x+o.r,y-o.r+8,18)}});
+hk.forEach(h=>tx(h.o.f.e,h.o.x,h.o.y-cy+8,h.o.r*1.7));
+if(ph=='dive'||ph=='rise'){X.strokeStyle='#fff8';X.lineWidth=1;X.beginPath();X.moveTo(W/2,190-cy);X.lineTo(lx,ly-cy);X.stroke();X.fillStyle='#f44';X.beginPath();X.arc(lx,ly-cy,7,0,7);X.fill();tx('🪝',lx,ly-cy+20,18)}
+fl.forEach(o=>{tx(o.f.e,o.x,o.y+8,o.r*1.7);if(o.g)tx('✨',o.x+o.r,o.y-o.r+8,18)});
+if(ph=='fling'){X.strokeStyle='#ffffffbb';X.lineWidth=2;X.beginPath();X.arc(mx,my,GR(),0,7);X.stroke();X.beginPath();X.moveTo(mx-9,my);X.lineTo(mx+9,my);X.moveTo(mx,my-9);X.lineTo(mx,my+9);X.stroke()}
+parts.forEach(p=>{X.globalAlpha=Math.min(1,p.l*1.5);tx(p.e,p.x,p.y,p.z,p.c||'#fff')});X.globalAlpha=1;
+panel(0,0,W,44,0,'#0b1826f0','#0b1826d0');X.strokeStyle='#ffffff22';X.lineWidth=1;X.beginPath();X.moveTo(0,44);X.lineTo(W,44);X.stroke();
+panel(6,6,110,32,14,'#2a4a2e','#173420','#4fae5c99');tx('🪙 '+S.coins.toLocaleString(),18,28,15,'#ffe27a','left');
+panel(122,6,118,32,14,'#183048','#0e1e30','#4fa3d699');tx('⬇'+((Math.max(200,ly)-200)/10|0)+'/'+(LD()/10|0)+'m',181,28,12,'#bfe6ff');
+X.beginPath();X.arc(252,22,15,0,7);X.fillStyle='#1c2c3c';X.fill();X.strokeStyle='#4fa3d699';X.lineWidth=2;X.stroke();tx('⚙',252,28,16,'#bfe6ff');
+panel(276,6,78,32,14,'#2c1c40','#180e24','#c78cff99');tx('📖'+S.dex.filter(x=>x).length+'/100',315,28,11,'#e9d8ff');
+if(bn>0&&(ph=='dive'||ph=='rise')){X.globalAlpha=Math.min(1,bn);tx(ZN[bz],W/2,140,26);X.globalAlpha=1}
+if(ph=='fling'&&combo>1){X.save();X.shadowColor='#ff8c1a';X.shadowBlur=16;tx('🔥 x'+combo,W/2,100,34,'#ffb347');X.restore()}
+const P={dock:'탭해서 출항!',dive:'드래그로 이동! 물고기는 자동으로 잡히고 💣만 피해!',rise:'물 위로 올라가는 중… '+hk.length+'/'+CAP(),fling:'조준하고 탭해서 쏴라!!'};
+if(P[ph])tx(P[ph],W/2,ph=='dock'||ph=='fling'?300:80,ph=='dock'||ph=='fling'?24:15);
+if(ph=='res'){const rc=best?TC[best.f.t]:'#667';panel(30,150,300,300,22,'#0e1620f5','#060a10f5',rc);if(best){X.save();X.shadowColor=rc;X.shadowBlur=20;rr(30,150,300,300,22);X.lineWidth=3;X.strokeStyle=rc;X.stroke();X.restore()}tx('조업 결과',W/2,182,18,'#9df');
+if(best){const f=best.f;tx(f.e,W/2,270,80);tx(f.n,W/2,310,22,TC[f.t]);tx(TN[f.t]+(nn?'  ✨신규 '+nn+'종!':''),W/2,334,14);tx(FL[f.t],W/2,354,13,'#ccc')}else tx('빈손... 😭',W/2,290,26);
+tx(shot+'마리 명중 · 놓침 '+lost+' · 최대콤보 x'+mc,W/2,385,14,'#ccc');tx('+'+sc.toLocaleString()+' 🪙',W/2,418,24,'#fd4');if(t>.4)tx('탭해서 다시 출항',W/2,442,14,'#9f9')}
+if(ph=='dock'||ph=='res'){const pk=S.up[0]>=8;panel(228,50,126,28,14,pk?'#7a4fc9':'#2a3340',pk?'#4a2c8a':'#20282f',pk?'#c9a8ffcc':'#55606c');tx(now-pw<3?'한 번 더 탭!':'⭐'+S.pr+' 환생 (×'+PM().toFixed(1)+')',291,69,12,pk?'#fff':'#889');
+S.q.forEach((q,i)=>{const yy=468+i*22;panel(6,yy,W-12,19,10,'#0b1622d9','#0b1622b0');tx('📜 '+QD[q.k].replace('%',q.n)+' '+Math.min(q.p,q.n)+'/'+q.n+' +'+q.r+'🪙',14,yy+14,11,'#cfe','left')});
+panel(0,544,W,96,0,'#0b1420f7','#080e18f7');
+for(let i=0;i<4;i++){const x=6+i*88,ok=S.coins>=cost(i);panel(x,554,84,76,14,ok?'#2f8f5a':'#243040',ok?'#155230':'#161d28',ok?'#7fe3a6cc':'#4a5563');
+tx(UN[i],x+42,578,12,'#fff');tx('Lv '+S.up[i],x+42,600,12,'#bfe0ff');tx('🪙'+cost(i).toLocaleString(),x+42,621,11,ok?'#ffe27a':'#8892a0')}}
+if(view==1){X.fillStyle='#050d18f7';X.fillRect(0,0,W,H);tx('📖 도감 '+S.dex.filter(x=>x).length+'/100',W/2,44,20,'#9df');
+F.forEach(f=>{const x=20+f.i%10*32,y=70+(f.i/10|0)*32;rr(x+1,y+1,30,30,8);X.fillStyle=S.dex[f.i]?TC[f.t]+'33':'#ffffff0d';X.fill();X.lineWidth=1;X.strokeStyle=S.dex[f.i]?TC[f.t]+'aa':'#ffffff1a';X.stroke();
+if(S.dex[f.i])tx(f.e,x+16,y+23,18);else tx('?',x+16,y+22,14,'#4a5a6a');if(f.i==sel){X.lineWidth=2;X.strokeStyle='#fff';rr(x+1,y+1,30,30,8);X.stroke()}});
+if(sel>=0){const f=F[sel];tx(S.dex[sel]?f.e+' '+f.n:'???',W/2,440,22,S.dex[sel]?TC[f.t]:'#889');tx(S.dex[sel]?TN[f.t]+' · '+S.dex[sel]+'마리 잡음':'아직 못 잡음',W/2,468,14,'#ccc')}
+tx('빈 곳을 탭하면 닫힘',W/2,600,13,'#789')}
+if(view==2){X.fillStyle='#050d18f7';X.fillRect(0,0,W,H);tx('⚙ 설정',W/2,90,24,'#9df');
+panel(60,210,240,50,16,'#254a68','#152a3c','#5fb4e8aa');tx(S.snd?'🔊 사운드 ON':'🔇 사운드 OFF',W/2,242,17);
+panel(60,280,240,50,16,'#7a2c2c','#3f1414','#ff8a8aaa');tx(now-pw2<3?'한번 더 탭하면 초기화':'🗑 데이터 초기화',W/2,312,15,'#ffd0d0');
+tx('정새싹게임즈 · 병맛낚시',W/2,560,12,'#456');tx('빈 곳을 탭하면 닫힘',W/2,600,13,'#789')}
+X.globalAlpha=Math.min(.5,fx);X.fillStyle=fc;X.fillRect(0,0,W,H);X.globalAlpha=1;X.restore()}
+function fit(){const r=C.getBoundingClientRect(),d=Math.min(3,window.devicePixelRatio||1);C.width=Math.round(r.width*d);C.height=Math.round(r.height*d)}fit();addEventListener('resize',fit);
+let last=performance.now();(function L(n){upd(Math.min(.05,(n-last)/1000));last=n;draw();requestAnimationFrame(L)})(last);
+</script></body></html>
