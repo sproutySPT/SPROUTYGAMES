@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="정새싹게임즈 🌱 — 간단하고 중독성 넘치는 웹 미니게임을 직접 플레이해보세요. 한번시작하면 멈출수없을지도? 병맛낚시는 모바일 전용입니다." />
 <meta name="robots" content="index,follow">
-<meta name="keywords" content="정새싹게임즈, SPROUTY GAMES, SPTG, 웹게임, 미니게임, 폭락도 락이다, 네온 라이더, 나무패기, 병맛낚시, 정새싹:프론트라인, 정새싹게임즈 좀비디펜스">
+<meta name="keywords" content="정새싹게임즈, SPROUTY GAMES, SPTG, 웹게임, 미니게임, 폭락도 락이다, 네온 라이더, 나무패기, 병맛낚시, 정새싹:프론트라인, 정새싹게임즈 좀비디펜스, 치킨 배달 러시, 치킨배달러시">
 <meta name="author" content="정새싹게임즈">
 <meta name="language" content="ko">
 <meta name="geo.region" content="KR">
@@ -276,6 +276,7 @@ a{color:inherit}
 
 .gl-top{position:absolute;left:0;right:0;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;pointer-events:none}
 .gl-hint{font:500 11px/1.4 var(--sans);color:rgba(214,230,222,.5)}
+.gl-pick{pointer-events:auto;flex:none;padding:8px 12px;border-radius:9px;border:1px solid var(--lime);background:rgba(190,223,117,.16);color:#d8f0a0;font:800 12px var(--sans);cursor:pointer;backdrop-filter:blur(4px);transition:filter .12s,transform .12s,background .12s}.gl-pick:hover{background:rgba(190,223,117,.3)}.gl-pick:active{transform:translateY(1px)}.gl-pick:disabled{opacity:.6;cursor:default}
 .gl-count{font:500 12px var(--mono);letter-spacing:.06em;color:rgba(226,240,232,.78)}
 
 .gl-arrow{
@@ -510,6 +511,7 @@ body.modal-open{overflow:hidden}
             <canvas class="gl-canvas" id="glCanvas" aria-hidden="true"></canvas>
             <div class="gl-top">
               <div class="gl-hint" data-i18n="gl.hint">좌우로 스크롤하거나 드래그해서 고르세요</div>
+              <button class="gl-pick" id="glPick" type="button" data-i18n="gl.pick">🎲 정새싹 PICK</button>
               <div class="gl-count" id="glCount">1 / 6</div>
             </div>
             <button class="gl-arrow prev" id="glPrev" type="button" aria-label="이전 게임" data-i18n-attr="aria-label:gl.prev">‹</button>
@@ -549,6 +551,10 @@ body.modal-open{overflow:hidden}
               <img src="쓰연.jpg" alt="쓰레기 연구소 썸네일" data-i18n-attr="alt:game.trashlab.alt"><span class="gl-fb-badge">NEW</span><span class="gl-fb-title" data-i18n="game.trashlab.title">쓰레기 연구소 🗑️</span>
               <span class="sr-only" data-i18n="game.trashlab.sr">쓰레기를 뽑고 모으고 연구하는 방치형 수집 게임! 🗑️ 수집 🌐 웹게임</span>
             </a>
+            <a class="gl-fb-card" data-game-id="chickenrush" data-video="치킨.mp4" href="https://www.정새싹게임즈.서버.한국/치킨배달러시" target="_blank" rel="noopener">
+              <img src="치킨.jpg" alt="치킨 배달 러시 썸네일" data-i18n-attr="alt:game.chickenrush.alt"><span class="gl-fb-badge">NEW</span><span class="gl-fb-title" data-i18n="game.chickenrush.title">치킨 배달 러시 🍗</span>
+              <span class="sr-only" data-i18n="game.chickenrush.sr">식기 전에 치킨을 배달하라! 🍗 레이싱 🌐 웹게임</span>
+            </a>
             <a class="gl-fb-card mobile-only" data-game-id="fishing" data-video="fishing.mp4" href="https://www.정새싹게임즈.서버.한국/병맛낚시" target="_blank" rel="noopener">
               <img src="fishing.jpg" alt="병맛낚시 썸네일" data-i18n-attr="alt:game.fishing.alt"><span class="gl-fb-badge mobile">MOBILE ONLY</span><span class="gl-fb-title" data-i18n="game.fishing.title">병맛낚시 🎣</span>
               <span class="sr-only" data-i18n="game.fishing.sr">모바일 전용 낚시 미니게임. 📱 스마트폰과 태블릿에서만 플레이할 수 있습니다.</span>
@@ -571,7 +577,7 @@ body.modal-open{overflow:hidden}
           <div class="about-intro" data-reveal>
             <div class="about-intro-title" data-i18n="about.title"><span data-brand="ko">정새싹게임즈</span> / <span data-brand="en">SPROUTY GAMES</span></div>
             <div class="about-intro-body" data-i18n="about.body"><span data-brand="ko">정새싹게임즈</span>는 <span class="accent">어딘가 맛이 가버린 2013년생 학생 둘</span>이 함께 운영하는 미니게임 개발 팀입니다.<br>돈도 많이 벌고, 무엇보다 <span class="accent">재밌고 중독적인 게임</span>을 만드는 것이 목표입니다.<br><br>Vibe-coding 기반으로 빠르게 만들다 보니 게임이 좀 요상한 구석이 있을 수 있습니다. 너그러운 마음으로 봐.(?)</div>
-            <div class="about-stats"><div class="about-stat"><div class="num">2</div><div class="lbl">TEAM MEMBERS</div></div><div class="about-stat"><div class="num">6</div><div class="lbl">RELEASED GAMES</div></div><div class="about-stat"><div class="num">2026.6.14</div><div class="lbl">SINCE</div></div></div>
+            <div class="about-stats"><div class="about-stat"><div class="num">2</div><div class="lbl">TEAM MEMBERS</div></div><div class="about-stat"><div class="num">8</div><div class="lbl">RELEASED GAMES</div></div><div class="about-stat"><div class="num">2026.6.14</div><div class="lbl">SINCE</div></div></div>
             <div class="about-contact"><span>✉️ CONTACT</span><a href="mailto:sproutygames@gmail.com" data-contact>sproutygames@gmail.com</a></div>
           </div>
 
@@ -692,6 +698,7 @@ const I18N_EN = {
   'gl.prev': `Previous game`,
   'gl.next': `Next game`,
   'gl.open': `DETAILS`,
+  'gl.pick': `🎲 SPROUTY PICK`,
   'gl.loading': `Setting the stage…`,
   'gl.listLabel': `Game list`,
 
@@ -713,6 +720,9 @@ const I18N_EN = {
   'game.trashlab.title': `Trash Lab 🗑️`,
   'game.trashlab.alt': `Trash Lab thumbnail`,
   'game.trashlab.sr': `An idle collecting game: pull trash, fill your codex, and research! 🗑️ Collection 🌐 Web Game`,
+  'game.chickenrush.title': `Chicken Delivery Rush 🍗`,
+  'game.chickenrush.alt': `Chicken Delivery Rush thumbnail`,
+  'game.chickenrush.sr': `Deliver the chicken before it gets cold! 🍗 Racing 🌐 Web Game`,
   'game.fishing.title': `Ridiculous Fishing 🎣`,
   'game.fishing.alt': `Ridiculous Fishing thumbnail`,
   'game.fishing.sr': `Mobile-only fishing mini-game. 📱 Playable on smartphones and tablets only.`,
@@ -847,6 +857,9 @@ function ui(key){
 // 3) 항목 사이에는 반드시 쉼표(,)가 필요합니다. 쉼표가 없으면 화면이 통째로 깨집니다.
 const NOTICES = [
 
+  { date: '2026.10.31', tag: 'update', text: '치킨 배달 러시 출시! 식기 전에 치킨을 배달하세요!',
+    en: 'Chicken Delivery Rush is out! Deliver the chicken before it gets cold!' },
+
   { date: '2026.10.31', tag: 'update', text: '쓰레기 연구소 출시! 쓰레기를 뽑고, 모으고, 연구해 보세요!',
     en: 'Trash Lab is out! Pull it, collect it, research it!' },
 
@@ -856,8 +869,8 @@ const NOTICES = [
     en: 'A new free rider, DEATH, just joined Neon Rider! Chain up your enemies and yeet them out of existence.' }
 ];
 
-const SPROUT_NOTE = `다음게임 기대해주쇼. 짱일겨..🙃`;
-const SPROUT_NOTE_EN = `wait for the next game. it'll be GOATED. fr..🙃`;
+const SPROUT_NOTE = `정새싹노트는 잠시쉽니당~~`;
+const SPROUT_NOTE_EN = `Sprouty Note is taking a little break~~`;
 
 // 공지사항 렌더링
 function renderNotices(){
@@ -1049,6 +1062,15 @@ const GAME_DETAILS = {
     link: 'https://www.정새싹게임즈.서버.한국/쓰레기연구소'
   },
 
+  chickenrush: {
+    title: '치킨 배달 러시 🍗',
+    shortDescription: '식기 전에 치킨을 배달하세요!',
+    description: '밀려오는 차량을 피하고 🔥으로 온도를 지켜 식기 전에 치킨을 배달하는 러시 게임입니다. 정직운전, 자유운전, 난폭운전 중 마음에 드는 라이더를 골라 달려 보세요.',
+    genres: ['🍗 배달', '🏍️ 레이싱', '🌐 웹게임'],
+    developer: '정새싹',
+    link: 'https://www.정새싹게임즈.서버.한국/치킨배달러시'
+  },
+
   fishing: {
     title: '병맛낚시 🎣',
     shortDescription: '📱 모바일 전용 — 휴대폰/태블릿에서만 플레이 가능!',
@@ -1109,6 +1131,14 @@ const GAME_DETAILS_EN = {
     shortDescription: 'Pull it, collect it, research it!',
     description: "An idle collecting game: rip open trash packs, fill your codex, and park a piece in the Trash Furnace to earn trash shards automatically. Watch out for the occasional rotten luck.",
     genres: ['🗑️ Collection', '🌐 Web Game'],
+    developer: 'SPROUTY'
+  },
+
+  chickenrush: {
+    title: 'Chicken Delivery Rush 🍗',
+    shortDescription: 'Deliver the chicken before it gets cold!',
+    description: "Dodge the traffic and grab 🔥 to keep your chicken hot all the way to the drop-off. Pick your rider — Honest, Free, or Road Rage — and hit the road.",
+    genres: ['🍗 Delivery', '🏍️ Racing', '🌐 Web Game'],
     developer: 'SPROUTY'
   },
 
@@ -1926,6 +1956,7 @@ function createGameStage(){
   const infoMain = document.getElementById('glInfoMain');
   const infoTags = document.getElementById('glInfoTags');
   const openBtn = document.getElementById('glOpen');
+  const pickBtn = document.getElementById('glPick');
 
   const N = GAMES.length;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -1977,6 +2008,27 @@ function createGameStage(){
   prevBtn.addEventListener('click', () => step(-1));
   nextBtn.addEventListener('click', () => step(1));
   openBtn.addEventListener('click', () => openGameDetail(GAMES[sel].id));
+
+  // 🎲 정새싹 PICK — 랜덤 룰렛으로 게임을 고른 뒤 상세 팝업을 엽니다.
+  let pickTimer = 0;
+  function pickRandom(){
+    if(pickTimer || N < 1) return;
+    let fin = Math.floor(Math.random() * N);
+    if(N > 1) while(fin === sel) fin = Math.floor(Math.random() * N);
+    if(!gl){ openGameDetail(GAMES[fin].id); return; }
+    const seq = [];
+    const n = 5 + Math.floor(Math.random() * 3);
+    for(let k = 0; k < n; k++) seq.push(Math.floor(Math.random() * N));
+    seq.push(fin);
+    let k = 0;
+    pickBtn.disabled = true;
+    (function tick(){
+      setTarget(seq[k]); k++;
+      if(k < seq.length) pickTimer = setTimeout(tick, 120 + k * 35);
+      else pickTimer = setTimeout(() => { pickTimer = 0; pickBtn.disabled = false; openGameDetail(GAMES[fin].id); }, 800);
+    })();
+  }
+  pickBtn.addEventListener('click', pickRandom);
 
   // ── 드래그 / 터치 / 클릭 ──
   canvas.addEventListener('pointerdown', e => {
