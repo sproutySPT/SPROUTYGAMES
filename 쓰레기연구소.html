@@ -682,7 +682,7 @@ img{max-width:100%;display:block;}
 <div class="modal-backdrop" id="modal-settings">
   <div class="modal-box">
     <h3>설정</h3>
-    <div class="setting-row"><span>배경음악</span><label class="switch"><input type="checkbox" id="toggle-music"><span class="slider"></span></label></div>
+    <div class="setting-row" style="display:none"><span>배경음악</span><label class="switch"><input type="checkbox" id="toggle-music"><span class="slider"></span></label></div>
     <div class="setting-row"><span>효과음</span><label class="switch"><input type="checkbox" id="toggle-sfx"><span class="slider"></span></label></div>
     <div class="setting-row"><span>언어 / Language</span><button class="btn-ghost" id="btn-lang" style="flex:none;padding:8px 16px;">한국어</button></div>
     <div style="margin-top:8px;text-align:center;font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.15px;">made by 정새싹게임즈's 정지호</div>
@@ -1217,14 +1217,7 @@ var AudioManager = {
   sfxMap: {},
   sfxNames: ["click","grab","tear","card","rare","mythic","legendary","dev","sell","collect","equip"],
   init: function(){
-    try{
-      this.bgmEl = new Audio("audio/laboratory.mp3");
-      this.bgmEl.loop = true;
-      this.bgmEl.volume = 0.35;
-      var self = this;
-      this.bgmEl.addEventListener("canplaythrough", function(){ self.bgmAvailable=true; }, {once:true});
-      this.bgmEl.addEventListener("error", function(){ self.bgmAvailable=false; }, {once:true});
-    }catch(e){ this.bgmAvailable=false; }
+    this.bgmAvailable = false;
 
     this.sfxNames.forEach(function(name){
       try{
@@ -1294,7 +1287,7 @@ var AudioManager = {
     });
   },
   playBgm: function(){
-    if(!state.settings.music) return;
+    return; // 배경음악 제거 (효과음만 사용)
     if(this.bgmAvailable && this.bgmEl){
       var p = this.bgmEl.play();
       if(p && p.catch) p.catch(function(){});
