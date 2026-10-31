@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<script src="/sprouty-lang.js"></script>
 <title>SPROUTY · 쓰레기 연구소</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -683,6 +684,7 @@ img{max-width:100%;display:block;}
     <h3>설정</h3>
     <div class="setting-row"><span>배경음악</span><label class="switch"><input type="checkbox" id="toggle-music"><span class="slider"></span></label></div>
     <div class="setting-row"><span>효과음</span><label class="switch"><input type="checkbox" id="toggle-sfx"><span class="slider"></span></label></div>
+    <div class="setting-row"><span>언어 / Language</span><button class="btn-ghost" id="btn-lang" style="flex:none;padding:8px 16px;">한국어</button></div>
     <div style="margin-top:8px;text-align:center;font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.15px;">made by 정새싹게임즈's 정지호</div>
     <div class="modal-actions">
       <button class="btn-ghost danger" id="btn-open-reset">저장 데이터 초기화</button>
@@ -790,6 +792,172 @@ var PACKS = [
 ];
 var PACK_MAP = {};
 PACKS.forEach(function(p){ PACK_MAP[p.id]=p; });
+
+
+/* =========================================================
+   I18N (sprouty-lang.js 연동)
+========================================================= */
+var SP = window.SPROUTY || {lang:"ko", onChange:function(){}};
+function isEn(){ return SP.lang === "en"; }
+function T(ko, en){ return isEn() ? en : ko; }
+var GRADE_EN = {"일반":"Common","희귀":"Rare","초희귀":"Super Rare","영웅":"Epic","신화":"Mythic","전설":"Legendary","☆☆☆":"☆☆☆"};
+function gname(g){ return isEn() ? (GRADE_EN[g] || g) : g; }
+var SPROUT_EN = {
+  "라이터":["Lighter","Whoosh!"],
+  "죽어가는 개미":["Dying Ant","Uuurrgh..."],
+  "코딱지":["Booger","Pick pick pick.."],
+  "햄버거":["Hamburger","Ba-ra-bam-ba-ba"],
+  "개발자":["Developer","Yep, it's me"],
+  "혈기왕성한 개미":["Energetic Ant","Heave-ho!"],
+  "방사능 옥수수":["Radioactive Corn","Care for a bite?"],
+  "풍선":["Balloon","Wheee"],
+  "수류탄":["Grenade","Fire in the hole"],
+  "수류탄인 척하는 아보카도":["Fake Grenade Avocado","Aw, you caught me"],
+  "강력한 개미":["Mighty Ant","Heh heh, just you wait"],
+  "수소폭탄":["Hydrogen Bomb","Kaaa-boooom"],
+  "기관총":["Machine Gun","Rat-a-tat-tat-tat"],
+  "전봇대":["Utility Pole","You're tall."],
+  "알루미늄 야구배트":["Aluminum Bat","Crack!"],
+  "The Great Master 개미":["The Great Master Ant","Hahaha, I am the great ant"],
+  "강아지":["Puppy","Grrr... woof woof"],
+  "누군가의 어금니":["Someone's Molar","Ouch!"],
+  "서울우유":["Seoul Milk","There's no Incheon milk..."],
+  "고장난 타이머":["Broken Timer","Tick tock tick tock"],
+  "오징어":["Squid","It's you!"],
+  "외계인":["Alien","Take me to your leader"],
+  "다이아몬드":["Diamond","Hehe, this one's pricey"],
+  "초콜렛":["Chocolate","So sweet"],
+  "감자":["Potato","Yes. This is a potato."],
+  "해물파전":["Seafood Pajeon","Crispy crunchy.."],
+  "신호등":["Traffic Light","The light is green."],
+  "정새싹":["Jeong Saessak","Ooooh!!!!!"]
+};
+function dn(id){ return (isEn() && SPROUT_EN[id]) ? SPROUT_EN[id][0] : id; }
+function ddesc(sp){ return (isEn() && SPROUT_EN[sp.id]) ? SPROUT_EN[sp.id][1] : (sp.desc || ""); }
+var PACK_EN = {
+  normal:["Basic Trash Pack","The most basic trash collection pack."],
+  cool:["Cool Trash Pack","A higher chance of rarer trash."],
+  awesome:["Awesome Trash Pack","A premium trash pack made from top-grade research materials."],
+  legend:["Legendary Trash Pack","An ultra-premium pack that never drops Common trash."],
+  ultra:["Jeong Saessak Trash Pack","Nothing below Epic. The ultimate pack for chasing Jeong Saessak."]
+};
+function pname(p){ return isEn() ? PACK_EN[p.id][0] : p.name; }
+function pdesc(p){ return isEn() ? PACK_EN[p.id][1] : p.desc; }
+function packDisplayName(koName){
+  for(var i=0;i<PACKS.length;i++){ if(PACKS[i].name===koName) return pname(PACKS[i]); }
+  return koName;
+}
+var lastResultSession = null;
+
+var STATIC_EN_RAW = {
+  "쓰레기 연구소":"Trash Lab",
+  "SPROUTY · 쓰레기 수집 & 연구":"SPROUTY · Collect & Research Trash",
+  "최근 획득":"Latest Pull",
+  "가장 낮은 확률":"Lowest Odds",
+  "총 획득":"Total Obtained",
+  "개":" pcs",
+  "뽑기":"PULL",
+  "눌러서 쓰레기 팩을 선택하세요":"Tap to choose a trash pack",
+  "🧪 쓰레기 용광로 자동 생산":"🧪 Trash Furnace Auto-Production",
+  "배치한 단 하나의 쓰레기가 쓰레기 조각을 계속 벌어옵니다.":"The single piece of trash you place keeps earning trash shards.",
+  "용광로":"Furnace",
+  "연구 효율":"Research Boost",
+  "오프라인 적립":"Offline Earnings",
+  "8시간":"8 hrs",
+  "🧪 연구소":"🧪 Lab",
+  "📖 도감":"📖 Codex",
+  "🕘 획득 기록":"🕘 History",
+  "← 뒤로":"← Back",
+  "쓰레기 팩 선택":"Choose a Trash Pack",
+  "🧪 쓰레기 연구소":"🧪 Trash Lab",
+  "쓰레기가 쓰레기 조각을 벌어옵니다":"Trash Earns Trash Shards",
+  "도감에서 발견한 쓰레기 단 하나를 쓰레기 용광로에 배치하면 자동으로 쓰레기 조각이 생산됩니다.":"Place one discovered piece of trash from the Codex into the Trash Furnace to automatically produce trash shards.",
+  "마지막 계산":"Last Calculated",
+  "🗑️ 쓰레기 용광로":"🗑️ Trash Furnace",
+  "발견한 쓰레기 중 단 하나만 배치할 수 있습니다. 슬롯 추가 업그레이드는 없습니다.":"Only one discovered piece of trash can be placed. There are no extra-slot upgrades.",
+  "⚙️ 연구소 업그레이드":"⚙️ Lab Upgrades",
+  "💡 방치 보상":"💡 Idle Rewards",
+  "게임을 꺼도 최대 8시간 동안 쓰레기 조각이 쌓입니다. 다시 들어오면 자동으로 정산됩니다.":"Trash shards keep piling up for up to 8 hours even while the game is closed. They are settled automatically when you return.",
+  "← 취소":"← Cancel",
+  "건너뛰기 ⏭":"Skip ⏭",
+  "✋ 드래그해서 뜯기":"✋ Drag to tear open",
+  "획득 결과":"Results",
+  "🗑️ 다시 뽑기":"🗑️ Pull Again",
+  "연구소로 돌아가기":"Back to Lab",
+  "← 연구소로":"← To Lab",
+  "쓰레기 도감":"Trash Codex",
+  "선택됨":"Selected",
+  "취소":"Cancel",
+  "선택 판매":"Sell Selected",
+  "쓰레기 판매":"Sell Trash",
+  "판매":"Sell",
+  "설정":"Settings",
+  "배경음악":"Music",
+  "효과음":"Sound Effects",
+  "저장 데이터 초기화":"Reset Save Data",
+  "닫기":"Close",
+  "억까 발생!":"Rotten Luck!",
+  "쓰레기 조각의 절반이 허공으로 사라졌습니다...":"Half of your trash shards vanished into thin air...",
+  "ㅠㅠ 확인":"T_T OK",
+  "정말 초기화할까요?":"Really reset?",
+  "모든 쓰레기 조각, 쓰레기, 획득 기록이 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.":"All trash shards, trash, and history will be permanently deleted. This cannot be undone.",
+  "초기화":"Reset",
+  "획득 기록":"History"
+};
+function i18nNorm(t){ return t.replace(/\uFE0F/g,"").trim(); }
+var STATIC_EN = {};
+Object.keys(STATIC_EN_RAW).forEach(function(k){ STATIC_EN[i18nNorm(k)] = STATIC_EN_RAW[k]; });
+function applyStaticI18n(){
+  var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode:function(n){
+      var p = n.parentNode;
+      if(p && (p.tagName==="SCRIPT" || p.tagName==="STYLE")) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  var n;
+  while((n = w.nextNode())){
+    var ko = n.__ko;
+    if(ko === undefined){
+      var key0 = i18nNorm(n.nodeValue);
+      if(!Object.prototype.hasOwnProperty.call(STATIC_EN, key0)) continue;
+      ko = n.__ko = n.nodeValue;
+    }
+    var key = i18nNorm(ko);
+    if(isEn() && Object.prototype.hasOwnProperty.call(STATIC_EN, key)){
+      var trimmed = ko.trim();
+      n.nodeValue = ko.replace(trimmed, function(){ return STATIC_EN[key]; });
+    } else {
+      n.nodeValue = ko;
+    }
+  }
+  document.title = T("SPROUTY · 쓰레기 연구소", "SPROUTY · Trash Lab");
+  var sb = document.getElementById("btn-settings-main");
+  if(sb) sb.title = T("설정", "Settings");
+  var lb = document.getElementById("btn-lang");
+  if(lb) lb.textContent = isEn() ? "English" : "한국어";
+}
+function refreshLanguage(){
+  applyStaticI18n();
+  closeModal("modal-detail");
+  closeModal("modal-sell-confirm");
+  var a = document.querySelector(".screen.active");
+  var name = a ? a.getAttribute("data-screen") : "main";
+  renderMain();
+  if(name==="packs") renderPackGrid();
+  if(name==="lab") renderIdleScreen();
+  if(name==="dex"){ renderDexFilters(); renderDexGrid(currentDexFilter); }
+  if(name==="opening" && pendingOpen){
+    document.getElementById("opening-pity").textContent = pityLabel(pendingOpen.pack);
+  }
+  if(name==="result" && lastResultSession){
+    var keep = currentSession;
+    currentSession = lastResultSession;
+    renderResultScreen();
+    currentSession = keep;
+  }
+  if(document.getElementById("modal-history").classList.contains("active")) renderHistory();
+}
 
 var IMAGE_DIR = "images/";
 var STORAGE_KEY = "trash_lab_save_v1";
@@ -912,7 +1080,7 @@ function applyIdleProduction(showToast){
   if(gained > 0){
     state.seeds += gained;
     showSeedGainVisual(gained);
-    if(showToast && delta >= 15000){ toast("🧪 연구소가 쓰레기 조각 +" + fmt(Math.floor(gained)) + "개를 생산했습니다!"); }
+    if(showToast && delta >= 15000){ toast(T("🧪 연구소가 쓰레기 조각 +" + fmt(Math.floor(gained)) + "개를 생산했습니다!", "🧪 The lab produced +" + fmt(Math.floor(gained)) + " trash shards!")); }
   }
   return {gained:gained, delta:delta};
 }
@@ -920,13 +1088,13 @@ function levelUpSprout(id){
   var owned = state.owned[id]||0;
   var level = getSproutLevel(id);
   if(owned < 3 || level >= 10){
-    toast(level >= 10 ? "이미 최대 레벨입니다." : "같은 쓰레기 3개가 필요합니다.");
+    toast(level >= 10 ? T("이미 최대 레벨입니다.","Already at max level.") : T("같은 쓰레기 3개가 필요합니다.","You need 3 of the same trash."));
     return false;
   }
   state.owned[id] = owned - 3;
   state.levels[id] = level + 1;
   saveState();
-  toast("🌱 " + id + " 강화! Lv." + (level+1));
+  toast(T("🌱 " + id + " 강화! Lv." + (level+1), "🌱 " + dn(id) + " upgraded! Lv." + (level+1)));
   return true;
 }
 function renderIdleScreen(){
@@ -936,28 +1104,28 @@ function renderIdleScreen(){
   var cap = getLabCapacity();
   var filled = getAssignedIds().length;
   var boostPct = (state.labUpgrades.boost||0)*10;
-  document.getElementById("lab-total-rate").textContent = "+" + fmtRate(rate) + " /초";
+  document.getElementById("lab-total-rate").textContent = "+" + fmtRate(rate) + T(" /초"," /sec");
   document.getElementById("lab-filled").textContent = filled + " / " + cap;
   document.getElementById("lab-boost").textContent = "+" + boostPct + "%";
-  document.getElementById("lab-last-online").textContent = "방금 계산";
-  document.getElementById("lab-boost-desc").textContent = "용광로에 배치된 쓰레기 생산량 +" + boostPct + "%";
+  document.getElementById("lab-last-online").textContent = T("방금 계산","Just now");
+  document.getElementById("lab-boost-desc").textContent = T("용광로에 배치된 쓰레기 생산량 +" + boostPct + "%", "Furnace output +" + boostPct + "%");
   var boostLv = state.labUpgrades.boost||0;
   var boostBtn = document.getElementById("btn-upgrade-boost");
-  if(boostLv >= BOOST_COSTS.length){ boostBtn.textContent="최대 효율"; boostBtn.disabled=true; }
+  if(boostLv >= BOOST_COSTS.length){ boostBtn.textContent=T("최대 효율","Max Boost"); boostBtn.disabled=true; }
   else { boostBtn.textContent="🗑️ " + fmt(BOOST_COSTS[boostLv]); boostBtn.disabled=state.seeds < BOOST_COSTS[boostLv]; }
   var slotWrap = document.getElementById("idle-slots");
   slotWrap.innerHTML = "";
   var discovered = SPROUTS.filter(function(s){ return !!state.discovered[s.id]; });
   for(var i=0;i<1;i++){
     var slot = document.createElement("div"); slot.className="idle-slot";
-    var label = document.createElement("div"); label.className="idle-slot-label"; label.textContent="쓰레기 용광로"; slot.appendChild(label);
+    var label = document.createElement("div"); label.className="idle-slot-label"; label.textContent=T("쓰레기 용광로","Trash Furnace"); slot.appendChild(label);
     var current = state.labSlots[i] || "";
     var chooseBtn = document.createElement("button");
     chooseBtn.className = "idle-slot-picker";
     if(current && SPROUT_MAP[current]){
-      chooseBtn.innerHTML = "<span class=\"slot-picker-icon\">" + SPROUT_MAP[current].emoji + "</span><span class=\"slot-picker-main\"><b>" + current + "</b><small>Lv." + getSproutLevel(current) + " · +" + fmtRate(getEffectiveSproutRate(SPROUT_MAP[current])*getLabBoost()) + "/초</small></span><span class=\"slot-picker-arrow\">›</span>";
+      chooseBtn.innerHTML = "<span class=\"slot-picker-icon\">" + SPROUT_MAP[current].emoji + "</span><span class=\"slot-picker-main\"><b>" + dn(current) + "</b><small>Lv." + getSproutLevel(current) + " · +" + fmtRate(getEffectiveSproutRate(SPROUT_MAP[current])*getLabBoost()) + T("/초","/sec") + "</small></span><span class=\"slot-picker-arrow\">›</span>";
     }else{
-      chooseBtn.innerHTML = "<span class=\"slot-picker-icon\">＋</span><span class=\"slot-picker-main\"><b>쓰레기 선택</b><small>도감에서 배치할 쓰레기를 고르세요</small></span><span class=\"slot-picker-arrow\">›</span>";
+      chooseBtn.innerHTML = "<span class=\"slot-picker-icon\">＋</span><span class=\"slot-picker-main\"><b>" + T("쓰레기 선택","Choose Trash") + "</b><small>" + T("도감에서 배치할 쓰레기를 고르세요","Pick trash to place from the Codex") + "</small></span><span class=\"slot-picker-arrow\">›</span>";
     }
     chooseBtn.addEventListener("click", function(idx){ return function(){
       pendingLabSlotIndex = 0;
@@ -966,15 +1134,15 @@ function renderIdleScreen(){
     }; }(i));
     slot.appendChild(chooseBtn);
     var rateLine=document.createElement("div"); rateLine.className="idle-slot-rate";
-    if(current && SPROUT_MAP[current]) rateLine.textContent="자동 생산 중";
-    else rateLine.textContent="대기 중";
+    if(current && SPROUT_MAP[current]) rateLine.textContent=T("자동 생산 중","Producing");
+    else rateLine.textContent=T("대기 중","Idle");
     slot.appendChild(rateLine);
     slotWrap.appendChild(slot);
   }
 }
 function updateMainIdleSummary(){
   var rate=getTotalIdleRate(), cap=getLabCapacity(), filled=getAssignedIds().length, boost=(state.labUpgrades.boost||0)*10;
-  var a=document.getElementById("main-idle-rate"); if(a) a.textContent="+"+fmtRate(rate)+" /초";
+  var a=document.getElementById("main-idle-rate"); if(a) a.textContent="+"+fmtRate(rate)+T(" /초"," /sec");
   var b=document.getElementById("main-lab-filled"); if(b) b.textContent=filled+" / "+cap;
   var c=document.getElementById("main-lab-boost"); if(c) c.textContent="+"+boost+"%";
 }
@@ -982,14 +1150,14 @@ function upgradeLabCapacity(){ return false; }
 function upgradeLabBoost(){
   applyIdleProduction(false);
   var lv=state.labUpgrades.boost||0;
-  if(lv>=BOOST_COSTS.length){ toast("연구 효율은 최대입니다."); return; }
+  if(lv>=BOOST_COSTS.length){ toast(T("연구 효율은 최대입니다.","Research boost is maxed.")); return; }
   var cost=BOOST_COSTS[lv];
-  if(state.seeds<cost){ toast("쓰레기 조각이 부족합니다."); return; }
+  if(state.seeds<cost){ toast(T("쓰레기 조각이 부족합니다.","Not enough trash shards.")); return; }
   state.seeds-=cost;
   state.labUpgrades.boost++;
   saveState();
   AudioManager.playSfx("collect");
-  toast("⚙️ 연구 효율 +10%!");
+  toast(T("⚙️ 연구 효율 +10%!","⚙️ Research boost +10%!"));
   renderIdleScreen(); renderMain();
 }
 
@@ -1406,7 +1574,7 @@ function drawCardTexture(sprout, grade, idx, total, prob){
   ctx.fillStyle="#FFFFFF"; ctx.font="900 38px sans-serif"; ctx.textAlign="left";
   ctx.fillText("SPROUTY",78,104);
   ctx.fillStyle=color; ctx.font="900 26px sans-serif"; ctx.textAlign="right";
-  ctx.fillText(info.label.toUpperCase(),w-78,104);
+  ctx.fillText(gname(grade).toUpperCase(),w-78,104);
   ctx.globalAlpha=.75; ctx.strokeStyle=color; ctx.lineWidth=3;
   ctx.beginPath();ctx.moveTo(78,126);ctx.lineTo(w-78,126);ctx.stroke();ctx.globalAlpha=1;
 
@@ -1430,12 +1598,13 @@ function drawCardTexture(sprout, grade, idx, total, prob){
 
   // name
   ctx.fillStyle="#F7FBFF"; ctx.font="900 46px sans-serif";
-  var name=sprout ? sprout.id : "쓰레기";
-  if(name.length>10) ctx.font="900 38px sans-serif";
+  var name=sprout ? dn(sprout.id) : T("쓰레기","Trash");
+  var nameSize = name.length>10 ? 38 : 46; ctx.font="900 "+nameSize+"px sans-serif";
+  while(ctx.measureText(name).width > w-150 && nameSize > 20){ nameSize -= 2; ctx.font="900 "+nameSize+"px sans-serif"; }
   ctx.fillText(name,cx,650);
 
   // one-line description — intentionally large and easy to read
-  var desc = sprout && sprout.desc ? sprout.desc : "";
+  var desc = sprout ? ddesc(sprout) : "";
   if(desc){
     ctx.textAlign="center";
     ctx.fillStyle="#FFE9A8";
@@ -1452,27 +1621,27 @@ function drawCardTexture(sprout, grade, idx, total, prob){
 
   // grade plaque
   ctx.fillStyle=color; roundedRectPath(ctx,174,738,w-348,78,39); ctx.fill();
-  ctx.fillStyle="#081015"; ctx.font="900 34px sans-serif"; ctx.fillText(info.label,cx,779);
+  ctx.fillStyle="#081015"; ctx.font="900 34px sans-serif"; ctx.fillText(gname(grade),cx,779);
 
   // data block
   ctx.textAlign="left"; ctx.fillStyle="#B9C7CE"; ctx.font="700 24px sans-serif";
-  ctx.fillText("출현 확률",92,870);
+  ctx.fillText(T("출현 확률","Drop Rate"),92,870);
   ctx.textAlign="right"; ctx.fillStyle="#FFFFFF"; ctx.font="900 28px sans-serif";
   ctx.fillText((Number(prob)||0).toFixed(3).replace(/0+$/,'').replace(/\.$/,'')+"%",w-92,870);
   ctx.textAlign="left"; ctx.fillStyle="#B9C7CE"; ctx.font="700 24px sans-serif";
-  ctx.fillText("연차 위치",92,920);
+  ctx.fillText(T("연차 위치","Card No."),92,920);
   ctx.textAlign="right"; ctx.fillStyle="#FFFFFF"; ctx.font="900 28px sans-serif";
   ctx.fillText((idx+1)+" / "+total,w-92,920);
 
   // developer easter egg remains, but only when the item itself is the developer
   if(sprout && sprout.id==="개발자"){
     ctx.textAlign="center"; ctx.fillStyle="#FFE9A8"; ctx.font="800 20px sans-serif";
-    ctx.fillText("개발자가 왜 쓰레기 도감에 들어왔습니다.",cx,960);
+    ctx.fillText(T("개발자가 왜 쓰레기 도감에 들어왔습니다.","Why is the developer in the trash codex?"),cx,960);
   }
 
   // serialized-feeling footer / card code
   ctx.textAlign="left"; ctx.fillStyle="#7B8A92"; ctx.font="700 18px monospace";
-  ctx.fillText("SPROUTY • SPECIMEN / "+(sprout?sprout.id:"UNKNOWN"),78,1000);
+  ctx.fillText("SPROUTY • SPECIMEN / "+(sprout?dn(sprout.id):"UNKNOWN"),78,1000);
   ctx.textAlign="right"; ctx.fillText("R-"+info.rank+" / 001",w-78,1000);
 
   // holographic shine stripe
@@ -1630,8 +1799,8 @@ PouchScene.prototype.revealCard = function(result, idx, total){
   var bctx=backCanvas.getContext("2d");
   var bg=bctx.createLinearGradient(0,0,256,350); bg.addColorStop(0,"#1A242A"); bg.addColorStop(1,"#080C0F"); bctx.fillStyle=bg; bctx.fillRect(0,0,256,350);
   bctx.strokeStyle=info.color; bctx.lineWidth=8; bctx.strokeRect(14,14,228,322);
-  bctx.fillStyle="#fff"; bctx.font="900 34px sans-serif"; bctx.textAlign="center"; bctx.fillText("쓰레기",128,155);
-  bctx.fillStyle=info.color; bctx.font="900 24px sans-serif"; bctx.fillText(info.label,128,195);
+  bctx.fillStyle="#fff"; bctx.font="900 34px sans-serif"; bctx.textAlign="center"; bctx.fillText(T("쓰레기","TRASH"),128,155);
+  bctx.fillStyle=info.color; bctx.font="900 24px sans-serif"; bctx.fillText(gname(grade),128,195);
   bctx.fillStyle="#82909A"; bctx.font="700 14px sans-serif"; bctx.fillText("SPROUTY LAB",128,235);
   var backTex=new THREE.CanvasTexture(backCanvas); backTex.encoding=THREE.sRGBEncoding;
   var backMat=new THREE.MeshBasicMaterial({map:backTex,side:THREE.FrontSide});
@@ -1969,10 +2138,10 @@ function renderMain(){
     placeholder.textContent = "🌱";
     visual.appendChild(placeholder);
   }
-  document.getElementById("record-recent-name").textContent = recent ? recent.id : "아직 없음";
+  document.getElementById("record-recent-name").textContent = recent ? dn(recent.id) : T("아직 없음","None yet");
 
   var lowest = state.lowestProb ? SPROUT_MAP[state.lowestProb.sproutId] : null;
-  document.getElementById("record-lowest-name").textContent = lowest ? lowest.id : "아직 없음";
+  document.getElementById("record-lowest-name").textContent = lowest ? dn(lowest.id) : T("아직 없음","None yet");
   document.getElementById("record-lowest-prob").textContent = lowest ? fmtPercent(state.lowestProb.prob) : "";
 
   document.getElementById("record-total").textContent = fmt(state.totalObtained);
@@ -2001,17 +2170,17 @@ function renderPackGrid(){
 
     var name = document.createElement("div");
     name.className = "pack-name";
-    name.textContent = pack.name;
+    name.textContent = pname(pack);
     card.appendChild(name);
 
     var desc = document.createElement("div");
     desc.className = "pack-desc";
-    desc.textContent = pack.desc;
+    desc.textContent = pdesc(pack);
     card.appendChild(desc);
 
     var price = document.createElement("div");
     price.className = "pack-price";
-    price.innerHTML = '<span class="seed-icon">🗑️</span> ' + fmt(pack.price) + ' / 1회';
+    price.innerHTML = '<span class="seed-icon">🗑️</span> ' + fmt(pack.price) + T(' / 1회',' / pull');
     card.appendChild(price);
 
     var probList = document.createElement("div");
@@ -2025,7 +2194,7 @@ function renderPackGrid(){
       dot.className = "dot";
       dot.style.background = GRADES[g].color;
       left.appendChild(dot);
-      left.appendChild(document.createTextNode(g));
+      left.appendChild(document.createTextNode(gname(g)));
       var right = document.createElement("span");
       right.textContent = pack.probs[g] + "%";
       row.appendChild(left);
@@ -2037,21 +2206,21 @@ function renderPackGrid(){
     var pityLine = document.createElement("div");
     pityLine.className = "pity-line";
     var remain = Math.max(0, pack.pity.threshold - state.pity[pack.id]);
-    pityLine.textContent = "피티 " + state.pity[pack.id] + "/" + pack.pity.threshold + " · " + remain + "회 내 " + pack.pity.guarantee + " 이상 확정";
+    pityLine.textContent = pityLabel(pack);
     card.appendChild(pityLine);
 
     var btnRow = document.createElement("div");
     btnRow.className = "pack-btns";
     var btn1 = document.createElement("button");
     btn1.className = "pack-btn";
-    btn1.textContent = "1회 뽑기\n🗑️" + fmt(pack.price);
+    btn1.textContent = T("1회 뽑기","Pull ×1") + "\n🗑️" + fmt(pack.price);
     btn1.style.whiteSpace = "pre-line";
     btn1.disabled = state.seeds < pack.price;
     btn1.addEventListener("click", function(){ AudioManager.playSfx("click"); requestOpen(pack, 1); });
 
     var btn10 = document.createElement("button");
     btn10.className = "pack-btn ghost";
-    btn10.textContent = "10연차\n🗑️" + fmt(pack.price*10);
+    btn10.textContent = T("10연차","Pull ×10") + "\n🗑️" + fmt(pack.price*10);
     btn10.style.whiteSpace = "pre-line";
     btn10.disabled = state.seeds < pack.price*10;
     btn10.addEventListener("click", function(){ AudioManager.playSfx("click"); requestOpen(pack, 10); });
@@ -2074,7 +2243,7 @@ var dragging = false, dragStartX = 0, currentProgress = 0, tornSoundPlayed = fal
 function requestOpen(pack, count){
   var cost = pack.price*count;
   if(state.seeds < cost){
-    toast("쓰레기 조각이 부족합니다.");
+    toast(T("쓰레기 조각이 부족합니다.","Not enough trash shards."));
     return;
   }
   pendingOpen = {pack:pack, count:count};
@@ -2088,7 +2257,7 @@ function requestOpen(pack, count){
   document.getElementById("tear-tab").style.display = "flex";
   document.getElementById("tear-tab").style.opacity = 1;
   document.getElementById("opening-pity").textContent = pityLabel(pack);
-  document.getElementById("pouch-name-tag").textContent = pack.name;
+  document.getElementById("pouch-name-tag").textContent = pname(pack);
   document.getElementById("pouch-name-tag").classList.add("hidden");
   goToScreen("opening");
   requestAnimationFrame(function(){
@@ -2107,7 +2276,7 @@ function requestOpen(pack, count){
 }
 function pityLabel(pack){
   var remain = Math.max(0, pack.pity.threshold - state.pity[pack.id]);
-  return "피티 " + state.pity[pack.id] + "/" + pack.pity.threshold + " · " + remain + "회 내 " + pack.pity.guarantee + " 이상 확정";
+  return T("피티 " + state.pity[pack.id] + "/" + pack.pity.threshold + " · " + remain + "회 내 " + pack.pity.guarantee + " 이상 확정", "Pity " + state.pity[pack.id] + "/" + pack.pity.threshold + " · " + gname(pack.pity.guarantee) + " or higher guaranteed within " + remain + " pull(s)");
 }
 function updateTearProgress(p){
   currentProgress = p;
@@ -2143,7 +2312,7 @@ function onEnvelopeOpened(){
   var pack = pendingOpen.pack, count = pendingOpen.count;
   var cost = pack.price*count;
   if(state.seeds < cost){
-    toast("쓰레기 조각이 부족합니다.");
+    toast(T("쓰레기 조각이 부족합니다.","Not enough trash shards."));
     goToScreen("packs");
     return;
   }
@@ -2218,7 +2387,8 @@ function maybeUkkam(){
 ========================================================= */
 function renderResultScreen(){
   var session = currentSession;
-  document.getElementById("result-title").textContent = session.count===1 ? "획득한 쓰레기" : "10연차 결과";
+  lastResultSession = session;
+  document.getElementById("result-title").textContent = session.count===1 ? T("획득한 쓰레기","Trash Obtained") : T("10연차 결과","Pull ×10 Results");
   var grid = document.getElementById("result-grid");
   grid.innerHTML = "";
   session.results.forEach(function(r){
@@ -2230,7 +2400,7 @@ function renderResultScreen(){
     cell.appendChild(visual);
     var name = document.createElement("div");
     name.className = "result-name grade-" + GRADES[r.grade].slug;
-    name.textContent = r.sprout.id;
+    name.textContent = dn(r.sprout.id);
     cell.appendChild(name);
     cell.addEventListener("click", function(){ AudioManager.playSfx("click"); openDetail(r.sprout.id); });
     grid.appendChild(cell);
@@ -2259,7 +2429,7 @@ function updateDexSelectionUI(){
   var btn=document.getElementById("btn-sell-selected");
   var count=Object.keys(selectedDexIds).length;
   if(toolbar) toolbar.classList.toggle("hidden", !dexSelectionMode);
-  if(note) note.textContent=dexSelectionMode ? "판매할 쓰레기를 눌러 선택/해제하세요." : "쓰레기를 꾹 누르면 여러 개를 선택해서 한꺼번에 판매할 수 있습니다.";
+  if(note) note.textContent=dexSelectionMode ? T("판매할 쓰레기를 눌러 선택/해제하세요.","Tap trash to select/deselect for selling.") : T("쓰레기를 꾹 누르면 여러 개를 선택해서 한꺼번에 판매할 수 있습니다.","Long-press trash to select several and sell them at once.");
   if(countEl) countEl.textContent=count;
   if(btn) btn.disabled=count===0;
 }
@@ -2278,14 +2448,14 @@ function toggleDexSelection(id){
 }
 function sellSelectedDex(){
   var ids=Object.keys(selectedDexIds).filter(function(id){ return (state.owned[id]||0)>0; });
-  if(ids.length===0){ toast("판매할 쓰레기가 없습니다."); return; }
+  if(ids.length===0){ toast(T("판매할 쓰레기가 없습니다.","Nothing to sell.")); return; }
   var totalCount=0, totalGain=0, names=[];
   ids.forEach(function(id){
     var s=SPROUT_MAP[id], info=GRADES[s.grade], owned=state.owned[id]||0;
     if(owned<=0) return;
-    totalCount += owned; totalGain += info.sell*owned; names.push(s.id+" x"+owned);
+    totalCount += owned; totalGain += info.sell*owned; names.push(dn(s.id)+" x"+owned);
   });
-  var ok=window.confirm(names.join("\n")+"\n\n총 "+fmt(totalCount)+"개를 판매하고 쓰레기 조각 +"+fmt(totalGain)+"을 받습니다.\n진행할까요?");
+  var ok=window.confirm(names.join("\n")+T("\n\n총 "+fmt(totalCount)+"개를 판매하고 쓰레기 조각 +"+fmt(totalGain)+"을 받습니다.\n진행할까요?", "\n\nSell "+fmt(totalCount)+" item(s) for +"+fmt(totalGain)+" trash shards.\nProceed?"));
   if(!ok) return;
   applyIdleProduction(false);
   ids.forEach(function(id){
@@ -2300,13 +2470,13 @@ function sellSelectedDex(){
   updateSeedDisplays();
   renderMain();
   renderDexGrid(currentDexFilter);
-  toast("쓰레기 조각 +"+fmt(totalGain)+" 획득! "+fmt(totalCount)+"개 판매");
+  toast(T("쓰레기 조각 +"+fmt(totalGain)+" 획득! "+fmt(totalCount)+"개 판매", "+"+fmt(totalGain)+" trash shards! Sold "+fmt(totalCount)+" item(s)"));
 }
 function renderDexFilters(){
   var hint = document.getElementById("dex-deploy-hint");
   if(hint){
     if(pendingLabSlotIndex !== null){
-      hint.textContent = "🔥 쓰레기 용광로" + "에 배치할 쓰레기를 선택하세요. 쓰레기 카드를 누르면 메뉴가 열립니다.";
+      hint.textContent = T("🔥 쓰레기 용광로에 배치할 쓰레기를 선택하세요. 쓰레기 카드를 누르면 메뉴가 열립니다.", "🔥 Choose trash to place in the Trash Furnace. Tap a trash card to open its menu.");
       hint.classList.remove("hidden");
     }else{
       hint.classList.add("hidden");
@@ -2314,7 +2484,7 @@ function renderDexFilters(){
   }
   var wrap = document.getElementById("dex-filters");
   wrap.innerHTML = "";
-  var options = [{key:"all", label:"전체"}].concat(GRADE_ORDER.map(function(g){ return {key:g, label:g}; }));
+  var options = [{key:"all", label:T("전체","All")}].concat(GRADE_ORDER.map(function(g){ return {key:g, label:gname(g)}; }));
   options.forEach(function(opt){
     var btn = document.createElement("button");
     btn.className = "dex-filter-btn" + (currentDexFilter===opt.key ? " active" : "");
@@ -2333,7 +2503,7 @@ function renderDexGrid(filter){
   var grid = document.getElementById("dex-grid");
   grid.innerHTML = "";
   var discoveredCount = Object.keys(state.discovered).length;
-  document.getElementById("dex-progress").textContent = discoveredCount + " / " + SPROUTS.length + " 발견";
+  document.getElementById("dex-progress").textContent = discoveredCount + " / " + SPROUTS.length + T(" 발견"," discovered");
 
   var list = SPROUTS.filter(function(s){ return filter==="all" || s.grade===filter; });
   list.forEach(function(s){
@@ -2346,7 +2516,7 @@ function renderDexGrid(filter){
     cell.appendChild(visual);
     var nameEl = document.createElement("div");
     nameEl.className = "cell-name";
-    nameEl.textContent = discovered ? s.id : "???";
+    nameEl.textContent = discovered ? dn(s.id) : "???";
     cell.appendChild(nameEl);
     var count = state.owned[s.id]||0;
     if(discovered && count>0){
@@ -2409,7 +2579,7 @@ function openDetail(sproutId){
     var gradeBadge = document.createElement("div");
     gradeBadge.className = "d-grade";
     gradeBadge.style.color = "var(--muted)";
-    gradeBadge.textContent = "미발견";
+    gradeBadge.textContent = T("미발견","Undiscovered");
     content.appendChild(gradeBadge);
     var name = document.createElement("div");
     name.className = "d-name";
@@ -2419,7 +2589,7 @@ function openDetail(sproutId){
     msg.style.color = "var(--muted)";
     msg.style.fontSize = "13.5px";
     msg.style.fontWeight = "600";
-    msg.textContent = "아직 발견하지 못한 쓰레기입니다. 팩을 뽑아 수집해보세요!";
+    msg.textContent = T("아직 발견하지 못한 쓰레기입니다. 팩을 뽑아 수집해보세요!","You haven't found this trash yet. Open packs to collect it!");
     content.appendChild(msg);
     openModal("modal-detail");
     return;
@@ -2431,17 +2601,17 @@ function openDetail(sproutId){
   descEl.style.color="#D9A72E";
   descEl.style.fontSize="14px";
   descEl.style.fontWeight="900";
-  descEl.textContent = s.desc || "";
+  descEl.textContent = ddesc(s);
   content.appendChild(descEl);
   var gradeBadge2 = document.createElement("div");
   gradeBadge2.className = "d-grade grade-" + info.slug;
   gradeBadge2.style.background = info.color + "22";
-  gradeBadge2.textContent = info.label;
+  gradeBadge2.textContent = gname(s.grade);
   content.appendChild(gradeBadge2);
 
   var name2 = document.createElement("div");
   name2.className = "d-name";
-  name2.textContent = s.id;
+  name2.textContent = dn(s.id);
   content.appendChild(name2);
 
   function row(label, value){
@@ -2455,20 +2625,20 @@ function openDetail(sproutId){
     r.appendChild(l); r.appendChild(v);
     content.appendChild(r);
   }
-  row("보유 개수", owned + "개");
-  row("판매 가격", "🗑️ " + fmt(info.sell));
+  row(T("보유 개수","Owned"), owned + T("개"," pcs"));
+  row(T("판매 가격","Sell Price"), "🗑️ " + fmt(info.sell));
 
   var probTitle = document.createElement("div");
   probTitle.className = "d-prob-title";
-  probTitle.textContent = "팩별 등장 확률";
+  probTitle.textContent = T("팩별 등장 확률","Drop Rate by Pack");
   content.appendChild(probTitle);
   PACKS.forEach(function(pack){
-    row(pack.name, fmtPercent(getSproutProbability(pack, s)));
+    row(pname(pack), fmtPercent(getSproutProbability(pack, s)));
   });
 
   var level = getSproutLevel(sproutId);
   var prod = getSproutRate(s) * (1 + (level-1)*0.35);
-  row("연구소 레벨", "Lv." + level + " · " + fmtRate(prod) + "/초");
+  row(T("연구소 레벨","Lab Level"), "Lv." + level + " · " + fmtRate(prod) + T("/초","/sec"));
   var allDetailRows = content.querySelectorAll(".detail-row");
   if(allDetailRows.length) allDetailRows[allDetailRows.length-1].style.borderBottom = "none";
 
@@ -2478,7 +2648,7 @@ function openDetail(sproutId){
     var alreadyIdx = state.labSlots.indexOf(sproutId);
     var btnDeploy = document.createElement("button");
     btnDeploy.className = "btn-solid";
-    btnDeploy.textContent = alreadyIdx === pendingLabSlotIndex ? "현재 슬롯에 배치됨" : "🧪 이 쓰레기 배치";
+    btnDeploy.textContent = alreadyIdx === pendingLabSlotIndex ? T("현재 슬롯에 배치됨","Already placed") : T("🧪 이 쓰레기 배치","🧪 Place This Trash");
     btnDeploy.disabled = alreadyIdx === pendingLabSlotIndex;
     btnDeploy.addEventListener("click", function(){
       AudioManager.playSfx("equip");
@@ -2489,14 +2659,14 @@ function openDetail(sproutId){
       saveState();
       pendingLabSlotIndex = null;
       closeModal("modal-detail");
-      toast("🧪 " + sproutId + "이 쓰레기 용광로" + "에 배치되었습니다!");
+      toast(T("🧪 " + sproutId + "이 쓰레기 용광로에 배치되었습니다!", "🧪 " + dn(sproutId) + " placed in the Trash Furnace!"));
       goToScreen("lab");
     });
     btnRow.appendChild(btnDeploy);
   }
   var btnLevel = document.createElement("button");
   btnLevel.className = "btn-solid";
-  btnLevel.textContent = level >= 10 ? "최대 레벨" : "강화 (동일 쓰레기 3개)";
+  btnLevel.textContent = level >= 10 ? T("최대 레벨","Max Level") : T("강화 (동일 쓰레기 3개)","Upgrade (3 of the same)");
   btnLevel.disabled = owned < 3 || level >= 10;
   btnLevel.addEventListener("click", function(){
     AudioManager.playSfx("click");
@@ -2508,12 +2678,12 @@ function openDetail(sproutId){
   });
   var btnSellOne = document.createElement("button");
   btnSellOne.className = "btn-ghost";
-  btnSellOne.textContent = "1개 판매";
+  btnSellOne.textContent = T("1개 판매","Sell 1");
   btnSellOne.disabled = owned < 1;
   btnSellOne.addEventListener("click", function(){ AudioManager.playSfx("click"); openSellConfirm(s.id, 1); });
   var btnSellAll = document.createElement("button");
   btnSellAll.className = "btn-solid";
-  btnSellAll.textContent = "전부 판매";
+  btnSellAll.textContent = T("전부 판매","Sell All");
   btnSellAll.disabled = owned < 1;
   btnSellAll.addEventListener("click", function(){ AudioManager.playSfx("click"); openSellConfirm(s.id, owned); });
   btnRow.appendChild(btnLevel);
@@ -2535,7 +2705,7 @@ function openSellConfirm(sproutId, count){
   var assigned = state.labSlots.indexOf(sproutId) >= 0;
   pendingSell = {sproutId:sproutId, count:count};
   document.getElementById("sell-confirm-text").textContent =
-    s.id + " x" + count + "\n판매하면 쓰레기 조각 +" + fmt(gain) + (assigned ? "\n\n현재 연구소에 배치되어 있습니다. 전부 판매하면 연구소에서 자동으로 빠집니다." : "") + "\n\n정말 판매하시겠습니까?";
+    T(s.id + " x" + count + "\n판매하면 쓰레기 조각 +" + fmt(gain) + (assigned ? "\n\n현재 연구소에 배치되어 있습니다. 전부 판매하면 연구소에서 자동으로 빠집니다." : "") + "\n\n정말 판매하시겠습니까?", dn(s.id) + " x" + count + "\nSelling gives +" + fmt(gain) + " trash shards." + (assigned ? "\n\nThis is currently placed in the lab. Selling all will remove it from the furnace." : "") + "\n\nAre you sure you want to sell?");
   openModal("modal-sell-confirm");
 }
 document.addEventListener("DOMContentLoaded", function(){
@@ -2557,7 +2727,7 @@ document.addEventListener("DOMContentLoaded", function(){
     state.lastProductionAt = Date.now();
     saveState();
     AudioManager.playSfx("sell");
-    toast("쓰레기 조각 +" + fmt(gain) + " 획득!");
+    toast(T("쓰레기 조각 +" + fmt(gain) + " 획득!", "+" + fmt(gain) + " trash shards!"));
     closeModal("modal-sell-confirm");
     closeModal("modal-detail");
     updateSeedDisplays();
@@ -2589,7 +2759,7 @@ function renderHistory(){
   if(state.history.length===0){
     var empty = document.createElement("div");
     empty.className = "history-empty";
-    empty.textContent = "아직 획득 기록이 없습니다.";
+    empty.textContent = T("아직 획득 기록이 없습니다.","No pulls yet.");
     list.appendChild(empty);
     return;
   }
@@ -2602,8 +2772,8 @@ function renderHistory(){
     var main = document.createElement("div");
     main.className = "h-main";
     var d = new Date(h.ts);
-    var dateStr = d.toLocaleString("ko-KR", {month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit"});
-    main.innerHTML = h.sproutId + (h.pityForced ? ' <span class="h-pity-tag">천장</span>' : '') + ' <span class="h-sub">· ' + h.packName + ' · ' + fmtPercent(h.prob) + ' · ' + dateStr + '</span>';
+    var dateStr = d.toLocaleString(isEn() ? "en-US" : "ko-KR", {month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit"});
+    main.innerHTML = dn(h.sproutId) + (h.pityForced ? ' <span class="h-pity-tag">' + T('천장','Pity') + '</span>' : '') + ' <span class="h-sub">· ' + packDisplayName(h.packName) + ' · ' + fmtPercent(h.prob) + ' · ' + dateStr + '</span>';
     row.appendChild(main);
     list.appendChild(row);
   });
@@ -2742,6 +2912,10 @@ function wireEvents(){
     saveState();
     if(state.settings.sfx) AudioManager.playSfx("click");
   });
+  document.getElementById("btn-lang").addEventListener("click", function(){
+    AudioManager.playSfx("click");
+    if(SP.set) SP.set(isEn() ? "ko" : "en");
+  });
   document.getElementById("btn-open-reset").addEventListener("click", function(){
     AudioManager.playSfx("click");
     openModal("modal-reset-confirm");
@@ -2750,7 +2924,7 @@ function wireEvents(){
     resetState();
     closeModal("modal-reset-confirm");
     closeModal("modal-settings");
-    toast("초기화되었습니다.");
+    toast(T("초기화되었습니다.","Save data reset."));
     goToScreen("main");
   });
 
@@ -2829,6 +3003,7 @@ function init(){
   }
 
   try{ wireEvents(); }catch(e){ console.error("wireEvents failed", e); }
+  try{ applyStaticI18n(); SP.onChange(refreshLanguage); }catch(e){ console.warn("i18n init failed", e); }
   try{ renderMain(); }catch(e){ console.error(e); }
 }
 
