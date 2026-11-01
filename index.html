@@ -241,8 +241,8 @@ a{color:inherit}
 .system-strip{display:flex;align-items:center;gap:8px;font:8px var(--mono);color:#93a791;white-space:nowrap}
 .status-led{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px rgba(196,239,116,.8);animation:blink 1.6s steps(1) infinite}
 .sys-clock{padding:5px 7px;border-radius:5px;border:1px solid #4a5748;background:#172019;color:var(--white);font-size:9px}
-.feedback-btn-top{border-radius:5px;border:1px solid #4d5b49;background:#121a12;color:#9aab95;padding:5px 8px;cursor:pointer;font:7px var(--mono);transition:.12s}
-.feedback-btn-top:hover{border-color:var(--lime);color:var(--lime)}
+.top-btn{border-radius:5px;border:1px solid #4d5b49;background:#121a12;color:#9aab95;padding:5px 8px;cursor:pointer;font:7px var(--mono);transition:.12s}
+.top-btn:hover{border-color:var(--lime);color:var(--lime)}
 .lang-toggle-top{display:inline-flex;align-items:center;padding:2px;border-radius:5px;border:1px solid #4d5b49;background:#121a12;cursor:pointer;font:7px var(--mono);transition:.12s}
 .lang-toggle-top span{padding:3px 5px;border-radius:3px;color:#7f8f7b;letter-spacing:.04em;transition:.12s}
 .lang-toggle-top span.on{background:#bedf75;color:#15200f;font-weight:700}
@@ -413,6 +413,7 @@ body.modal-open{overflow:hidden}
 .cr-count{display:inline-block;color:var(--amber)}
 .cr-count.pulse{animation:crShake .32s ease}
 .cr-end{display:block;margin:12px auto 0;font-size:18px;filter:grayscale(.3)}
+.cr-techs{display:block;margin:22px auto 4px}
 
 .cr-fx{position:absolute;inset:0;z-index:6;overflow:hidden;pointer-events:none}
 .cr-bubble{position:absolute;max-width:210px;padding:6px 10px;border-radius:12px;background:#f3fbe9;color:#10200f;font:700 11px/1.4 var(--sans);text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.4);transform:translate(-50%,-100%);animation:crBubble 1.9s ease forwards}
@@ -604,7 +605,7 @@ body.modal-open{overflow:hidden}
           <span class="brand-icon">🌱</span>
           <div><div class="brand-title" id="brandTitleMain">SPROUTY GAMES</div><div class="brand-sub" data-brand="abbr">SPTG</div></div>
         </div>
-        <div class="system-strip"><span class="status-led"></span><span>ONLINE</span><div class="sys-clock" id="sysClock">--:--</div><button id="navLangBtn" type="button" class="lang-toggle-top" aria-label="Language / 언어" title="Language / 언어"><span data-l="ko">KO</span><span data-l="en">EN</span></button><button id="navFeedbackBtn" type="button" class="feedback-btn-top">FEEDBACK</button></div>
+        <div class="system-strip"><span class="status-led"></span><span>ONLINE</span><div class="sys-clock" id="sysClock">--:--</div><button id="navLangBtn" type="button" class="lang-toggle-top" aria-label="Language / 언어" title="Language / 언어"><span data-l="ko">KO</span><span data-l="en">EN</span></button><button id="navFeedbackBtn" type="button" class="top-btn">FEEDBACK</button></div>
       </header>
 
       <div class="wrap">
@@ -710,7 +711,7 @@ body.modal-open{overflow:hidden}
 
           <div class="section-title"><span class="tag">CREDITS</span><div class="line"></div></div>
           <div class="team-launch" data-reveal><p data-i18n="about.creditsP">만든 사람들, 쓴 기술들, 그리고 고마운 분들. 눌러보면 반응하는 게 숨어 있을지도?</p><button class="team-open-btn" id="openCreditsBtn" type="button">[ CREDITS ]</button></div>
-          <div class="team-launch" data-reveal style="margin-top:10px"><p data-i18n="about.techP">이 사이트에 쓰인 기술, 오픈소스 라이선스, 폴더 안 파일들까지 전부 공개합니다. 소스도 직접 볼 수 있어요.</p><button class="team-open-btn" id="openTechBtn" type="button">[ TECHS &amp; OPENSOURCE ]</button></div>
+          
 
           <div id="teamOverlay" class="team-overlay" aria-hidden="true"><div class="team-shell"><div class="team-topbar"><div><div class="team-title">TEAM DATABASE</div><div class="team-sub" data-i18n="team.sub">2013년생 학생 둘이 만드는 팀입니다</div></div><button class="team-close-btn" id="closeTeamBtn" type="button" data-i18n="common.close">닫기 ✕</button></div><div class="team-grid">
             <article class="team-card"><img class="team-photo" src="dev.jpg" alt="정새싹 사진" data-i18n-attr="alt:team.jiho.alt"><div><span class="team-name" data-i18n="n.jiho">정새싹</span><span class="team-role" data-i18n="team.role.dev">개발자</span></div><div class="team-contrib"><b data-i18n="team.contrib">주요 기여작</b><span data-i18n="team.jiho.contrib">모든 작품</span></div><div class="team-desc" data-i18n="team.jiho.desc">1인 개발을 담당하는 핵심 제작자. 기획, 수정, 업로드, 버그 대응, 호스팅까지 전반을 맡고 있습니다.</div></article>
@@ -788,7 +789,7 @@ body.modal-open{overflow:hidden}
         <div class="cr-center"><button class="cr-egg cr-since" data-egg="sincedate" type="button">2026.06.14</button><br><button class="cr-egg cr-val" data-egg="sincedesc" type="button" data-i18n="cr.sincedesc">첫게임 주식시뮬레이터 출시<span class="cr-paren">(설립)</span></button></div>
         <div class="cr-divider"><span>special thanks</span></div>
         <div class="cr-thanks"><span class="cr-name" data-i18n="n.jungho">전레디</span><span class="cr-name" data-i18n="n.siu">염시우</span><span class="cr-name" data-i18n="n.t1">정성훈</span><span class="cr-name" data-i18n="n.t2">김지율</span><span class="cr-name" data-i18n="n.t3">김지후</span><span class="cr-name" data-i18n="n.t4">장민재</span><span class="cr-name">1-1</span></div>
-        <div class="cr-foot"><div class="cr-count" id="crCount">🥚 0 / 0</div><div id="crHint">글씨를 눌러보세요. 반응하는 게 숨어 있어요.</div><button class="cr-egg cr-end" data-egg="endsprout" type="button" aria-label="새싹" data-i18n-attr="aria-label:cr.sprout">🌱</button></div>
+        <div class="cr-foot"><div class="cr-count" id="crCount">🥚 0 / 0</div><div id="crHint">글씨를 눌러보세요. 반응하는 게 숨어 있어요.</div><button class="cr-egg cr-end" data-egg="endsprout" type="button" aria-label="새싹" data-i18n-attr="aria-label:cr.sprout">🌱</button><button class="team-open-btn cr-techs" id="openTechBtn" type="button" aria-haspopup="dialog">[ TECHS &amp; OPENSOURCE ]</button></div>
     </div>
     <div class="cr-fx" id="crFx"></div>
   </div>
@@ -805,7 +806,7 @@ body.modal-open{overflow:hidden}
    · 다른 표기(예: SPROUTY GAME SYSTEM)가 화면·문구에 섞이면 콘솔에 경고가 뜹니다. (맨 아래 checkBrandNames)
    ════════════════════════════════════════════════════ */
 const BRAND = Object.freeze({ ko: '정새싹게임즈', en: 'SPROUTY GAMES', abbr: 'SPTG' });
-const CONTACT = Object.freeze({ email: 'sproutygames@gmail.com', feedbackKo: 'https://naver.me/GbyInA1z' });
+const CONTACT = Object.freeze({ email: 'sproutygames@gmail.com' });
 
 (function applyBrand(){
   document.querySelectorAll('[data-brand]').forEach(el => { el.textContent = BRAND[el.dataset.brand]; });
@@ -884,7 +885,6 @@ const I18N_EN = {
   'about.bannerFooter': `Footer banner`,
   'about.teamP': `Curious who made these games? …Not curious? Cool, whatever, we'll live.`,
   'about.creditsP': `The people, the tech, and the folks we owe big thanks to. Poke around — something might react 👀`,
-  'about.techP': `The full tech stack, open-source licenses, and every file in the project folder — with a live source viewer.`,
 
   'team.sub': `A team of two students born in 2013`,
   'common.close': `CLOSE ✕`,
@@ -1096,18 +1096,16 @@ function showToast(msg){
 // 메일 앱 열기 (따로 함수로 둔 이유: 테스트/교체가 쉽게)
 function openMailto(url){ window.location.href = url; }
 
-// 피드백 버튼 (상단 네비게이션)
-//  · 한국어: 네이버 폼 (CONTACT.feedbackKo)
-//  · English: 네이버 폼은 한국어라서, 메일 작성 창을 열고 주소를 복사해 둡니다 (메일 앱이 없는 PC 대비)
+// 피드백 버튼 (상단바) — 언어와 상관없이 항상 메일 작성 창을 엽니다
+//  · 받는 사람 주소는 클립보드에도 복사해 둡니다 (메일 앱이 없는 PC 대비)
 const navFeedbackBtn = document.getElementById('navFeedbackBtn');
 if(navFeedbackBtn){
   navFeedbackBtn.addEventListener('click', () => {
-    if(LANG !== 'en'){
-      window.open(CONTACT.feedbackKo, '_blank');
-      return;
-    }
-    const subject = '[' + BRAND.en + '] Feedback';
-    const body = 'Hi ' + BRAND.en + ' team,\n\n(What happened, or what would you love to see?)\n\n\nGame:\nDevice / browser:\n';
+    const en = LANG === 'en';
+    const subject = en ? '[' + BRAND.en + '] Feedback' : '[' + BRAND.ko + '] 피드백';
+    const body = en
+      ? 'Hi ' + BRAND.en + ' team,\n\n(What happened, or what would you love to see?)\n\n\nGame:\nDevice / browser:\n'
+      : '안녕하세요, ' + BRAND.ko + ' 팀에게\n\n(어떤 일이 있었는지, 또는 바라는 점을 적어 주세요)\n\n\n게임:\n기기 / 브라우저:\n';
     try{ if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(CONTACT.email).catch(() => {}); }catch(e){}
     showToast(ui('feedbackToast', CONTACT.email));
     openMailto('mailto:' + CONTACT.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
@@ -2448,7 +2446,7 @@ function eggFor(key){
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 🛠 TECHS & OPENSOURCE — ABOUT 탭의 [ TECHS & OPENSOURCE ] 버튼으로 열리는 창
+// 🛠 TECHS & OPENSOURCE — 크레딧 맨 밑의 [ TECHS & OPENSOURCE ] 버튼으로 열리는 창
 //  · STACK    : 쓰인 기술 목록 (아래 STACK 배열만 고치면 됩니다)
 //  · FILES    : 폴더 안 파일 목록 + 소스/미리보기 (아래 FILES 배열에 파일 이름을 추가하세요)
 //  · LICENSES : 오픈소스 라이선스 표 (아래 LICENSES 배열)
@@ -2803,6 +2801,8 @@ function eggFor(key){
 
   // ── 열기 / 닫기 ──
   function open(){
+    const cr = document.getElementById('creditsOverlay'), crClose = document.getElementById('closeCreditsBtn');
+    if(cr && cr.classList.contains('open') && crClose) crClose.click();   // 크레딧 맨 밑 버튼에서 열었으면 크레딧부터 닫기
     overlay.classList.add('open'); overlay.setAttribute('aria-hidden', 'false'); document.body.classList.add('modal-open');
     showTab('stack'); panels.stack.scrollTop = 0; loadSource();
     closeBtn.focus({ preventScroll:true });
@@ -2810,7 +2810,7 @@ function eggFor(key){
   function close(){
     body.querySelectorAll('video').forEach(v => v.pause());
     overlay.classList.remove('open'); overlay.setAttribute('aria-hidden', 'true'); document.body.classList.remove('modal-open');
-    openBtn.focus({ preventScroll:true });
+    if(!openBtn.closest('.credits-overlay')) openBtn.focus({ preventScroll:true });
   }
   openBtn.addEventListener('click', open);
   closeBtn.addEventListener('click', close);
