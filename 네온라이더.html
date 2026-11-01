@@ -756,6 +756,12 @@
 })();
 
 </script>
+<!-- 🔐 Firebase 로그인(공용) + 로그인 버튼 -->
+<script type="module" src="/sprouty-auth.js"></script>
+<script>window.SPROUTY_CLOUD={"game":"neonrider","keys":["neon_riders_shop_v3"]};</script>
+<script src="/sprouty-cloud.js"></script>
+<script>window.SPROUTY_LOGIN_BTN={pos:'left',top:8,visible:function(){var e=document.getElementById('screen-home');return !!e&&e.classList.contains('show')&&e.offsetParent!==null}};</script>
+<script src="/sprouty-login-btn.js"></script>
 </head>
 <body>
   <div class="opening-splash" id="openingSplash" aria-hidden="true">

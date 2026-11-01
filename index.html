@@ -86,23 +86,7 @@
 <!-- ═══════════════════════════════════════════════════════════════
      📊 FIREBASE ANALYTICS (GA4) — 방문자 통계
      ═══════════════════════════════════════════════════════════════ -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCifbe_hRnfFEU7UF09-xeN97rP3onS1dE",
-    authDomain: "sprouty-games.firebaseapp.com",
-    projectId: "sprouty-games",
-    storageBucket: "sprouty-games.firebasestorage.app",
-    messagingSenderId: "259145148090",
-    appId: "1:259145148090:web:4328ff5b117487c09dc483",
-    measurementId: "G-T7Z6MZ5MD6"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+<script type="module" src="sprouty-auth.js"></script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;600;700;900&display=swap');
@@ -587,6 +571,41 @@ body.modal-open{overflow:hidden}
   .lang-switch{width:100%}
   .lang-btn{flex:1;min-width:0}
 }
+
+/* ===== AUTH (LOGIN / SIGNUP) ===== */
+#navAuthBtn{max-width:104px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#navAuthBtn.on{border-color:var(--lime);color:var(--lime)}
+.auth-overlay{position:fixed;inset:0;z-index:10001;background:rgba(4,7,4,.91);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .16s ease}
+.auth-overlay.open{opacity:1;pointer-events:auto}
+.auth-overlay [hidden]{display:none!important}
+.auth-shell{width:min(420px,100%);max-height:92vh;display:flex;flex-direction:column;border:2px solid #65745f;border-radius:14px;background:#111811;box-shadow:0 0 0 4px #080908,0 16px 44px rgba(0,0,0,.62);overflow:hidden}
+.auth-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #3d4a3b;background:#151d15}
+.auth-title{font:9px var(--pixel);color:var(--lime)}
+.auth-sub{margin-top:5px;font:8px/1.5 var(--mono);color:#75846f}
+.auth-body{padding:16px;overflow:auto;overscroll-behavior:contain}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:3px;border-radius:var(--r-btn);border:1px solid #445140;background:#0d120d;margin-bottom:14px}
+.auth-tab{cursor:pointer;padding:10px 8px;border-radius:5px;border:1px solid transparent;background:transparent;color:#849382;font:700 12px/1 var(--sans);transition:.12s}
+.auth-tab:hover{color:var(--lime)}
+.auth-tab.on{background:#bedf75;border-color:#e3f7b4;color:#15200f;box-shadow:0 2px 0 #4c6a1d;cursor:default}
+.auth-field{display:flex;flex-direction:column;gap:6px;margin-bottom:11px}
+.auth-field>span{font:700 10px var(--mono);letter-spacing:.06em;color:#8fa58a}
+.auth-field input{width:100%;padding:11px 12px;border-radius:var(--r-btn);border:1px solid #445140;background:#080c08;color:var(--white);font:16px var(--sans);outline:none;cursor:text}
+.auth-field input:focus{border-color:var(--lime)}
+.auth-field small{font:9px var(--mono);color:#6d7a6b}
+.auth-msg{min-height:18px;margin:2px 0 10px;font:11px/1.55 var(--sans)}
+.auth-msg.err{color:var(--danger)}
+.auth-msg.ok{color:var(--lime)}
+.auth-submit{width:100%;margin-top:2px;font-size:11px}
+.auth-submit:disabled{opacity:.6;cursor:default}
+.auth-link{display:block;margin:12px auto 0;padding:4px;background:none;border:0;color:#8fa58a;font:11px var(--sans);text-decoration:underline;cursor:pointer}
+.auth-link:hover{color:var(--lime)}
+.auth-me{text-align:center;padding:8px 0 18px}
+.auth-me .ava{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 12px;border-radius:50%;border:2px solid var(--lime);background:#16291d;font:700 26px var(--sans);color:var(--lime)}
+.auth-me .nm{font:700 15px var(--sans);color:#e4f2d8;overflow-wrap:anywhere}
+.auth-me .em{margin-top:5px;font:11px var(--mono);color:#7f8f7b;overflow-wrap:anywhere}
+.auth-me .hi{margin-top:12px;font:11px/1.6 var(--sans);color:#a4b3a1}
+.auth-logout{width:100%;padding:12px;border-radius:var(--r-btn);border:1px solid #79514d;background:#1a1211;color:#d99288;font:700 12px var(--sans);cursor:pointer}
+.auth-logout:hover{border-color:var(--danger)}
 </style>
 </head><body>
 <div id="bootScreen" class="boot-screen" aria-hidden="true">
@@ -605,7 +624,7 @@ body.modal-open{overflow:hidden}
           <span class="brand-icon">🌱</span>
           <div><div class="brand-title" id="brandTitleMain">SPROUTY GAMES</div><div class="brand-sub" data-brand="abbr">SPTG</div></div>
         </div>
-        <div class="system-strip"><span class="status-led"></span><span>ONLINE</span><div class="sys-clock" id="sysClock">--:--</div><button id="navLangBtn" type="button" class="lang-toggle-top" aria-label="Language / 언어" title="Language / 언어"><span data-l="ko">KO</span><span data-l="en">EN</span></button><button id="navFeedbackBtn" type="button" class="top-btn">FEEDBACK</button></div>
+        <div class="system-strip"><span class="status-led"></span><span>ONLINE</span><div class="sys-clock" id="sysClock">--:--</div><button id="navLangBtn" type="button" class="lang-toggle-top" aria-label="Language / 언어" title="Language / 언어"><span data-l="ko">KO</span><span data-l="en">EN</span></button><button id="navAuthBtn" type="button" class="top-btn">로그인</button><button id="navFeedbackBtn" type="button" class="top-btn">FEEDBACK</button></div>
       </header>
 
       <div class="wrap">
@@ -729,6 +748,40 @@ body.modal-open{overflow:hidden}
   <div class="speaker" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
 </main>
 
+<div id="authOverlay" class="auth-overlay" aria-hidden="true">
+  <div class="auth-shell" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="auth-top">
+      <div><div class="auth-title" id="authTitle">ACCOUNT</div><div class="auth-sub" id="authSub"></div></div>
+      <button class="team-close-btn" id="authClose" type="button">닫기 ✕</button>
+    </div>
+    <div class="auth-body">
+      <div id="authFormView">
+        <div class="auth-tabs" role="tablist">
+          <button class="auth-tab on" type="button" role="tab" data-mode="login" id="authTabLogin">로그인</button>
+          <button class="auth-tab" type="button" role="tab" data-mode="signup" id="authTabSignup">회원가입</button>
+        </div>
+        <form id="authForm" novalidate>
+          <label class="auth-field" id="authNickWrap" hidden><span id="authNickLbl">닉네임 (선택)</span><input id="authNick" type="text" maxlength="16" autocomplete="nickname"></label>
+          <label class="auth-field"><span id="authEmailLbl">이메일</span><input id="authEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false"></label>
+          <label class="auth-field"><span id="authPwLbl">비밀번호</span><input id="authPw" type="password" autocomplete="current-password"><small id="authPwHint" hidden>6자 이상</small></label>
+          <label class="auth-field" id="authPw2Wrap" hidden><span id="authPw2Lbl">비밀번호 확인</span><input id="authPw2" type="password" autocomplete="new-password"></label>
+          <div class="auth-msg" id="authMsg" role="alert" aria-live="polite"></div>
+          <button class="primary-btn auth-submit" id="authSubmit" type="submit">로그인</button>
+          <button class="auth-link" id="authReset" type="button">비밀번호를 잊으셨나요?</button>
+        </form>
+      </div>
+      <div id="authUserView" hidden>
+        <div class="auth-me">
+          <div class="ava" id="authAva">🌱</div>
+          <div class="nm" id="authName"></div>
+          <div class="em" id="authMail"></div>
+          <div class="hi" id="authHi"></div>
+        </div>
+        <button class="auth-logout" id="authLogout" type="button">로그아웃</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="techOverlay" class="tech-overlay" aria-hidden="true">
   <div class="tech-shell" role="dialog" aria-modal="true" aria-labelledby="techTitle">
     <div class="tech-top"><div><div class="tech-title" id="techTitle">TECHS &amp; OPENSOURCE</div><div class="tech-sub">BUILD MANIFEST · ZERO-BUILD STATIC SITE</div></div><div class="tech-top-act"><button class="team-close-btn tx-outside" id="txOutside" type="button" title="/outside.txt">outside.txt</button><button class="team-close-btn" id="closeTechBtn" type="button" data-i18n="common.close">닫기 ✕</button></div></div>
@@ -2512,7 +2565,7 @@ function eggFor(key){
     ['index.html','src'],['404.html','src'],
     ['폭락도락이다.html','src'],['정새싹디펜스.html','src'],['나무패기.html','src'],['네온라이더.html','src'],
     ['정새싹_프론트라인.html','src'],['쓰레기연구소.html','src'],['치킨배달러시.html','src'],['병맛낚시.html','src'],
-    ['sprouty-lang.js','src'],
+    ['sprouty-lang.js','src'],['sprouty-auth.js','src'],
     ['outside.txt','txt'],['llms.txt','txt'],['robots.txt','txt'],['sitemap.xml','txt'],['CNAME','txt'],
     ['icon.png','img'],['og-image.png','img'],['C.jpg','img'],['opening.jpg','img'],
     ['banner_event.jpg','img'],['banner_footer.jpg','img'],['banner_notice.jpg','img'],
@@ -3487,6 +3540,160 @@ function animateStatCount(el){
 
   loadInitialWeather();
 })();
+</script>
+<script type="module">
+/* 🔐 로그인/회원가입 창 — 실제 Firebase 처리는 sprouty-auth.js 가 담당합니다. */
+import { ready, onUser, signUp, logIn, logOut, resetPassword, errorMessage, nameOf } from "./sprouty-auth.js";
+
+const $ = id => document.getElementById(id);
+const ov = $('authOverlay'), navBtn = $('navAuthBtn');
+if(ov && navBtn){
+  const form = $('authForm'), msgEl = $('authMsg'), submitBtn = $('authSubmit');
+  const emailEl = $('authEmail'), pwEl = $('authPw'), pw2El = $('authPw2'), nickEl = $('authNick');
+  const TXT = {
+    ko: {
+      account: 'ACCOUNT', subOut: '로그인하면 게임 기록을 내 계정에 연결할 수 있어요', subIn: '로그인된 상태예요',
+      login: '로그인', signup: '회원가입', submitSignup: '가입하기', close: '닫기 ✕',
+      email: '이메일', pw: '비밀번호', pw2: '비밀번호 확인', nick: '닉네임 (선택)', pwHint: '6자 이상',
+      forgot: '비밀번호를 잊으셨나요?', logout: '로그아웃',
+      hello: n => n + ' 님, 환영해요! 🌱',
+      needEmail: '이메일을 입력해 주세요.', needPw: '비밀번호를 입력해 주세요.', mismatch: '비밀번호가 서로 달라요.',
+      resetAsk: '위 칸에 이메일을 먼저 입력해 주세요.', resetSent: '재설정 메일을 보냈어요. 메일함(스팸함 포함)을 확인해 주세요.',
+      okLogin: '로그인했어요! 🌱', okSignup: '가입 완료! 환영해요 🌱', okLogout: '로그아웃했어요.', navOut: '로그인'
+    },
+    en: {
+      account: 'ACCOUNT', subOut: 'Log in to link your game progress to your account', subIn: 'You are logged in',
+      login: 'Log in', signup: 'Sign up', submitSignup: 'Create account', close: 'CLOSE ✕',
+      email: 'Email', pw: 'Password', pw2: 'Confirm password', nick: 'Nickname (optional)', pwHint: 'At least 6 characters',
+      forgot: 'Forgot your password?', logout: 'Log out',
+      hello: n => 'Welcome, ' + n + '! 🌱',
+      needEmail: 'Please enter your email.', needPw: 'Please enter your password.', mismatch: 'Passwords don\'t match.',
+      resetAsk: 'Type your email in the field above first.', resetSent: 'Reset email sent. Check your inbox (and spam folder).',
+      okLogin: 'Logged in! 🌱', okSignup: 'Account created! Welcome 🌱', okLogout: 'Logged out.', navOut: 'LOGIN'
+    }
+  };
+  const lang = () => document.documentElement.lang === 'en' ? 'en' : 'ko';
+  const tx = () => TXT[lang()];
+  const toast = m => { try{ if(typeof showToast === 'function') showToast(m); }catch(e){} };
+
+  let mode = 'login', user = null, pendingNext = '';
+
+  function msg(text, kind){ msgEl.textContent = text || ''; msgEl.className = 'auth-msg' + (kind ? ' ' + kind : ''); }
+
+  function render(){
+    const t = tx(), signup = mode === 'signup';
+    $('authTitle').textContent = t.account;
+    $('authSub').textContent = user ? t.subIn : t.subOut;
+    $('authClose').textContent = t.close;
+    $('authTabLogin').textContent = t.login;
+    $('authTabSignup').textContent = t.signup;
+    ov.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+    $('authNickLbl').textContent = t.nick;
+    $('authEmailLbl').textContent = t.email;
+    $('authPwLbl').textContent = t.pw;
+    $('authPw2Lbl').textContent = t.pw2;
+    $('authPwHint').textContent = t.pwHint;
+    $('authNickWrap').hidden = !signup;
+    $('authPw2Wrap').hidden = !signup;
+    $('authPwHint').hidden = !signup;
+    $('authReset').hidden = signup;
+    $('authReset').textContent = t.forgot;
+    pwEl.autocomplete = signup ? 'new-password' : 'current-password';
+    submitBtn.textContent = signup ? t.submitSignup : t.login;
+    $('authLogout').textContent = t.logout;
+    $('authFormView').hidden = !!user;
+    $('authUserView').hidden = !user;
+    if(user){
+      const n = nameOf(user);
+      $('authAva').textContent = Array.from(n)[0] ? Array.from(n)[0].toUpperCase() : '🌱';
+      $('authName').textContent = n;
+      $('authMail').textContent = user.email || '';
+      $('authHi').textContent = t.hello(n);
+    }
+    navBtn.textContent = user ? '👤 ' + nameOf(user) : t.navOut;
+    navBtn.classList.toggle('on', !!user);
+  }
+
+  function setMode(m){ mode = m; msg(''); render(); }
+
+  function open(m){
+    if(m) mode = m;
+    msg('');
+    render();
+    ov.classList.add('open');
+    ov.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    if(!user) setTimeout(() => { try{ emailEl.focus({ preventScroll: true }); }catch(e){} }, 60);
+  }
+  function close(){
+    ov.classList.remove('open');
+    ov.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    pendingNext = '';
+  }
+  const isOpen = () => ov.classList.contains('open');
+
+  function busy(b){ submitBtn.disabled = b; $('authReset').disabled = b; }
+
+  navBtn.addEventListener('click', () => open());
+  $('authClose').addEventListener('click', close);
+  ov.addEventListener('click', e => { if(e.target === ov) close(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && isOpen()) close(); });
+  ov.querySelectorAll('.auth-tab').forEach(b => b.addEventListener('click', () => { if(b.dataset.mode !== mode) setMode(b.dataset.mode); }));
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const t = tx(), email = emailEl.value.trim(), pw = pwEl.value;
+    msg('');
+    if(!email) return msg(t.needEmail, 'err');
+    if(!pw) return msg(t.needPw, 'err');
+    if(mode === 'signup' && pw !== pw2El.value) return msg(t.mismatch, 'err');
+    busy(true);
+    try{
+      if(mode === 'signup') await signUp(email, pw, nickEl.value.trim());
+      else await logIn(email, pw);
+      toast(mode === 'signup' ? t.okSignup : t.okLogin);
+      form.reset();
+      if(pendingNext){ const n = pendingNext; pendingNext = ''; location.href = n; return; }
+      close();
+    }catch(err){
+      msg(errorMessage(err, lang()), 'err');
+    }finally{
+      busy(false);
+    }
+  });
+
+  $('authReset').addEventListener('click', async () => {
+    const t = tx(), email = emailEl.value.trim();
+    if(!email) return msg(t.resetAsk, 'err');
+    busy(true);
+    try{ await resetPassword(email); msg(t.resetSent, 'ok'); }
+    catch(err){ msg(errorMessage(err, lang()), 'err'); }
+    finally{ busy(false); }
+  });
+
+  $('authLogout').addEventListener('click', async () => {
+    try{ await logOut(); toast(tx().okLogout); close(); }catch(err){ console.warn('[auth]', err); }
+  });
+
+  onUser(u => { user = u; render(); });
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  render();
+
+  // 게임 페이지에서 로그인 필요로 넘어온 경우: /?login=1&next=/게임주소
+  (async () => {
+    const q = new URLSearchParams(location.search);
+    if(q.get('login') !== '1') return;
+    const n = q.get('next') || '';
+    const safe = n.startsWith('/') && !n.startsWith('//') && !n.includes('\\');
+    try{ history.replaceState(null, '', location.pathname + location.hash); }catch(e){}
+    const u = await ready;
+    if(u && safe){ location.href = n; return; }
+    if(safe) pendingNext = n;
+    open('login');
+    pendingNext = safe ? n : '';
+  })();
+}
 </script>
 </body>
 </html>

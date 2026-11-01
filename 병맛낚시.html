@@ -15,7 +15,13 @@ canvas{
   animation:rise .5s ease-out;
 }
 @keyframes rise{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
-</style></head><body><canvas id="c" width="360" height="640"></canvas>
+</style><!-- 🔐 Firebase 로그인(공용) + 로그인 버튼 -->
+<script type="module" src="/sprouty-auth.js"></script>
+<script>window.SPROUTY_CLOUD={"game":"fishing","keys":["fish2"]};</script>
+<script src="/sprouty-cloud.js"></script>
+<script>window.SPROUTY_LOGIN_BTN={visible:function(){return typeof ph!=='undefined'&&(ph==='tut'||ph==='dock'||ph==='res')},anchor:function(){var c=document.getElementById('c');if(!c)return null;var r=c.getBoundingClientRect();return{left:r.left+r.width/2,top:r.top+r.height*(48/640)}}};</script>
+<script src="/sprouty-login-btn.js"></script>
+</head><body><canvas id="c" width="360" height="640"></canvas>
 <div id="opening" style="position:fixed;inset:0;z-index:100;background:#04121d;display:flex;align-items:center;justify-content:center;opacity:1;transition:opacity .7s ease;"><img id="openimg" src="opening.jpg" alt="" style="width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;"></div>
 <script>(function(){var o=document.getElementById('opening'),im=document.getElementById('openimg'),done=false;
 function out(){if(done)return;done=true;o.style.opacity='0';o.style.pointerEvents='none';setTimeout(function(){if(o.parentNode)o.parentNode.removeChild(o)},800)}

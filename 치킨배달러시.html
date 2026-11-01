@@ -130,6 +130,12 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none
 #fire:active{transform:translateY(3px)}
 #fire.empty{filter:grayscale(.7) brightness(.75)}
 </style>
+<!-- 🔐 Firebase 로그인(공용) + 로그인 버튼 -->
+<script type="module" src="/sprouty-auth.js"></script>
+<script>window.SPROUTY_CLOUD={"game":"chickenrush","keys":["sprouty_chickenrush_v2","sprouty_chickenrush_best"]};</script>
+<script src="/sprouty-cloud.js"></script>
+<script>window.SPROUTY_LOGIN_BTN={pos:'left',top:8,visible:function(){var o=document.getElementById('ovTitle');return !!o&&!o.hidden}};</script>
+<script src="/sprouty-login-btn.js"></script>
 </head>
 <body>
 <div id="splash"><img id="splashImg" alt=""></div>

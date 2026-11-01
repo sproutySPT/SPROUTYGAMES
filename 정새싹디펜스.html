@@ -664,6 +664,12 @@ canvas{ position:absolute; top:0; left:0; display:block; touch-action:none; back
 </script>
 <style id="sprouty-i18n-css">html[lang="en"] .weapon-card.equipped::before{content:'EQUIPPED'}
 </style>
+<!-- 🔐 Firebase 로그인(공용) + 로그인 버튼 -->
+<script type="module" src="/sprouty-auth.js"></script>
+<script>window.SPROUTY_CLOUD={"game":"defense","keys":["lastTurret_best_v1","lastTurret_muted_v1"]};</script>
+<script src="/sprouty-cloud.js"></script>
+<script>window.SPROUTY_LOGIN_BTN={pos:'left',top:8,visible:function(){var s=document.getElementById('startScreen');return !!s&&getComputedStyle(s).display!=='none'}};</script>
+<script src="/sprouty-login-btn.js"></script>
 </head>
 <body>
 <div id="openingSplash"><img src="opening.jpg" alt=""></div>

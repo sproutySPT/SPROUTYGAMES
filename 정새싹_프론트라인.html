@@ -531,6 +531,13 @@
 })();
 
 </script>
+<!-- 🔐 Firebase 로그인(공용) + 로그인 버튼 -->
+<script type="module" src="/sprouty-auth.js"></script>
+<script>window.SPROUTY_CLOUD={"game":"frontline","keys":["fps_gold","fps_unlocked_weapons","fps_sound_muted","fps_ui_hidden"]};</script>
+<script src="/sprouty-cloud.js"></script>
+<script>window.SPROUTY_LOGIN_BTN={pos:'left',top:8,visible:function(){var o=document.getElementById('overlay');return !!o&&!o.classList.contains('hidden')}};</script>
+<style>@media(max-width:850px){#overlay .command-menu{padding-top:50px!important}}</style>
+<script src="/sprouty-login-btn.js"></script>
 </head>
 <body>
 <div id="openingSplash"><img src="opening.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="opening-fallback" style="display:none"><strong>정새싹:프론트라인</strong><span>정새싹 // TACTICAL FPS</span></div></div>
