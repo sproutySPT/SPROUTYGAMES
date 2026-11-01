@@ -1,4 +1,32 @@
 ﻿<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════
+  © 2026 정새싹게임즈 (SPROUTY GAMES). All rights reserved.
+
+  [KO]
+  이 파일과 이 웹사이트의 소스코드(HTML·CSS·JavaScript), 디자인, 텍스트,
+  이미지, 영상, 로고, 게임 및 그 구성요소에 대한 저작권은 정새싹게임즈에
+  있으며, 대한민국 저작권법 및 베른협약 등 국제 저작권 조약으로 보호됩니다.
+  사전 서면 허락 없이 전부 또는 일부를 복제·전송·배포·수정·2차적저작물
+  작성·재업로드·판매하거나 상업적으로 이용하는 행위, 자동화된 수집
+  (스크래핑) 및 AI/머신러닝 학습 데이터로 이용하는 행위를 금지합니다.
+  소스 보기 기능은 열람 목적으로만 제공되며 어떠한 이용 허락(라이선스)도
+  부여하지 않습니다. three.js, Firebase SDK, 폰트 등 제3자 구성요소는
+  각자의 라이선스를 따르며 정새싹게임즈의 저작물이 아닙니다.
+  허락 문의 및 침해 신고: sproutygames@gmail.com
+
+  [EN]
+  The source code, design, text, images, video, logos, games and all other
+  components of this website are the property of SPROUTY GAMES and are
+  protected by copyright law and international treaties (incl. the Berne
+  Convention). No part may be copied, transmitted, distributed, modified,
+  adapted, re-uploaded, sold or used commercially, scraped, or used to train
+  AI/ML models, without prior written permission. The "view source" feature
+  is provided for viewing only and grants no license. Third-party components
+  (three.js, Firebase SDK, fonts, etc.) remain under their own licenses.
+  Permissions & infringement reports: sproutygames@gmail.com
+  ═══════════════════════════════════════════════════════════════
+-->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -7,6 +35,7 @@
 <meta name="robots" content="index,follow">
 <meta name="keywords" content="정새싹게임즈, SPROUTY GAMES, SPTG, 웹게임, 미니게임, 폭락도 락이다, 네온 라이더, 나무패기, 병맛낚시, 정새싹:프론트라인, 정새싹게임즈 좀비디펜스, 치킨 배달 러시, 치킨배달러시">
 <meta name="author" content="정새싹게임즈">
+<meta name="copyright" content="© 2026 정새싹게임즈 (SPROUTY GAMES). All rights reserved.">
 <meta name="language" content="ko">
 <meta name="geo.region" content="KR">
 <meta name="format-detection" content="telephone=no">
@@ -45,7 +74,10 @@
       "@type": "WebSite",
       "name": "정새싹게임즈 🌱",
       "alternateName": ["SPROUTY GAMES", "SPTG"],
-      "url": "https://www.정새싹게임즈.서버.한국/"
+      "url": "https://www.정새싹게임즈.서버.한국/",
+      "copyrightYear": 2026,
+      "copyrightHolder": { "@type": "Organization", "name": "정새싹게임즈" },
+      "copyrightNotice": "© 2026 정새싹게임즈 (SPROUTY GAMES). All rights reserved."
     }
   ]
 }
@@ -114,7 +146,7 @@ html{background:#0b0d0b;scroll-behavior:smooth;cursor:url('C.jpg'),auto}
 body{
   min-height:100vh;
   margin:0;
-  padding:22px 12px 44px;
+  padding:12px 8px 44px;
   background:
     radial-gradient(circle at 50% 0%, rgba(255,255,255,.05), transparent 30%),
     linear-gradient(180deg,#1d1f1b 0%,#101110 42%,#070807 100%);
@@ -131,7 +163,7 @@ a{color:inherit}
 
 /* ===== HANDHELD BODY ===== */
 .handheld{
-  width:min(1120px,100%);
+  width:100%;
   margin:0 auto;
   position:relative;
   padding:20px;
@@ -216,7 +248,7 @@ a{color:inherit}
 .lang-toggle-top span.on{background:#bedf75;color:#15200f;font-weight:700}
 .lang-toggle-top:hover{border-color:var(--lime)}
 
-.wrap{width:min(1040px,100%);margin:0 auto;padding:0 var(--wrap-pad) calc(78px + env(safe-area-inset-bottom,0px));position:relative;z-index:3}
+.wrap{width:100%;margin:0 auto;padding:0 var(--wrap-pad) calc(78px + env(safe-area-inset-bottom,0px));position:relative;z-index:3}
 .tab-panel{display:none;padding:18px 0 42px}
 .tab-panel.active{display:block;animation:screenIn .28s ease}
 @keyframes screenIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -338,7 +370,7 @@ a{color:inherit}
 footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:18px;font:7px var(--mono);color:#60695c;border-top:1px solid #364233;padding-top:12px}.grow{color:#7a8c77}
 
 /* ===== TEAM OVERLAY / GAME DETAIL MODAL ===== */
-.team-overlay,.game-detail-modal,.credits-overlay{position:fixed;inset:0;z-index:10000;background:rgba(4,7,4,.91);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .16s ease}.team-overlay.open,.game-detail-modal.show,.credits-overlay.open{opacity:1;pointer-events:auto}
+.team-overlay,.game-detail-modal,.credits-overlay,.tech-overlay{position:fixed;inset:0;z-index:10000;background:rgba(4,7,4,.91);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .16s ease}.team-overlay.open,.game-detail-modal.show,.credits-overlay.open,.tech-overlay.open{opacity:1;pointer-events:auto}
 body.modal-open{overflow:hidden}
 .team-shell{width:min(900px,100%);max-height:88vh;display:flex;flex-direction:column;border:2px solid #65745f;border-radius:14px;background:#111811;box-shadow:0 0 0 4px #080908,0 16px 44px rgba(0,0,0,.62);overflow:hidden}
 .team-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #3d4a3b;background:#151d15}.team-title{font:9px var(--pixel);color:var(--lime)}.team-sub{margin-top:4px;font:7px var(--mono);color:#75846f}.team-close-btn{padding:7px 10px;border-radius:var(--r-btn);background:#121811;color:#aab9a5;border:1px solid #4d5b49;font:7px var(--mono)}.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:10px;overflow:auto}.team-card{border:1px solid #3e4d3b;border-radius:10px;background:#141d14;padding:10px;display:flex;flex-direction:column;gap:9px}.team-photo{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;border:1px solid #4e5b4b;background:#20251f}.team-name{font:8px var(--pixel);color:#dae7d6}.team-role{margin-left:5px;padding:3px 6px;border-radius:var(--r-chip);border:1px solid #5c6e56;color:#9cb295;font:6px var(--mono)}.team-contrib{padding:8px;border-radius:6px;border:1px solid #394739;background:#101610;font:7px/1.7 var(--mono);color:#8c9c8a}.team-contrib b{color:var(--amber)}.team-desc{font:9px/1.65 var(--sans);color:#768471}.team-shoutout{text-align:center;padding:8px 10px 12px;font:7px var(--mono);color:#75846f}
@@ -395,9 +427,98 @@ body.modal-open{overflow:hidden}
 .cr-drop{position:absolute;top:-24px;animation:crFall linear forwards}
 @keyframes crFall{to{transform:translateY(105vh) rotate(360deg);opacity:.25}}
 
+/* ===== TECHS & OPENSOURCE ===== */
+.tech-shell{position:relative;width:min(1100px,100%);height:min(88vh,780px);display:flex;flex-direction:column;border:2px solid #65745f;border-radius:14px;background:#0a100b;box-shadow:0 0 0 4px #080908,0 16px 44px rgba(0,0,0,.62);overflow:hidden;color:#cfdccb;font-family:var(--mono)}
+.tech-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #3d4a3b;background:#151d15}
+.tech-title{font:9px var(--pixel);color:var(--lime)}
+.tech-sub{margin-top:6px;font:8px var(--mono);color:#75846f;letter-spacing:.08em}
+.tech-tabs{display:flex;border-bottom:1px solid #2f3b2f;background:#0e150f;overflow-x:auto;flex:none}
+.tech-tab{padding:11px 18px;font:700 10px var(--mono);letter-spacing:.12em;color:#71806d;background:none;border:0;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+.tech-tab:hover{color:#b9cdb0}
+.tech-tab.on{color:var(--lime);border-bottom-color:var(--lime);background:#121b13}
+.tech-panels{position:relative;flex:1;min-height:0}
+.tech-panel{display:none;position:absolute;inset:0;overflow:auto;padding:16px;scrollbar-width:thin;overscroll-behavior:contain}
+.tech-panel.on{display:block}
+#techFiles.on{display:flex;padding:0;overflow:hidden}
+.tech-status{display:flex;flex-wrap:wrap;gap:6px 16px;padding:6px 12px;border-top:1px solid #2f3b2f;background:#0e150f;font:9px var(--mono);color:#6f7f6c;flex:none}
+.tech-status .dot{color:var(--lime)}
+.tx-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:6px}
+.tx-kpi{padding:10px 12px;border:1px solid #2f3b2f;border-radius:6px;background:#0d140e}
+.tx-kpi .k{font:700 8px var(--mono);letter-spacing:.14em;color:#667663}
+.tx-kpi .v{margin-top:6px;font:700 13px var(--mono);color:#dceace}
+.tx-cat{display:flex;align-items:center;gap:10px;margin:20px 0 10px;font:700 9px var(--mono);letter-spacing:.16em;color:#8fa58a}
+.tx-cat::after{content:"";flex:1;height:1px;background:#2b372b}
+.tx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.tx-card{padding:11px 12px;border:1px solid #2f3b2f;border-radius:6px;background:#0d140e;transition:border-color .12s}
+.tx-card:hover{border-color:#5b6e56}
+.tx-card .h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tx-card .n{font:700 11px var(--mono);color:#e4f2d8}
+.tx-card .ver{padding:2px 6px;border-radius:3px;border:1px solid #435240;background:#131c13;font:700 8px var(--mono);color:var(--amber);white-space:nowrap}
+.tx-card .d{margin-top:7px;font:10px/1.65 var(--mono);color:#8c9c88}
+.tx-table{width:100%;border-collapse:collapse;font:10.5px var(--mono)}
+.tx-table th{padding:8px 10px;text-align:left;font:700 8px var(--mono);letter-spacing:.14em;color:#667663;border-bottom:1px solid #2f3b2f}
+.tx-table td{padding:10px;border-bottom:1px solid #1d281e;color:#b4c4b0;vertical-align:top}
+.tx-table td.n{color:#e4f2d8;font-weight:700}
+.tx-table .lic{display:inline-block;padding:2px 7px;border-radius:3px;border:1px solid #4a5d46;background:#131c13;color:#a8d38b;font:700 9px var(--mono);white-space:nowrap}
+.tx-table a{color:#7fc4e8;text-decoration:none;word-break:break-all}.tx-table a:hover{text-decoration:underline}
+.tx-legal{margin-bottom:16px;padding:14px 16px;border:1px solid #5b6e56;border-radius:6px;background:#0f1a10}
+.tx-legal .t{font:700 11px var(--mono);color:var(--lime)}
+.tx-legal ol{margin:10px 0 0 18px;padding:0;font:10.5px/1.75 var(--mono);color:#b4c4b0}
+.tx-legal li{margin-bottom:5px}
+.tx-legal .en{margin-top:10px;padding-top:10px;border-top:1px dashed #2f3b2f;font:9.5px/1.7 var(--mono);color:#7f8f7b}
+.tx-legal a{color:#7fc4e8;text-decoration:none}
+.tech-shell{font-variant-numeric:tabular-nums}
+.tech-status .hint{margin-left:auto;color:#55644f}
+.tx-comp{margin:10px 0 4px;padding:12px 14px;border:1px solid #2f3b2f;border-radius:6px;background:#0d140e}
+.tx-comp .k{font:700 8px var(--mono);letter-spacing:.14em;color:#667663}
+.tx-comp .bar{display:flex;height:8px;margin:10px 0 9px;border-radius:4px;overflow:hidden;background:#1a241b}
+.tx-comp .bar i{display:block;height:100%}
+.tx-comp .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font:10px var(--mono);color:#a9b8a5}
+.tx-comp .legend i{display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:2px}
+.tx-comp .legend b{color:#e4f2d8}
+.tx-comp .meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:10px;padding-top:9px;border-top:1px dashed #263226;font:9px var(--mono);color:#667663}
+.tx-comp .meta b{color:#b4c4b0;font-weight:500;word-break:break-all}
+.tx-diagram{padding:10px;border:1px solid #2f3b2f;border-radius:6px;background:#0b110c}
+.tx-kv{display:grid;grid-template-columns:repeat(2,1fr);gap:0 16px}
+.tx-kv div{display:flex;justify-content:space-between;gap:12px;padding:8px 2px;border-bottom:1px solid #1d281e;font:10.5px var(--mono)}
+.tx-kv span{color:#667663;white-space:nowrap}
+.tx-kv b{color:#d8e8cc;font-weight:500;text-align:right;word-break:break-word}
+@media(max-width:720px){.tech-status .hint{display:none}.tx-kv{grid-template-columns:1fr}}
+.tx-note{margin-top:14px;font:9.5px/1.7 var(--mono);color:#6f7f6c}
+.tx-tree{width:270px;flex:none;display:flex;flex-direction:column;min-height:0;border-right:1px solid #2f3b2f;background:#0c120d}
+.tx-filter,.tx-find{margin:8px;padding:7px 9px;border:1px solid #3a473a;border-radius:4px;background:#080c08;color:#cfdccb;font:10px var(--mono);outline:none}
+.tx-filter:focus,.tx-find:focus{border-color:var(--lime)}
+.tx-list{flex:1;overflow:auto;padding-bottom:10px;scrollbar-width:thin}
+.tx-root{padding:4px 12px 2px;font:10px var(--mono);color:#8c9c88}
+.tx-group{padding:10px 12px 4px;font:700 8px var(--mono);letter-spacing:.14em;color:#5f6f5c}
+.tx-item{display:flex;align-items:center;gap:8px;width:100%;padding:6px 12px;border:0;border-left:2px solid transparent;background:none;color:#a9b8a5;font:10.5px var(--mono);text-align:left;cursor:pointer}
+.tx-item:hover{background:#121b13}
+.tx-item.on{background:#17231a;border-left-color:var(--lime);color:#e4f2d8}
+.tx-ext{flex:none;min-width:34px;padding:2px 4px;border-radius:3px;background:#1a261b;color:#8fb27f;font:700 8px var(--mono);text-align:center}
+.tx-ext.src{background:#2a2414;color:#e6c07b}.tx-ext.img{background:#13262c;color:#7fc4e8}.tx-ext.vid{background:#2b1a26;color:#e59ac8}
+.tx-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.6}
+.tx-view{flex:1;min-width:0;display:flex;flex-direction:column}
+.tx-viewbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:4px 12px;border-bottom:1px solid #2f3b2f;background:#0e150f;font:10px var(--mono);color:#8c9c88;flex:none}
+.tx-path{color:#d8e8cc;font-weight:700;word-break:break-all}
+.tx-spacer{flex:1}
+.tx-find{width:150px;margin:4px 0}
+.tx-btn{padding:5px 9px;border:1px solid #435240;border-radius:4px;background:#131c13;color:#a9be9f;font:700 9px var(--mono);letter-spacing:.06em;cursor:pointer;text-decoration:none}
+.tx-btn:hover{border-color:var(--lime);color:#e4f2d8}
+.tx-body{flex:1;min-height:0;overflow:auto;background:#070b08;scrollbar-width:thin}
+.tx-code{display:flex;min-width:max-content;font:11px/18px var(--mono)}
+.tx-gutter{position:sticky;left:0;z-index:2;flex:none;padding:8px 10px 8px 12px;border-right:1px solid #1f2a20;background:#0a0f0b;color:#4c5b4a;text-align:right;white-space:pre;user-select:none;-webkit-user-select:none}
+.tx-src{position:relative;margin:0;padding:8px 16px;color:#c4d3bf;white-space:pre;tab-size:2;font:inherit}
+.tx-hl{position:absolute;left:0;right:0;height:18px;background:rgba(196,239,116,.14);border-left:2px solid var(--lime);pointer-events:none}
+.c-cm{color:#5f7a5a;font-style:italic}.c-str{color:#e6c07b}.c-tag{color:#7fc4e8}.c-num{color:#d49bd6}
+.tx-msg{padding:24px;font:11px/1.7 var(--mono);color:#8c9c88}
+.tx-media{display:grid;place-items:center;min-height:100%;padding:18px;background:repeating-conic-gradient(#0d130e 0 25%,#0a0f0b 0 50%) 0 0/20px 20px}
+.tx-media img,.tx-media video{max-width:100%;max-height:68vh;border:1px solid #3a473a;background:#000}
+@media(max-width:900px){.tx-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.tech-shell{height:92vh}.tech-panel{padding:12px}#techFiles.on{flex-direction:column}.tx-tree{width:100%;height:36%;border-right:0;border-bottom:1px solid #2f3b2f}.tx-find{width:100%;margin:4px 0}.tx-table{font-size:9.5px}.tx-table th:nth-child(4),.tx-table td:nth-child(4){display:none}}
+
 /* ===== BOTTOM CONTROL HUD ===== */
 .tabbar{display:flex;justify-content:center;position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0;padding:0 0 env(safe-area-inset-bottom,0px);background:#0f150f;border-top:1px solid #3d4b3b}
-.tabbar-inner{display:grid;grid-template-columns:repeat(3,1fr);width:min(620px,100%);background:#0f150f;overflow:hidden}
+.tabbar-inner{display:grid;grid-template-columns:repeat(3,1fr);width:100%;background:#0f150f;overflow:hidden}
 .tab-btn{position:relative;padding:9px 7px;border:0;border-right:1px solid #384437;background:#121a12;color:#697863;cursor:pointer;font:7px var(--mono);text-transform:uppercase;transition:.12s}
 .tab-btn:last-child{border-right:0}
 .tab-btn span.tab-ico{margin-right:5px}
@@ -587,6 +708,7 @@ body.modal-open{overflow:hidden}
 
           <div class="section-title"><span class="tag">CREDITS</span><div class="line"></div></div>
           <div class="team-launch" data-reveal><p data-i18n="about.creditsP">만든 사람들, 쓴 기술들, 그리고 고마운 분들. 눌러보면 반응하는 게 숨어 있을지도?</p><button class="team-open-btn" id="openCreditsBtn" type="button">[ CREDITS ]</button></div>
+          <div class="team-launch" data-reveal style="margin-top:10px"><p data-i18n="about.techP">이 사이트에 쓰인 기술, 오픈소스 라이선스, 폴더 안 파일들까지 전부 공개합니다. 소스도 직접 볼 수 있어요.</p><button class="team-open-btn" id="openTechBtn" type="button">[ TECHS &amp; OPENSOURCE ]</button></div>
 
           <div id="teamOverlay" class="team-overlay" aria-hidden="true"><div class="team-shell"><div class="team-topbar"><div><div class="team-title">TEAM DATABASE</div><div class="team-sub" data-i18n="team.sub">2013년생 학생 둘이 만드는 팀입니다</div></div><button class="team-close-btn" id="closeTeamBtn" type="button" data-i18n="common.close">닫기 ✕</button></div><div class="team-grid">
             <article class="team-card"><img class="team-photo" src="dev.jpg" alt="정새싹 사진" data-i18n-attr="alt:team.jiho.alt"><div><span class="team-name" data-i18n="n.jiho">정새싹</span><span class="team-role" data-i18n="team.role.dev">개발자</span></div><div class="team-contrib"><b data-i18n="team.contrib">주요 기여작</b><span data-i18n="team.jiho.contrib">모든 작품</span></div><div class="team-desc" data-i18n="team.jiho.desc">1인 개발을 담당하는 핵심 제작자. 기획, 수정, 업로드, 버그 대응, 호스팅까지 전반을 맡고 있습니다.</div></article>
@@ -594,7 +716,7 @@ body.modal-open{overflow:hidden}
           </div></div></div>
 
           <div class="ticker-bar"><span class="ticker-track" data-i18n="ticker">🌱 <span data-brand="ko">정새싹게임즈</span> — 버그제보는 112-감자튀김먹고싶다-아 잠만 히히히 1743원에사서 50원으로떨어짐-이끾끼-샤라웃투전레디🙏</span></div>
-          <footer><div data-i18n="footer">© 2026 <span data-brand="ko">정새싹게임즈</span>.</div><div class="grow" data-i18n="footer.right"><span data-brand="en">SPROUTY GAMES</span> / <span data-brand="abbr">SPTG</span></div><div class="grow" data-i18n="footer.band">실리카겔은정말최고의밴드야.</div></footer>
+          <footer><div data-i18n="footer">© 2026 <span data-brand="ko">정새싹게임즈</span>. All rights reserved. 무단 복제·배포 금지.</div><div class="grow" data-i18n="footer.right"><span data-brand="en">SPROUTY GAMES</span> / <span data-brand="abbr">SPTG</span></div><div class="grow" data-i18n="footer.band">실리카겔은정말최고의밴드야.</div></footer>
         </section>
       </div>
 
@@ -603,6 +725,31 @@ body.modal-open{overflow:hidden}
   </div>
   <div class="speaker" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
 </main>
+
+<div id="techOverlay" class="tech-overlay" aria-hidden="true">
+  <div class="tech-shell" role="dialog" aria-modal="true" aria-labelledby="techTitle">
+    <div class="tech-top"><div><div class="tech-title" id="techTitle">TECHS &amp; OPENSOURCE</div><div class="tech-sub">BUILD MANIFEST · ZERO-BUILD STATIC SITE</div></div><button class="team-close-btn" id="closeTechBtn" type="button" data-i18n="common.close">닫기 ✕</button></div>
+    <div class="tech-tabs" role="tablist">
+      <button class="tech-tab on" type="button" role="tab" data-techtab="stack">STACK</button>
+      <button class="tech-tab" type="button" role="tab" data-techtab="files">FILES</button>
+      <button class="tech-tab" type="button" role="tab" data-techtab="lic">LICENSES</button>
+      <button class="tech-tab" type="button" role="tab" data-techtab="sys">SYSTEM</button>
+    </div>
+    <div class="tech-panels">
+      <section class="tech-panel on" id="techStack"></section>
+      <section class="tech-panel" id="techFiles">
+        <aside class="tx-tree"><input class="tx-filter" id="txFilter" type="text" placeholder="Filter files…" autocomplete="off" spellcheck="false"><div class="tx-list" id="txList"></div></aside>
+        <div class="tx-view">
+          <div class="tx-viewbar"><span class="tx-path" id="txPath">—</span><span id="txMeta"></span><span class="tx-spacer"></span><input class="tx-find" id="txFind" type="text" placeholder="Find ↵  /  :line" autocomplete="off" spellcheck="false" hidden><button class="tx-btn" id="txCopy" type="button" hidden>COPY</button><a class="tx-btn" id="txRaw" target="_blank" rel="noopener noreferrer" hidden>OPEN RAW ↗</a></div>
+          <div class="tx-body" id="txBody"></div>
+        </div>
+      </section>
+      <section class="tech-panel" id="techLic"></section>
+      <section class="tech-panel" id="techSys"></section>
+    </div>
+    <div class="tech-status" id="techStatus"></div>
+  </div>
+</div>
 
 <div id="creditsOverlay" class="credits-overlay" aria-hidden="true">
   <div class="credits-shell" role="dialog" aria-modal="true" aria-labelledby="creditsTitle">
@@ -735,6 +882,7 @@ const I18N_EN = {
   'about.bannerFooter': `Footer banner`,
   'about.teamP': `Curious who made these games? …Not curious? Cool, whatever, we'll live.`,
   'about.creditsP': `The people, the tech, and the folks we owe big thanks to. Poke around — something might react 👀`,
+  'about.techP': `The full tech stack, open-source licenses, and every file in the project folder — with a live source viewer.`,
 
   'team.sub': `A team of two students born in 2013`,
   'common.close': `CLOSE ✕`,
@@ -750,7 +898,7 @@ const I18N_EN = {
   'team.jungho.desc': `Certified cabbage enjoyer`,
 
   'ticker': `🌱 ${BRAND.en} — bug reports? dial 911-i-want-french-fries-wait hold on lol hehe-bought at $17.43 and it dipped to $0.50 (not financial advice)-skibidi-big shoutout to Ex-Rad🙏`,
-  'footer': `© 2026 ${BRAND.en}.`,
+  'footer': `© 2026 ${BRAND.en}. All rights reserved. Unauthorized copying or redistribution is prohibited.`,
   'footer.right': `${BRAND.abbr}`,
   'footer.band': `Silica Gel is seriously the best band ever.`,
   'game.mobileNotice': `📱 MOBILE ONLY · Smartphones & tablets only`,
@@ -2291,6 +2439,346 @@ function eggFor(key){
   const en = CREDIT_EGGS_EN[key];
   return en ? Object.assign({}, ko, en) : ko;
 }
+
+// ═══════════════════════════════════════════════════════════════
+// 🛠 TECHS & OPENSOURCE — ABOUT 탭의 [ TECHS & OPENSOURCE ] 버튼으로 열리는 창
+//  · STACK    : 쓰인 기술 목록 (아래 STACK 배열만 고치면 됩니다)
+//  · FILES    : 폴더 안 파일 목록 + 소스/미리보기 (아래 FILES 배열에 파일 이름을 추가하세요)
+//  · LICENSES : 오픈소스 라이선스 표 (아래 LICENSES 배열)
+// ═══════════════════════════════════════════════════════════════
+(function initTechs(){
+  const overlay = document.getElementById('techOverlay');
+  const openBtn = document.getElementById('openTechBtn');
+  const closeBtn = document.getElementById('closeTechBtn');
+  if(!overlay || !openBtn || !closeBtn) return;
+  const $ = id => document.getElementById(id);
+  const panels = { stack:$('techStack'), files:$('techFiles'), lic:$('techLic'), sys:$('techSys') };
+  const body = $('txBody'), listEl = $('txList'), pathEl = $('txPath'), metaEl = $('txMeta');
+  const findEl = $('txFind'), copyEl = $('txCopy'), rawEl = $('txRaw'), statusEl = $('techStatus'), filterEl = $('txFilter');
+
+  const STACK = [
+    { cat:'RENDERING & GRAPHICS', items:[
+      ['three.js','r128','WebGL renderer behind the 3D game gallery — custom GLSL ES vertex/fragment shaders, planar-reflection render target and live video-texture cards.'],
+      ['Canvas 2D API','native','Real-time weather particle overlay and screen FX, driven by requestAnimationFrame.'],
+      ['CSS3 Engine','native','Custom properties, Grid/Flexbox, clamp()/min() fluid sizing, backdrop-filter and safe-area insets.']
+    ]},
+    { cat:'RUNTIME & PLATFORM', items:[
+      ['Vanilla JavaScript','ES6+','Framework-free application layer — tab routing, state, i18n and UI logic in hand-written code. No bundler, no transpiler.'],
+      ['ES Modules','native','Firebase SDK pulled in through native <script type="module"> imports from the gstatic CDN.'],
+      ['Web Audio API','native','UI sound effects synthesized on the fly with oscillator and gain nodes — no audio assets shipped.'],
+      ['IntersectionObserver','native','Scroll-triggered reveal animations without scroll-event polling.'],
+      ['Web Storage API','native','localStorage persistence for the language preference; sessionStorage for easter-egg progress.'],
+      ['Fetch API','native','Non-blocking REST calls for live weather and geolocation.']
+    ]},
+    { cat:'BACKEND & SERVICES', items:[
+      ['Firebase JS SDK','12.19.0','Modular ESM build — App + Analytics for usage telemetry.'],
+      ['Open-Meteo API','v1','Keyless forecast endpoint feeding the live weather visuals on the system screen.'],
+      ['GeoJS · ipwho.is','REST','IP-geolocation providers chained as fallbacks to resolve coordinates.']
+    ]},
+    { cat:'RELIABILITY & ACCESSIBILITY', items:[
+      ['CDN failover chain','cdnjs → jsDelivr','three.js is loaded from a primary CDN and automatically retried from a secondary one.'],
+      ['Progressive enhancement','—','DOM fallback gallery renders when WebGL or three.js is unavailable.'],
+      ['A11y primitives','WAI-ARIA','Dialog roles, :focus-visible rings, screen-reader-only labels and prefers-reduced-motion support.']
+    ]},
+    { cat:'CONTENT & I18N', items:[
+      ['Custom i18n runtime','ko / en','data-i18n attribute binding with original-string caching and a live language toggle.'],
+      ['JSON-LD','schema.org','Organization + WebSite structured data for search-engine rich results.']
+    ]},
+    { cat:'TYPOGRAPHY', items:[
+      ['Press Start 2P','Google Fonts','Pixel display face for headings and HUD labels.'],
+      ['IBM Plex Mono','Google Fonts','Monospace face for system readouts and data.'],
+      ['Galmuri11','jsDelivr','Bitmap-style Korean UI face.'],
+      ['Noto Sans KR','Google Fonts','Fallback sans-serif for Korean body text.']
+    ]}
+  ];
+
+  const LICENSES = [
+    ['three.js','r128','MIT','https://github.com/mrdoob/three.js'],
+    ['Firebase JS SDK','12.19.0','Apache-2.0','https://github.com/firebase/firebase-js-sdk'],
+    ['Galmuri','Galmuri11','SIL OFL 1.1','https://github.com/quiple/galmuri'],
+    ['Press Start 2P','Google Fonts','SIL OFL 1.1','https://fonts.google.com/specimen/Press+Start+2P'],
+    ['IBM Plex Mono','Google Fonts','SIL OFL 1.1','https://github.com/IBM/plex'],
+    ['Noto Sans KR','Google Fonts','SIL OFL 1.1','https://fonts.google.com/noto/specimen/Noto+Sans+KR'],
+    ['Open-Meteo','API v1','CC BY 4.0 (data)','https://open-meteo.com']
+  ];
+
+  const FILES = [
+    ['index.html','src'],
+    ['icon.png','img'],['C.jpg','img'],['opening.jpg','img'],
+    ['banner_event.jpg','img'],['banner_footer.jpg','img'],['banner_notice.jpg','img'],
+    ['dev.jpg','img'],['junghoo.jpg','img'],
+    ['game_lumberjack.jpg','img'],['game_stock.jpg','img'],['fishing.jpg','img'],['NEONRIDER.jpg','img'],
+    ['DEF.jpg','img'],['FPS.png','img'],['쓰연.jpg','img'],['치킨.jpg','img'],
+    ['Yo.mp4','vid'],['fishing.mp4','vid'],['나무패기.mp4','vid'],['네온라이더.mp4','vid'],['쓰연.mp4','vid'],
+    ['정새싹프론트라인.mp4','vid'],['좀비디펜스.mp4','vid'],['치킨.mp4','vid'],['폭락도락이다.mp4','vid']
+  ].map(a => ({ name:a[0], kind:a[1], ext:(a[0].split('.').pop() || '').toUpperCase() }));
+  const KIND_LABEL = { src:'SOURCE', img:'IMAGES', vid:'VIDEO' };
+  const TYPE_LABEL = { HTML:'HTML5 DOCUMENT', JPG:'JPEG IMAGE', PNG:'PNG IMAGE', MP4:'MP4 VIDEO' };
+
+  const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const fileUrl = name => encodeURIComponent(name);
+
+
+  // ── 소스 구성 / 체크섬 / 구조도 ──
+  function compHtml(){
+    return '<div class="tx-comp"><div class="k">SOURCE COMPOSITION · index.html</div><div class="bar" id="txCompBar"></div><div class="legend" id="txCompLegend">computing…</div><div class="meta"><span>SHA-256 <b id="txHash">…</b></span><span>LAST MODIFIED <b id="txMod">…</b></span></div></div>';
+  }
+  function fillComp(s){
+    const t = s.text, cnt = x => (x.match(/\n/g) || []).length + 1;
+    let css = 0, js = 0, m;
+    const reS = /<style[^>]*>([\s\S]*?)<\/style>/gi; while((m = reS.exec(t))) css += cnt(m[1]);
+    const reJ = /<script([^>]*)>([\s\S]*?)<\/script>/gi; while((m = reJ.exec(t))){ if(/ld\+json/i.test(m[1])) continue; js += cnt(m[2]); }
+    const html = Math.max(0, cnt(t) - css - js);
+    const items = [['HTML', html, '#e6c07b'], ['CSS', css, '#7fc4e8'], ['JavaScript', js, '#a8d38b']];
+    const sum = items.reduce((a, b) => a + b[1], 0) || 1;
+    const bar = $('txCompBar'), leg = $('txCompLegend'), hs = $('txHash'), md = $('txMod');
+    if(bar) bar.innerHTML = items.map(i => '<i style="width:' + (i[1] / sum * 100).toFixed(2) + '%;background:' + i[2] + '"></i>').join('');
+    if(leg) leg.innerHTML = items.map(i => '<span><i style="background:' + i[2] + '"></i>' + i[0] + ' <b>' + i[1].toLocaleString() + '</b> LOC (' + (i[1] / sum * 100).toFixed(1) + '%)</span>').join('');
+    if(md) md.textContent = document.lastModified || '—';
+    if(hs){
+      if(s.buf && window.crypto && crypto.subtle){
+        crypto.subtle.digest('SHA-256', s.buf).then(d => { hs.textContent = Array.from(new Uint8Array(d)).map(b => ('0' + b.toString(16)).slice(-2)).join(''); }).catch(() => { hs.textContent = 'unavailable'; });
+      }else hs.textContent = s.live ? 'n/a (DOM snapshot)' : 'unavailable (insecure context)';
+    }
+  }
+  function diagramHtml(){
+    const box = (x, title, lines) => '<rect x="' + x + '" y="14" width="220" height="112" rx="6" fill="#0d140e" stroke="#3d4a3b"/><text x="' + (x + 14) + '" y="36" fill="#8fa58a" font-size="9" font-weight="700" letter-spacing="1.6">' + title + '</text>' +
+      lines.map((l, i) => '<text x="' + (x + 14) + '" y="' + (62 + i * 22) + '" fill="#cfdccb" font-size="11">' + l + '</text>').join('');
+    return '<div class="tx-cat">ARCHITECTURE</div><div class="tx-diagram"><svg viewBox="0 0 760 204" role="img" aria-label="Architecture diagram" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;font-family:\'IBM Plex Mono\',monospace">' +
+      '<defs><marker id="txArr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="#8fb27f"/></marker></defs>' +
+      box(8, 'CLIENT LAYER', ['HTML5 · CSS3', 'Vanilla JS (ES6+)', 'Tab router · i18n runtime']) +
+      box(270, 'RENDERING', ['three.js r128 → WebGL', 'Custom GLSL ES shaders', 'Canvas 2D · weather FX']) +
+      box(532, 'EXTERNAL SERVICES', ['Firebase Analytics', 'Open-Meteo REST', 'GeoJS · ipwho.is']) +
+      '<line x1="228" y1="70" x2="268" y2="70" stroke="#8fb27f" stroke-width="1.4" marker-end="url(#txArr)"/>' +
+      '<path d="M118 126 V146 H642 V128" fill="none" stroke="#8fb27f" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#txArr)"/>' +
+      '<text x="380" y="141" fill="#667663" font-size="8.5" text-anchor="middle" letter-spacing="1">fetch() · ES modules</text>' +
+      '<rect x="8" y="164" width="744" height="28" rx="6" fill="#0d140e" stroke="#3d4a3b" stroke-dasharray="3 3"/>' +
+      '<text x="380" y="182" fill="#8c9c88" font-size="9.5" text-anchor="middle" letter-spacing="1">CDN · cdnjs → jsDelivr (failover) · gstatic · Google Fonts</text></svg></div>';
+  }
+  // ── SYSTEM 탭: 지금 이 브라우저에서 계산한 진단 정보 (어디로도 전송되지 않음) ──
+  function renderSys(){
+    const nv = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+    const res = (performance.getEntriesByType && performance.getEntriesByType('resource')) || [];
+    const xfer = res.reduce((a, r) => a + (r.transferSize || 0), 0);
+    let gl = { v:'unavailable', r:'—', max:'—' };
+    try{
+      const c = document.createElement('canvas'); let ctx = c.getContext('webgl2'), v = 'WebGL 2';
+      if(!ctx){ ctx = c.getContext('webgl') || c.getContext('experimental-webgl'); v = 'WebGL 1'; }
+      if(ctx){
+        const dbg = ctx.getExtension('WEBGL_debug_renderer_info');
+        gl = { v:v, r:String(dbg ? ctx.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : ctx.getParameter(ctx.RENDERER)), max:ctx.getParameter(ctx.MAX_TEXTURE_SIZE) + ' px' };
+        const lose = ctx.getExtension('WEBGL_lose_context'); if(lose) lose.loseContext();
+      }
+    }catch(e){}
+    const mm = q => { try{ return window.matchMedia(q).matches; }catch(e){ return false; } };
+    const ms = v => (v && v > 0) ? Math.round(v) + ' ms' : '—';
+    const G = [
+      ['RUNTIME', [['USER AGENT', navigator.userAgent.length > 78 ? navigator.userAgent.slice(0, 78) + '…' : navigator.userAgent], ['PLATFORM', navigator.platform || '—'], ['LANGUAGE', navigator.language || '—'], ['TIMEZONE', (Intl.DateTimeFormat().resolvedOptions().timeZone) || '—'], ['NETWORK', navigator.onLine ? 'ONLINE' + (navigator.connection && navigator.connection.effectiveType ? ' · ' + navigator.connection.effectiveType : '') : 'OFFLINE'], ['SECURE CONTEXT', window.isSecureContext ? 'yes' : 'no']]],
+      ['DISPLAY', [['VIEWPORT', innerWidth + ' × ' + innerHeight + ' px'], ['SCREEN', screen.width + ' × ' + screen.height + ' px'], ['PIXEL RATIO', String(window.devicePixelRatio || 1) + '×'], ['COLOR SCHEME', mm('(prefers-color-scheme: dark)') ? 'dark' : 'light'], ['REDUCED MOTION', mm('(prefers-reduced-motion: reduce)') ? 'on' : 'off'], ['TOUCH POINTS', String(navigator.maxTouchPoints || 0)]]],
+      ['GRAPHICS', [['API', gl.v], ['RENDERER', gl.r], ['MAX TEXTURE', gl.max]]],
+      ['HARDWARE', [['CPU THREADS', String(navigator.hardwareConcurrency || '—')], ['DEVICE MEMORY', navigator.deviceMemory ? '≥ ' + navigator.deviceMemory + ' GB' : '—']]],
+      ['PAGE PERFORMANCE', [['DOM INTERACTIVE', ms(nv && nv.domInteractive)], ['DOMCONTENTLOADED', ms(nv && nv.domContentLoadedEventEnd)], ['LOAD EVENT', ms(nv && nv.loadEventEnd)], ['RESOURCES', String(res.length)], ['TRANSFERRED', xfer > 0 ? sizeLabel(xfer) : '—']]]
+    ];
+    let h = '';
+    G.forEach(g => { h += '<div class="tx-cat">' + g[0] + '</div><div class="tx-kv">' + g[1].map(r => '<div><span>' + esc(r[0]) + '</span><b>' + esc(r[1]) + '</b></div>').join('') + '</div>'; });
+    h += '<div class="tx-note">Diagnostics are computed locally in your browser from standard Web APIs and are not sent anywhere.</div>';
+    panels.sys.innerHTML = h;
+  }
+
+  // ── STACK / LICENSES 그리기 ──
+  const kpi = { lines:null };
+  function renderStack(){
+    let h = '<div class="tx-kpis"><div class="tx-kpi"><div class="k">BUNDLER</div><div class="v">none</div></div><div class="tx-kpi"><div class="k">FRAMEWORK</div><div class="v">none</div></div><div class="tx-kpi"><div class="k">BUILD STEP</div><div class="v">0</div></div><div class="tx-kpi"><div class="k">SOURCE</div><div class="v" id="txKpiSrc">…</div></div></div>' + compHtml() + diagramHtml();
+    STACK.forEach(g => {
+      h += '<div class="tx-cat">' + esc(g.cat) + '</div><div class="tx-grid">';
+      g.items.forEach(it => { h += '<div class="tx-card"><div class="h"><span class="n">' + esc(it[0]) + '</span><span class="ver">' + esc(it[1]) + '</span></div><div class="d">' + esc(it[2]) + '</div></div>'; });
+      h += '</div>';
+    });
+    panels.stack.innerHTML = h;
+  }
+  function renderLic(){
+    const legal = '<div class="tx-legal"><div class="t">© 2026 정새싹게임즈 (SPROUTY GAMES). All rights reserved.</div><ol>' +
+      '<li>이 웹사이트의 소스코드(HTML·CSS·JavaScript), 디자인, 텍스트, 이미지, 영상, 로고, 게임 및 그 구성요소의 저작권은 정새싹게임즈에 있으며, 대한민국 저작권법 및 베른협약 등 국제 저작권 조약으로 보호됩니다.</li>' +
+      '<li>사전 서면 허락 없이 전부 또는 일부를 복제·전송·배포·수정·2차적저작물 작성·재업로드·판매하거나 상업적으로 이용하는 행위, 자동화된 수집(스크래핑) 및 AI/머신러닝 학습 데이터로 이용하는 행위를 금지합니다.</li>' +
+      '<li>소스 보기 기능은 열람 목적으로만 제공되며 어떠한 이용 허락(라이선스)도 부여하지 않습니다.</li>' +
+      '<li>아래 제3자 구성요소(three.js, Firebase SDK, 폰트 등)는 각자의 라이선스를 따르며 정새싹게임즈의 저작물이 아닙니다.</li>' +
+      '<li>허락 문의 및 침해 신고: <a href="mailto:sproutygames@gmail.com">sproutygames@gmail.com</a> · 위반 시 민·형사상 책임을 질 수 있습니다.</li></ol>' +
+      '<div class="en">The source code, design, text, images, video, logos and games on this site are the property of SPROUTY GAMES and protected by copyright law and international treaties. No part may be copied, distributed, modified, re-uploaded, sold, commercially used, scraped, or used to train AI/ML models without prior written permission. “View source” is for viewing only and grants no license. Third-party components remain under their own licenses.</div></div>';
+    let h = legal + '<table class="tx-table"><thead><tr><th>COMPONENT</th><th>VERSION</th><th>LICENSE</th><th>SOURCE</th></tr></thead><tbody>';
+    LICENSES.forEach(r => { h += '<tr><td class="n">' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td><span class="lic">' + esc(r[2]) + '</span></td><td><a href="' + esc(r[3]) + '" target="_blank" rel="noopener noreferrer">' + esc(r[3].replace('https://','')) + '</a></td></tr>'; });
+    h += '</tbody></table><div class="tx-note">All third-party components are loaded from public CDNs at runtime and remain under their original licenses. Thank you to every maintainer. 🌱</div>';
+    panels.lic.innerHTML = h;
+  }
+
+  // ── 소스 불러오기 (처음 한 번만) ──
+  let srcPromise = null;
+  function loadSource(){
+    if(srcPromise) return srcPromise;
+    const url = location.href.split('#')[0].split('?')[0];
+    srcPromise = fetch(url, { cache:'no-cache' })
+      .then(r => { if(!r.ok) throw new Error('http'); return r.arrayBuffer(); })
+      .then(buf => ({ text:new TextDecoder().decode(buf).replace(/\r\n/g,'\n'), buf:buf, live:false }))
+      .catch(() => ({ text:'<!DOCTYPE html>\n' + document.documentElement.outerHTML, live:true }));
+    srcPromise.then(s => {
+      const n = s.text.split('\n').length;
+      kpi.lines = n; kpi.kb = Math.round(new Blob([s.text]).size / 1024);
+      const el = $('txKpiSrc'); if(el) el.textContent = n.toLocaleString() + ' LOC · ' + kpi.kb + ' KB';
+      fillComp(s);
+    });
+    return srcPromise;
+  }
+
+  // ── 가벼운 문법 강조 ──
+  const RX = /(&lt;!--[\s\S]*?--&gt;)|(\/\*[\s\S]*?\*\/)|(^|[^:\w"'`\\])(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\[\s\S])*`)|(&lt;\/?[a-zA-Z][\w-]*)|(\b\d+(?:\.\d+)?\b)/gm;
+  function highlight(escaped){
+    return escaped.replace(RX, (m, c1, c2, pre, c3, str, tag) => {
+      if(c1 || c2) return '<span class="c-cm">' + m + '</span>';
+      if(c3 !== undefined) return pre + '<span class="c-cm">' + c3 + '</span>';
+      if(str) return '<span class="c-str">' + m + '</span>';
+      if(tag) return '<span class="c-tag">' + m + '</span>';
+      return '<span class="c-num">' + m + '</span>';
+    });
+  }
+
+  // ── 파일 목록 / 뷰어 ──
+  let current = null, token = 0, srcText = '', lineStarts = [], hlEl = null, lastIdx = -1;
+  function renderList(filter){
+    const q = (filter || '').trim().toLowerCase();
+    let h = '<div class="tx-root">▾ 📁 / <span style="color:#5f6f5c">site root</span></div>', last = '';
+    FILES.forEach(f => {
+      if(q && f.name.toLowerCase().indexOf(q) < 0) return;
+      if(f.kind !== last){ last = f.kind; h += '<div class="tx-group">' + KIND_LABEL[f.kind] + '</div>'; }
+      h += '<button class="tx-item' + (current === f ? ' on' : '') + '" type="button" data-file="' + esc(f.name) + '"><span class="tx-ext ' + f.kind + '">' + esc(f.ext) + '</span><span class="tx-name">' + esc(f.name) + '</span></button>';
+    });
+    if(h.indexOf('tx-item') < 0) h += '<div class="tx-msg">No files match.</div>';
+    listEl.innerHTML = h;
+  }
+  function setStatus(extra){
+    statusEl.innerHTML = '<span><span class="dot">●</span> READY</span><span>' + FILES.length + ' FILES</span><span>UTF-8</span>' + (extra ? '<span>' + esc(extra) + '</span>' : '') + '<span class="hint">1–4 TABS · / FILTER · ↑↓ FILES · ESC CLOSE</span>';
+  }
+  function sizeLabel(bytes){ return bytes >= 1048576 ? (bytes / 1048576).toFixed(2) + ' MB' : Math.max(1, Math.round(bytes / 1024)) + ' KB'; }
+  function probeSize(f, my, extra){
+    fetch(fileUrl(f.name), { method:'HEAD' }).then(r => {
+      const len = r.ok && r.headers.get('content-length');
+      if(len && my === token) metaEl.textContent = (TYPE_LABEL[f.ext] || f.ext) + ' · ' + sizeLabel(+len) + (extra ? ' · ' + extra : '');
+    }).catch(() => {});
+  }
+  function showMsg(t){ body.innerHTML = '<div class="tx-msg">' + esc(t) + '</div>'; }
+
+  function selectFile(f){
+    current = f; const my = ++token; lastIdx = -1;
+    body.querySelectorAll('video').forEach(v => v.pause());
+    renderList(filterEl.value);
+    pathEl.textContent = '/' + f.name;
+    metaEl.textContent = TYPE_LABEL[f.ext] || f.ext;
+    rawEl.hidden = false; rawEl.href = fileUrl(f.name);
+    const isSrc = f.kind === 'src';
+    findEl.hidden = !isSrc; copyEl.hidden = !isSrc; findEl.value = '';
+    if(isSrc){
+      showMsg('Loading source…');
+      loadSource().then(s => {
+        if(my !== token) return;
+        srcText = s.text;
+        lineStarts = [0]; for(let i = 0; i < srcText.length; i++) if(srcText.charCodeAt(i) === 10) lineStarts.push(i + 1);
+        const n = lineStarts.length;
+        const gutter = Array.from({ length:n }, (_, i) => i + 1).join('\n');
+        body.innerHTML = '<div class="tx-code"><div class="tx-gutter">' + gutter + '</div><pre class="tx-src" id="txSrc"></pre></div>';
+        const pre = $('txSrc'); pre.innerHTML = highlight(esc(srcText));
+        hlEl = document.createElement('div'); hlEl.className = 'tx-hl'; hlEl.hidden = true; pre.appendChild(hlEl);
+        body.scrollTop = 0; body.scrollLeft = 0;
+        metaEl.textContent = TYPE_LABEL.HTML + ' · ' + n.toLocaleString() + ' lines · ' + Math.round(new Blob([srcText]).size / 1024) + ' KB';
+        setStatus(s.live ? 'LIVE DOM SNAPSHOT (raw fetch unavailable)' : 'index.html · ' + n.toLocaleString() + ' lines');
+      });
+      return;
+    }
+    setStatus(f.name);
+    const wrap = document.createElement('div'); wrap.className = 'tx-media';
+    const err = () => { if(my === token) showMsg('Could not load ' + f.name + ' — the file may be missing or blocked.'); };
+    if(f.kind === 'img'){
+      const im = new Image(); im.alt = f.name;
+      im.onload = () => { if(my === token) probeSize(f, my, im.naturalWidth + ' × ' + im.naturalHeight + ' px'); };
+      im.onerror = err; im.src = fileUrl(f.name); wrap.appendChild(im);
+    }else{
+      const v = document.createElement('video'); v.controls = true; v.preload = 'metadata'; v.playsInline = true;
+      v.onloadedmetadata = () => { if(my === token) probeSize(f, my, v.videoWidth + ' × ' + v.videoHeight + ' · ' + Math.round(v.duration) + 's'); };
+      v.onerror = err; v.src = fileUrl(f.name); wrap.appendChild(v);
+    }
+    body.innerHTML = ''; body.appendChild(wrap);
+  }
+
+  function goLine(n){
+    if(!hlEl) return;
+    n = Math.min(Math.max(1, n), lineStarts.length);
+    hlEl.hidden = false; hlEl.style.top = (8 + (n - 1) * 18) + 'px';
+    body.scrollTop = Math.max(0, (n - 1) * 18 - body.clientHeight / 3); body.scrollLeft = 0;
+    setStatus('index.html · Ln ' + n + ' / ' + lineStarts.length.toLocaleString());
+  }
+  function lineOf(idx){ let lo = 0, hi = lineStarts.length - 1; while(lo < hi){ const mid = (lo + hi + 1) >> 1; if(lineStarts[mid] <= idx) lo = mid; else hi = mid - 1; } return lo + 1; }
+  findEl.addEventListener('keydown', e => {
+    if(e.key !== 'Enter' || !current || current.kind !== 'src') return;
+    const q = findEl.value.trim(); if(!q) return;
+    if(/^:\d+$/.test(q)){ goLine(parseInt(q.slice(1), 10)); return; }
+    const hay = srcText.toLowerCase(), needle = q.toLowerCase();
+    let i = hay.indexOf(needle, lastIdx + 1); if(i < 0) i = hay.indexOf(needle);
+    if(i < 0){ setStatus('No match for "' + q + '"'); return; }
+    lastIdx = i; goLine(lineOf(i));
+  });
+  copyEl.addEventListener('click', () => {
+    const done = () => { copyEl.textContent = 'COPIED ✓'; setTimeout(() => { copyEl.textContent = 'COPY'; }, 1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(srcText).then(done).catch(() => {}); return; }
+    const ta = document.createElement('textarea'); ta.value = srcText; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){} document.body.removeChild(ta);
+  });
+  listEl.addEventListener('click', e => {
+    const b = e.target.closest('.tx-item'); if(!b) return;
+    const f = FILES.find(x => x.name === b.dataset.file); if(f) selectFile(f);
+  });
+  filterEl.addEventListener('input', () => renderList(filterEl.value));
+
+  // ── 탭 ──
+  function showTab(name){
+    overlay.querySelectorAll('.tech-tab').forEach(t => { const on = t.dataset.techtab === name; t.classList.toggle('on', on); t.setAttribute('aria-selected', on ? 'true' : 'false'); });
+    Object.keys(panels).forEach(k => panels[k].classList.toggle('on', k === name));
+    if(name === 'files'){ if(!current) selectFile(FILES[0]); else setStatus(current.name); }
+    else{ body.querySelectorAll('video').forEach(v => v.pause()); if(name === 'sys') renderSys(); setStatus({ stack:'STACK OVERVIEW', lic:'THIRD-PARTY LICENSES', sys:'RUNTIME DIAGNOSTICS' }[name]); }
+  }
+  overlay.querySelectorAll('.tech-tab').forEach(t => t.addEventListener('click', () => showTab(t.dataset.techtab)));
+
+  // ── 열기 / 닫기 ──
+  function open(){
+    overlay.classList.add('open'); overlay.setAttribute('aria-hidden', 'false'); document.body.classList.add('modal-open');
+    showTab('stack'); panels.stack.scrollTop = 0; loadSource();
+    closeBtn.focus({ preventScroll:true });
+  }
+  function close(){
+    body.querySelectorAll('video').forEach(v => v.pause());
+    overlay.classList.remove('open'); overlay.setAttribute('aria-hidden', 'true'); document.body.classList.remove('modal-open');
+    openBtn.focus({ preventScroll:true });
+  }
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', e => { if(e.target === overlay) close(); });
+  document.addEventListener('keydown', e => {
+    if(!overlay.classList.contains('open')) return;
+    if(e.key === 'Escape'){ close(); return; }
+    const tag = (e.target && e.target.tagName) || '';
+    if(tag === 'INPUT' || e.ctrlKey || e.metaKey || e.altKey) return;
+    const tabs = ['stack', 'files', 'lic', 'sys'];
+    if(e.key >= '1' && e.key <= '4'){ e.preventDefault(); showTab(tabs[+e.key - 1]); return; }
+    if(e.key === '/'){ e.preventDefault(); showTab('files'); filterEl.focus(); return; }
+    if((e.key === 'ArrowDown' || e.key === 'ArrowUp') && panels.files.classList.contains('on')){
+      const btns = Array.from(listEl.querySelectorAll('.tx-item'));
+      const idx = btns.findIndex(b => b.classList.contains('on'));
+      const next = btns[Math.min(btns.length - 1, Math.max(0, idx + (e.key === 'ArrowDown' ? 1 : -1)))];
+      if(!next) return;
+      e.preventDefault();
+      const f = FILES.find(x => x.name === next.dataset.file);
+      if(f){ selectFile(f); const on = listEl.querySelector('.tx-item.on'); if(on){ on.focus({ preventScroll:true }); on.scrollIntoView({ block:'nearest' }); } }
+    }
+  });
+
+  renderStack(); renderLic(); renderList(''); setStatus('STACK OVERVIEW');
+})();
 
 (function initCredits(){
   const overlay = document.getElementById('creditsOverlay');
