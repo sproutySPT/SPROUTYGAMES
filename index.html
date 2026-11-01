@@ -429,7 +429,9 @@ body.modal-open{overflow:hidden}
 
 /* ===== TECHS & OPENSOURCE ===== */
 .tech-shell{position:relative;width:min(1100px,100%);height:min(88vh,780px);display:flex;flex-direction:column;border:2px solid #65745f;border-radius:14px;background:#0a100b;box-shadow:0 0 0 4px #080908,0 16px 44px rgba(0,0,0,.62);overflow:hidden;color:#cfdccb;font-family:var(--mono)}
-.tech-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #3d4a3b;background:#151d15}
+.tech-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #3d4a3b;background:#151d15}
+.tech-top-act{display:flex;align-items:center;gap:8px;flex:none;margin-left:auto}
+.tx-outside{border-color:#5b7a4d;color:#a8d38b;font:700 9px var(--mono);letter-spacing:.04em}.tx-outside:hover{border-color:var(--lime);color:#e4f2d8}
 .tech-title{font:9px var(--pixel);color:var(--lime)}
 .tech-sub{margin-top:6px;font:8px var(--mono);color:#75846f;letter-spacing:.08em}
 .tech-tabs{display:flex;border-bottom:1px solid #2f3b2f;background:#0e150f;overflow-x:auto;flex:none}
@@ -495,16 +497,16 @@ body.modal-open{overflow:hidden}
 .tx-item:hover{background:#121b13}
 .tx-item.on{background:#17231a;border-left-color:var(--lime);color:#e4f2d8}
 .tx-ext{flex:none;min-width:34px;padding:2px 4px;border-radius:3px;background:#1a261b;color:#8fb27f;font:700 8px var(--mono);text-align:center}
-.tx-ext.src{background:#2a2414;color:#e6c07b}.tx-ext.img{background:#13262c;color:#7fc4e8}.tx-ext.vid{background:#2b1a26;color:#e59ac8}
+.tx-ext.src{background:#2a2414;color:#e6c07b}.tx-ext.txt{background:#1c2230;color:#9db4e0}.tx-ext.img{background:#13262c;color:#7fc4e8}.tx-ext.vid{background:#2b1a26;color:#e59ac8}
 .tx-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.6}
-.tx-view{flex:1;min-width:0;display:flex;flex-direction:column}
+.tx-view{flex:1 1 0;min-width:0;min-height:0;display:flex;flex-direction:column}
 .tx-viewbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:4px 12px;border-bottom:1px solid #2f3b2f;background:#0e150f;font:10px var(--mono);color:#8c9c88;flex:none}
 .tx-path{color:#d8e8cc;font-weight:700;word-break:break-all}
 .tx-spacer{flex:1}
 .tx-find{width:150px;margin:4px 0}
 .tx-btn{padding:5px 9px;border:1px solid #435240;border-radius:4px;background:#131c13;color:#a9be9f;font:700 9px var(--mono);letter-spacing:.06em;cursor:pointer;text-decoration:none}
 .tx-btn:hover{border-color:var(--lime);color:#e4f2d8}
-.tx-body{flex:1;min-height:0;overflow:auto;background:#070b08;scrollbar-width:thin}
+.tx-body{flex:1 1 0;min-height:0;overflow:auto;background:#070b08;scrollbar-width:thin;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .tx-code{display:flex;min-width:max-content;font:11px/18px var(--mono)}
 .tx-gutter{position:sticky;left:0;z-index:2;flex:none;padding:8px 10px 8px 12px;border-right:1px solid #1f2a20;background:#0a0f0b;color:#4c5b4a;text-align:right;white-space:pre;user-select:none;-webkit-user-select:none}
 .tx-src{position:relative;margin:0;padding:8px 16px;color:#c4d3bf;white-space:pre;tab-size:2;font:inherit}
@@ -514,7 +516,7 @@ body.modal-open{overflow:hidden}
 .tx-media{display:grid;place-items:center;min-height:100%;padding:18px;background:repeating-conic-gradient(#0d130e 0 25%,#0a0f0b 0 50%) 0 0/20px 20px}
 .tx-media img,.tx-media video{max-width:100%;max-height:68vh;border:1px solid #3a473a;background:#000}
 @media(max-width:900px){.tx-kpis{grid-template-columns:1fr 1fr}}
-@media(max-width:720px){.tech-shell{height:92vh}.tech-panel{padding:12px}#techFiles.on{flex-direction:column}.tx-tree{width:100%;height:36%;border-right:0;border-bottom:1px solid #2f3b2f}.tx-find{width:100%;margin:4px 0}.tx-table{font-size:9.5px}.tx-table th:nth-child(4),.tx-table td:nth-child(4){display:none}}
+@media(max-width:720px){.tech-shell{height:92vh;height:92dvh}.tech-panel{padding:12px}#techFiles.on{flex-direction:column}.tx-tree{width:100%;height:36%;border-right:0;border-bottom:1px solid #2f3b2f}.tx-find{width:100%;margin:4px 0}.tx-table{font-size:9.5px}.tx-table th:nth-child(4),.tx-table td:nth-child(4){display:none}}
 
 /* ===== BOTTOM CONTROL HUD ===== */
 .tabbar{display:flex;justify-content:center;position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0;padding:0 0 env(safe-area-inset-bottom,0px);background:#0f150f;border-top:1px solid #3d4b3b}
@@ -728,7 +730,7 @@ body.modal-open{overflow:hidden}
 
 <div id="techOverlay" class="tech-overlay" aria-hidden="true">
   <div class="tech-shell" role="dialog" aria-modal="true" aria-labelledby="techTitle">
-    <div class="tech-top"><div><div class="tech-title" id="techTitle">TECHS &amp; OPENSOURCE</div><div class="tech-sub">BUILD MANIFEST · ZERO-BUILD STATIC SITE</div></div><button class="team-close-btn" id="closeTechBtn" type="button" data-i18n="common.close">닫기 ✕</button></div>
+    <div class="tech-top"><div><div class="tech-title" id="techTitle">TECHS &amp; OPENSOURCE</div><div class="tech-sub">BUILD MANIFEST · ZERO-BUILD STATIC SITE</div></div><div class="tech-top-act"><button class="team-close-btn tx-outside" id="txOutside" type="button" title="/outside.txt">outside.txt</button><button class="team-close-btn" id="closeTechBtn" type="button" data-i18n="common.close">닫기 ✕</button></div></div>
     <div class="tech-tabs" role="tablist">
       <button class="tech-tab on" type="button" role="tab" data-techtab="stack">STACK</button>
       <button class="tech-tab" type="button" role="tab" data-techtab="files">FILES</button>
@@ -1413,11 +1415,16 @@ if(gameDetailClose && gameDetailModal){
 gameDetailPlay.addEventListener('click', () => {
   if(!selectedGameUrl) return;
 
-  const popup = window.open(selectedGameUrl, '_blank', 'noopener,noreferrer');
-  if(!popup){
-    window.location.href = selectedGameUrl;
-    return;
-  }
+  // 새 탭으로만 연다. (window.open + noopener 는 항상 null 을 돌려줘서, 예전 코드는
+  //  '새 탭 + 현재 탭 이동' 이 동시에 일어났다. <a target=_blank> 클릭으로 바꿔서 해결)
+  const a = document.createElement('a');
+  a.href = selectedGameUrl;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 
   closeGameDetail();
 });
@@ -2502,18 +2509,25 @@ function eggFor(key){
     ['Open-Meteo','API v1','CC BY 4.0 (data)','https://open-meteo.com']
   ];
 
+  // 폴더 안 파일 목록 — kind: src(소스) · txt(텍스트/설정) · img · vid. 같은 kind 끼리 붙여 두세요(그룹 제목이 자동으로 붙습니다).
   const FILES = [
-    ['index.html','src'],
-    ['icon.png','img'],['C.jpg','img'],['opening.jpg','img'],
+    ['index.html','src'],['404.html','src'],
+    ['폭락도락이다.html','src'],['정새싹디펜스.html','src'],['나무패기.html','src'],['네온라이더.html','src'],
+    ['정새싹_프론트라인.html','src'],['쓰레기연구소.html','src'],['치킨배달러시.html','src'],['병맛낚시.html','src'],
+    ['sprouty-lang.js','src'],
+    ['outside.txt','txt'],['llms.txt','txt'],['robots.txt','txt'],['sitemap.xml','txt'],['CNAME','txt'],
+    ['icon.png','img'],['og-image.png','img'],['C.jpg','img'],['opening.jpg','img'],
     ['banner_event.jpg','img'],['banner_footer.jpg','img'],['banner_notice.jpg','img'],
-    ['dev.jpg','img'],['junghoo.jpg','img'],
+    ['dev.jpg','img'],['junghoo.jpg','img'],['ha.png','img'],['rumber.jpg','img'],
     ['game_lumberjack.jpg','img'],['game_stock.jpg','img'],['fishing.jpg','img'],['NEONRIDER.jpg','img'],
     ['DEF.jpg','img'],['FPS.png','img'],['쓰연.jpg','img'],['치킨.jpg','img'],
     ['Yo.mp4','vid'],['fishing.mp4','vid'],['나무패기.mp4','vid'],['네온라이더.mp4','vid'],['쓰연.mp4','vid'],
     ['정새싹프론트라인.mp4','vid'],['좀비디펜스.mp4','vid'],['치킨.mp4','vid'],['폭락도락이다.mp4','vid']
-  ].map(a => ({ name:a[0], kind:a[1], ext:(a[0].split('.').pop() || '').toUpperCase() }));
-  const KIND_LABEL = { src:'SOURCE', img:'IMAGES', vid:'VIDEO' };
-  const TYPE_LABEL = { HTML:'HTML5 DOCUMENT', JPG:'JPEG IMAGE', PNG:'PNG IMAGE', MP4:'MP4 VIDEO' };
+  ].map(a => ({ name:a[0], kind:a[1], ext:(a[0].indexOf('.') < 0 ? a[0] : a[0].split('.').pop()).toUpperCase() }));
+  const KIND_LABEL = { src:'SOURCE', txt:'TEXT & CONFIG', img:'IMAGES', vid:'VIDEO' };
+  const TYPE_LABEL = { HTML:'HTML5 DOCUMENT', JS:'JAVASCRIPT', TXT:'TEXT FILE', XML:'XML DOCUMENT', CNAME:'DOMAIN CONFIG', JPG:'JPEG IMAGE', PNG:'PNG IMAGE', MP4:'MP4 VIDEO' };
+  const isText = f => !!f && (f.kind === 'src' || f.kind === 'txt');
+  const T = (ko, en) => (LANG === 'en' ? en : ko);   // 현재 언어에 맞는 글 고르기
 
   const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const fileUrl = name => encodeURIComponent(name);
@@ -2597,20 +2611,31 @@ function eggFor(key){
     panels.stack.innerHTML = h;
   }
   function renderLic(){
-    const legal = '<div class="tx-legal"><div class="t">© 2026 정새싹게임즈 (SPROUTY GAMES). All rights reserved.</div><ol>' +
-      '<li>이 웹사이트의 소스코드(HTML·CSS·JavaScript), 디자인, 텍스트, 이미지, 영상, 로고, 게임 및 그 구성요소의 저작권은 정새싹게임즈에 있으며, 대한민국 저작권법 및 베른협약 등 국제 저작권 조약으로 보호됩니다.</li>' +
-      '<li>사전 서면 허락 없이 전부 또는 일부를 복제·전송·배포·수정·2차적저작물 작성·재업로드·판매하거나 상업적으로 이용하는 행위, 자동화된 수집(스크래핑) 및 AI/머신러닝 학습 데이터로 이용하는 행위를 금지합니다.</li>' +
-      '<li>소스 보기 기능은 열람 목적으로만 제공되며 어떠한 이용 허락(라이선스)도 부여하지 않습니다.</li>' +
-      '<li>아래 제3자 구성요소(three.js, Firebase SDK, 폰트 등)는 각자의 라이선스를 따르며 정새싹게임즈의 저작물이 아닙니다.</li>' +
-      '<li>허락 문의 및 침해 신고: <a href="mailto:sproutygames@gmail.com">sproutygames@gmail.com</a> · 위반 시 민·형사상 책임을 질 수 있습니다.</li></ol>' +
-      '<div class="en">The source code, design, text, images, video, logos and games on this site are the property of SPROUTY GAMES and protected by copyright law and international treaties. No part may be copied, distributed, modified, re-uploaded, sold, commercially used, scraped, or used to train AI/ML models without prior written permission. “View source” is for viewing only and grants no license. Third-party components remain under their own licenses.</div></div>';
+    const mail = '<a href="mailto:sproutygames@gmail.com">sproutygames@gmail.com</a>';
+    let legal;
+    if(LANG === 'en'){
+      legal = '<div class="tx-legal"><div class="t">© 2026 ' + BRAND.en + '. All rights reserved.</div><ol>' +
+        '<li>The copyright in this website’s source code (HTML, CSS, JavaScript), design, text, images, video, logos, games and all of their components belongs to ' + BRAND.en + ' and is protected by the Copyright Act of the Republic of Korea and international copyright treaties such as the Berne Convention.</li>' +
+        '<li>Without prior written permission, you may not copy, transmit, distribute, modify, create derivative works from, re-upload or sell all or any part of it, use it commercially, scrape it by automated means, or use it as training data for AI/machine learning.</li>' +
+        '<li>The view-source feature is provided for viewing only and does not grant any license.</li>' +
+        '<li>The third-party components below (three.js, Firebase SDK, fonts, etc.) are governed by their own licenses and are not works of ' + BRAND.en + '.</li>' +
+        '<li>Permission requests &amp; infringement reports: ' + mail + ' · Violations may result in civil and criminal liability.</li></ol></div>';
+    }else{
+      legal = '<div class="tx-legal"><div class="t">© 2026 정새싹게임즈 (SPROUTY GAMES). All rights reserved.</div><ol>' +
+        '<li>이 웹사이트의 소스코드(HTML·CSS·JavaScript), 디자인, 텍스트, 이미지, 영상, 로고, 게임 및 그 구성요소의 저작권은 정새싹게임즈에 있으며, 대한민국 저작권법 및 베른협약 등 국제 저작권 조약으로 보호됩니다.</li>' +
+        '<li>사전 서면 허락 없이 전부 또는 일부를 복제·전송·배포·수정·2차적저작물 작성·재업로드·판매하거나 상업적으로 이용하는 행위, 자동화된 수집(스크래핑) 및 AI/머신러닝 학습 데이터로 이용하는 행위를 금지합니다.</li>' +
+        '<li>소스 보기 기능은 열람 목적으로만 제공되며 어떠한 이용 허락(라이선스)도 부여하지 않습니다.</li>' +
+        '<li>아래 제3자 구성요소(three.js, Firebase SDK, 폰트 등)는 각자의 라이선스를 따르며 정새싹게임즈의 저작물이 아닙니다.</li>' +
+        '<li>허락 문의 및 침해 신고: ' + mail + ' · 위반 시 민·형사상 책임을 질 수 있습니다.</li></ol>' +
+        '<div class="en">The source code, design, text, images, video, logos and games on this site are the property of SPROUTY GAMES and protected by copyright law and international treaties. No part may be copied, distributed, modified, re-uploaded, sold, commercially used, scraped, or used to train AI/ML models without prior written permission. “View source” is for viewing only and grants no license. Third-party components remain under their own licenses.</div></div>';
+    }
     let h = legal + '<table class="tx-table"><thead><tr><th>COMPONENT</th><th>VERSION</th><th>LICENSE</th><th>SOURCE</th></tr></thead><tbody>';
     LICENSES.forEach(r => { h += '<tr><td class="n">' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td><span class="lic">' + esc(r[2]) + '</span></td><td><a href="' + esc(r[3]) + '" target="_blank" rel="noopener noreferrer">' + esc(r[3].replace('https://','')) + '</a></td></tr>'; });
     h += '</tbody></table><div class="tx-note">All third-party components are loaded from public CDNs at runtime and remain under their original licenses. Thank you to every maintainer. 🌱</div>';
     panels.lic.innerHTML = h;
   }
 
-  // ── 소스 불러오기 (처음 한 번만) ──
+  // ── 소스 불러오기 (index.html 은 처음 한 번만, 나머지 텍스트 파일은 열 때 한 번씩) ──
   let srcPromise = null;
   function loadSource(){
     if(srcPromise) return srcPromise;
@@ -2627,6 +2652,17 @@ function eggFor(key){
     });
     return srcPromise;
   }
+  const textCache = {};
+  function loadText(f){
+    if(f.name === 'index.html') return loadSource();
+    if(textCache[f.name]) return textCache[f.name];
+    textCache[f.name] = fetch(fileUrl(f.name), { cache:'no-cache' })
+      .then(r => { if(!r.ok) throw new Error('http ' + r.status); return r.arrayBuffer(); })
+      .then(buf => ({ text:new TextDecoder().decode(buf).replace(/\r\n/g,'\n'), live:false }))
+      .catch(() => { delete textCache[f.name]; return { missing:true }; });
+    return textCache[f.name];
+  }
+  const MAX_CHARS = 3000000, HL_MAX = 900000;   // 너무 큰 파일은 잘라 보여 주고, 색칠(문법 강조)도 건너뜁니다
 
   // ── 가벼운 문법 강조 ──
   const RX = /(&lt;!--[\s\S]*?--&gt;)|(\/\*[\s\S]*?\*\/)|(^|[^:\w"'`\\])(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\[\s\S])*`)|(&lt;\/?[a-zA-Z][\w-]*)|(\b\d+(?:\.\d+)?\b)/gm;
@@ -2641,7 +2677,7 @@ function eggFor(key){
   }
 
   // ── 파일 목록 / 뷰어 ──
-  let current = null, token = 0, srcText = '', lineStarts = [], hlEl = null, lastIdx = -1;
+  let current = null, token = 0, srcText = '', lineStarts = [0], hlEl = null, lastIdx = -1;
   function renderList(filter){
     const q = (filter || '').trim().toLowerCase();
     let h = '<div class="tx-root">▾ 📁 / <span style="color:#5f6f5c">site root</span></div>', last = '';
@@ -2657,6 +2693,7 @@ function eggFor(key){
     statusEl.innerHTML = '<span><span class="dot">●</span> READY</span><span>' + FILES.length + ' FILES</span><span>UTF-8</span>' + (extra ? '<span>' + esc(extra) + '</span>' : '') + '<span class="hint">1–4 TABS · / FILTER · ↑↓ FILES · ESC CLOSE</span>';
   }
   function sizeLabel(bytes){ return bytes >= 1048576 ? (bytes / 1048576).toFixed(2) + ' MB' : Math.max(1, Math.round(bytes / 1024)) + ' KB'; }
+  function byteLabel(bytes){ return bytes < 1024 ? bytes + ' B' : sizeLabel(bytes); }
   function probeSize(f, my, extra){
     fetch(fileUrl(f.name), { method:'HEAD' }).then(r => {
       const len = r.ok && r.headers.get('content-length');
@@ -2666,28 +2703,39 @@ function eggFor(key){
   function showMsg(t){ body.innerHTML = '<div class="tx-msg">' + esc(t) + '</div>'; }
 
   function selectFile(f){
-    current = f; const my = ++token; lastIdx = -1;
+    current = f; const my = ++token; lastIdx = -1; hlEl = null; srcText = ''; lineStarts = [0];
     body.querySelectorAll('video').forEach(v => v.pause());
     renderList(filterEl.value);
     pathEl.textContent = '/' + f.name;
     metaEl.textContent = TYPE_LABEL[f.ext] || f.ext;
     rawEl.hidden = false; rawEl.href = fileUrl(f.name);
-    const isSrc = f.kind === 'src';
-    findEl.hidden = !isSrc; copyEl.hidden = !isSrc; findEl.value = '';
-    if(isSrc){
-      showMsg('Loading source…');
-      loadSource().then(s => {
+    const txt = isText(f);
+    findEl.hidden = !txt; copyEl.hidden = !txt; findEl.value = '';
+    body.scrollTop = 0; body.scrollLeft = 0;
+    if(txt){
+      showMsg(T('불러오는 중…', 'Loading…'));
+      loadText(f).then(s => {
         if(my !== token) return;
+        if(s.missing){
+          findEl.hidden = true; copyEl.hidden = true;
+          showMsg(T('파일을 불러오지 못했어요: /' + f.name + ' — 아직 사이트 루트에 올리지 않았거나, http(s) 가 아닌 곳에서 열었을 수 있어요.',
+                    'Could not load /' + f.name + ' — it may not be uploaded to the site root yet, or the page is not served over http(s).'));
+          setStatus(f.name + ' — NOT FOUND');
+          return;
+        }
         srcText = s.text;
+        let cut = false;
+        if(srcText.length > MAX_CHARS){ srcText = srcText.slice(0, MAX_CHARS); cut = true; }
         lineStarts = [0]; for(let i = 0; i < srcText.length; i++) if(srcText.charCodeAt(i) === 10) lineStarts.push(i + 1);
         const n = lineStarts.length;
         const gutter = Array.from({ length:n }, (_, i) => i + 1).join('\n');
         body.innerHTML = '<div class="tx-code"><div class="tx-gutter">' + gutter + '</div><pre class="tx-src" id="txSrc"></pre></div>';
-        const pre = $('txSrc'); pre.innerHTML = highlight(esc(srcText));
+        const pre = $('txSrc'), escaped = esc(srcText);
+        pre.innerHTML = (f.ext === 'TXT' || f.ext === 'CNAME' || srcText.length > HL_MAX) ? escaped : highlight(escaped);
         hlEl = document.createElement('div'); hlEl.className = 'tx-hl'; hlEl.hidden = true; pre.appendChild(hlEl);
         body.scrollTop = 0; body.scrollLeft = 0;
-        metaEl.textContent = TYPE_LABEL.HTML + ' · ' + n.toLocaleString() + ' lines · ' + Math.round(new Blob([srcText]).size / 1024) + ' KB';
-        setStatus(s.live ? 'LIVE DOM SNAPSHOT (raw fetch unavailable)' : 'index.html · ' + n.toLocaleString() + ' lines');
+        metaEl.textContent = (TYPE_LABEL[f.ext] || f.ext) + ' · ' + n.toLocaleString() + ' lines · ' + byteLabel(new Blob([srcText]).size) + (cut ? ' · TRUNCATED' : '');
+        setStatus(s.live ? 'LIVE DOM SNAPSHOT (raw fetch unavailable)' : f.name + ' · ' + n.toLocaleString() + ' lines');
       });
       return;
     }
@@ -2711,11 +2759,11 @@ function eggFor(key){
     n = Math.min(Math.max(1, n), lineStarts.length);
     hlEl.hidden = false; hlEl.style.top = (8 + (n - 1) * 18) + 'px';
     body.scrollTop = Math.max(0, (n - 1) * 18 - body.clientHeight / 3); body.scrollLeft = 0;
-    setStatus('index.html · Ln ' + n + ' / ' + lineStarts.length.toLocaleString());
+    setStatus((current ? current.name : '') + ' · Ln ' + n + ' / ' + lineStarts.length.toLocaleString());
   }
   function lineOf(idx){ let lo = 0, hi = lineStarts.length - 1; while(lo < hi){ const mid = (lo + hi + 1) >> 1; if(lineStarts[mid] <= idx) lo = mid; else hi = mid - 1; } return lo + 1; }
   findEl.addEventListener('keydown', e => {
-    if(e.key !== 'Enter' || !current || current.kind !== 'src') return;
+    if(e.key !== 'Enter' || !isText(current) || !srcText) return;
     const q = findEl.value.trim(); if(!q) return;
     if(/^:\d+$/.test(q)){ goLine(parseInt(q.slice(1), 10)); return; }
     const hay = srcText.toLowerCase(), needle = q.toLowerCase();
@@ -2734,6 +2782,15 @@ function eggFor(key){
     const f = FILES.find(x => x.name === b.dataset.file); if(f) selectFile(f);
   });
   filterEl.addEventListener('input', () => renderList(filterEl.value));
+
+  // ── [outside.txt] 버튼: FILES 탭으로 넘어가서 /outside.txt 를 바로 연다 ──
+  const outsideBtn = $('txOutside');
+  if(outsideBtn) outsideBtn.addEventListener('click', () => {
+    const f = FILES.find(x => x.name === 'outside.txt'); if(!f) return;
+    filterEl.value = ''; current = f;
+    showTab('files'); selectFile(f);
+    const on = listEl.querySelector('.tx-item.on'); if(on) on.scrollIntoView({ block:'nearest' });
+  });
 
   // ── 탭 ──
   function showTab(name){
@@ -2778,6 +2835,7 @@ function eggFor(key){
   });
 
   renderStack(); renderLic(); renderList(''); setStatus('STACK OVERVIEW');
+  langHooks.push(renderLic);   // KO ⇄ EN 바꾸면 라이선스 탭도 같이 번역
 })();
 
 (function initCredits(){
